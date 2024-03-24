@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "584383106829",
+    "project_id": "csexplorer-433ae",
+    "storage_bucket": "csexplorer-433ae.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:584383106829:android:556120aa9b922aebb5ea44",
+        "android_client_info": {
+          "package_name": "com.example.csexplorer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChWEUt_xaNUd4y5_gQV0mAhb_sJvmb5zU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
