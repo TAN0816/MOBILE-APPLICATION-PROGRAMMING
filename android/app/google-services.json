@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "584383106829",
-    "project_id": "csexplorer-433ae",
-    "storage_bucket": "csexplorer-433ae.appspot.com"
+    "project_number": "397661049180",
+    "project_id": "secondhand-book-selling-ddda4",
+    "storage_bucket": "secondhand-book-selling-ddda4.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:584383106829:android:556120aa9b922aebb5ea44",
+        "mobilesdk_app_id": "1:397661049180:android:741d9bae52e2afe90e3199",
         "android_client_info": {
-          "package_name": "com.example.csexplorer"
+          "package_name": "com.example.secondhand_book_selling_platform"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyChWEUt_xaNUd4y5_gQV0mAhb_sJvmb5zU"
+          "current_key": "AIzaSyAmIPuMaQQ3MtVQv-AoIUpNM55Qnrr_Mi4"
         }
       ],
       "services": {
