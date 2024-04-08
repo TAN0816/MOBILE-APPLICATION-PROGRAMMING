@@ -1,11 +1,9 @@
-import 'package:secondhand_book_selling_platform/services/firebase_auth_methods.dart';
-import 'package:secondhand_book_selling_platform/widgets/custom_button.dart';
-import 'package:secondhand_book_selling_platform/screens/home_screen.dart';
-import 'package:secondhand_book_selling_platform/screens/notification_screen.dart';
-import 'package:secondhand_book_selling_platform/screens/message_screen.dart';
-import 'package:secondhand_book_selling_platform/screens/me_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:secondhand_book_selling_platform/services/firebase_auth_methods.dart';
+import 'package:secondhand_book_selling_platform/widgets/custom_button.dart';
+import 'package:secondhand_book_selling_platform/widgets/custom_textfield.dart';
+
 
 class MeScreen extends StatelessWidget {
   const MeScreen({Key? key}) : super(key: key);
@@ -15,10 +13,7 @@ class MeScreen extends StatelessWidget {
     final user = context.read<FirebaseAuthMethods>().user;
     return Scaffold(
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Your additional content here
-          Text(user.uid),
           if (!user.emailVerified && !user.isAnonymous)
             CustomButton(
               onTap: () {
@@ -28,17 +23,40 @@ class MeScreen extends StatelessWidget {
               },
               text: 'Verify Email',
             ),
-          CustomButton(
-            onTap: () {
-              context.read<FirebaseAuthMethods>().signOut(context);
-            },
-            text: 'Sign Out',
-          ),
-          CustomButton(
-            onTap: () {
-              context.read<FirebaseAuthMethods>().deleteAccount(context);
-            },
-            text: 'Delete Account',
+
+          // CustomButton(
+          //   onTap: () {
+          //     context.read<FirebaseAuthMethods>().deleteAccount(context);
+          //   },
+          //   text: 'Delete Account',
+          // ),
+
+          // Place the ElevatedButton at the top
+          Padding(
+            padding: const EdgeInsets.only(top: 40.0), // Adjust top padding as needed
+            child: ElevatedButton(
+              onPressed: () {
+                context.read<FirebaseAuthMethods>().signOut(context);
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Color(0xff4a56c1)),
+                shape: MaterialStateProperty.all<OutlinedBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(32),
+                  ),
+                ),
+                fixedSize: MaterialStateProperty.all<Size>(
+                  Size(280, 55), // Set your desired width and height here
+                ),
+              ),
+              child: Text(
+                'Sign Out',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                ),
+              ),
+            ),
           ),
         ],
       ),

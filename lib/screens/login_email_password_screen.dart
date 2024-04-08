@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:secondhand_book_selling_platform/screens/home_screen.dart';
 import 'package:secondhand_book_selling_platform/services/firebase_auth_methods.dart';
 import 'package:secondhand_book_selling_platform/widgets/custom_textfield.dart';
 import 'package:secondhand_book_selling_platform/widgets/custom_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:secondhand_book_selling_platform/screens/signup_email_password_screen.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:secondhand_book_selling_platform/screens/home_screen.dart';
+import 'package:secondhand_book_selling_platform/screens/home_page.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
@@ -250,7 +251,7 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
                                   // Navigate to the home screen
                                   Navigator.pushReplacementNamed(
                                     context,
-                                    HomeScreen.routeName,
+                                    Homepage.routeName,
                                   );
                                 },
                                 style: ButtonStyle(

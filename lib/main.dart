@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:secondhand_book_selling_platform/firebase_options.dart';
-import 'package:secondhand_book_selling_platform/screens/home_screen.dart';
+import 'package:secondhand_book_selling_platform/screens/home_page.dart';
 import 'package:secondhand_book_selling_platform/screens/login_email_password_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/login_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/phone_screen.dart';
@@ -53,7 +53,8 @@ class MyApp extends StatelessWidget {
           EmailPasswordSignup.routeName: (context) =>
               const EmailPasswordSignup(),
           EmailPasswordLogin.routeName: (context) => const EmailPasswordLogin(),
-          HomeScreen.routeName: (context) => const HomeScreen(),
+          Homepage.routeName: (context) => const Homepage(),
+
           // PhoneScreen.routeName: (context) => const PhoneScreen(),
         },
       ),
@@ -69,7 +70,7 @@ class AuthWrapper extends StatelessWidget {
     final firebaseUser = context.watch<User?>();
 
     if (firebaseUser != null) {
-      return const HomeScreen();
+      return const Homepage();
     }
     return const MainScreen();
   }
