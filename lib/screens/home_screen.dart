@@ -1,52 +1,77 @@
 import 'package:secondhand_book_selling_platform/services/firebase_auth_methods.dart';
 import 'package:secondhand_book_selling_platform/widgets/custom_button.dart';
+import 'package:secondhand_book_selling_platform/screens/home_screen.dart';
+import 'package:secondhand_book_selling_platform/screens/notification_screen.dart';
+import 'package:secondhand_book_selling_platform/screens/message_screen.dart';
+import 'package:secondhand_book_selling_platform/screens/me_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
+
+
+class HomeScreen extends StatefulWidget {
+  static const String routeName = '/home';
   const HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  _BottomNavBarState createState() => _BottomNavBarState();
+}
+
+class _BottomNavBarState extends State<HomeScreen> {
+  int _selectedIndex = 0; // Define _selectedIndex here
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final user = context.read<FirebaseAuthMethods>().user;
 
+    // Widget _getBodyWidget(int index) {
+    //   switch (index) {
+    //     case 0:
+    //       return HomeScreen();
+    //     case 1:
+    //       return NotificationScreen();
+    //     case 2:
+    //       return MessageScreen();
+    //     case 3:
+    //       return MeScreen();
+    //     default:
+    //       return HomeScreen(); // Default to HomeScreen if index is out of range
+    //   }
+    // }
+
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // when user signs anonymously or with phone, there is no email
-          if (!user.isAnonymous && user.phoneNumber == null) Text(user.email!),
-          if (!user.isAnonymous && user.phoneNumber == null)
-            Text(user.providerData[0].providerId),
-          // display phone number only when user's phone number is not null
-          if (user.phoneNumber != null) Text(user.phoneNumber!),
-          // uid is always available for every sign in method
-          Text(user.uid),
-          // display the button only when the user email is not verified
-          // or isnt an anonymous user
-          if (!user.emailVerified && !user.isAnonymous)
-            CustomButton(
-              onTap: () {
-                context
-                    .read<FirebaseAuthMethods>()
-                    .sendEmailVerification(context);
-              },
-              text: 'Verify Email',
-            ),
-          CustomButton(
-            onTap: () {
-              context.read<FirebaseAuthMethods>().signOut(context);
-            },
-            text: 'Sign Out',
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
           ),
-          CustomButton(
-            onTap: () {
-              context.read<FirebaseAuthMethods>().deleteAccount(context);
-            },
-            text: 'Delete Account',
+          BottomNavigationBarItem(
+            icon: Icon(Icons.notifications),
+            label: 'Notifications',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.message),
+            label: 'Messages',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Me',
           ),
         ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Color(0xff4a56c1), // Selected item color
+        unselectedItemColor: Colors.black, // Unselected item color
+        onTap: _onItemTapped,
+        backgroundColor: Colors.white, // Background color of the navigation bar
       ),
+      // body: _getBodyWidget(_selectedIndex),
     );
   }
 }

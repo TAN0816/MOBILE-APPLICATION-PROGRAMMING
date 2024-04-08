@@ -53,7 +53,8 @@ class MyApp extends StatelessWidget {
           EmailPasswordSignup.routeName: (context) =>
               const EmailPasswordSignup(),
           EmailPasswordLogin.routeName: (context) => const EmailPasswordLogin(),
-          PhoneScreen.routeName: (context) => const PhoneScreen(),
+          HomeScreen.routeName: (context) => const HomeScreen(),
+          // PhoneScreen.routeName: (context) => const PhoneScreen(),
         },
       ),
     );
@@ -70,6 +71,6 @@ class AuthWrapper extends StatelessWidget {
     if (firebaseUser != null) {
       return const HomeScreen();
     }
-    return const LoginScreen();
+    return const MainScreen();
   }
 }

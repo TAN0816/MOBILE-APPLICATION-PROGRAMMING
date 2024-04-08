@@ -224,4 +224,8 @@ class FirebaseAuthMethods {
       // in user again and then delete account.
     }
   }
+
+  void signInWithGoogle(BuildContext context) {}
+
+  void signInWithFacebook(BuildContext context) {}
 }
