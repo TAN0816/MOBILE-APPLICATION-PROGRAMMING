@@ -75,3 +75,23 @@ class AuthWrapper extends StatelessWidget {
     return const MainScreen();
   }
 }
+
+
+// class FirebaseAuthMethods {
+//   final FirebaseAuth _firebaseAuth;
+
+//   FirebaseAuthMethods(this._firebaseAuth);
+
+//   // Method to sign out the user
+//   Future<void> signOut(BuildContext context) async {
+//     try {
+//       await _firebaseAuth.signOut();
+//     } catch (e) {
+//       // Handle sign-out errors here
+//       print('Sign-out failed: $e');
+//     }
+//   }
+
+  // Other authentication methods...
+// }
+
