@@ -1,31 +1,45 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:secondhand_book_selling_platform/screens/home_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:secondhand_book_selling_platform/screens/home_page.dart';
+import 'package:secondhand_book_selling_platform/screens/login_email_password_screen.dart';
+import 'package:secondhand_book_selling_platform/screens/login_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/notification_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/message_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/me_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/edit_profile.dart';
+import 'package:secondhand_book_selling_platform/screens/signup_email_password_screen.dart';
 
 GoRouter router() {
   return GoRouter(
     initialLocation: '/',
     routes: [
       GoRoute(
+        path: '/',
+        builder: (context, state) {
+          final firebaseUser = context.watch<User?>();
+          if (firebaseUser != null) {
+            return const Homepage();
+          }
+          return const MainScreen();
+        },
+      ),
+      GoRoute(
         path: '/login',
-        builder: (context, state) => HomeScreen(),
+        builder: (context, state) => const EmailPasswordLogin(),
+      ),
+      GoRoute(
+        path: '/signup',
+        builder: (context, state) => const EmailPasswordSignup(),
       ),
       GoRoute(
         path: '/home',
-        builder: (context, state) => HomeScreen(),
+        builder: (context, state) => const Homepage(),
       ),
       GoRoute(
         path: '/notification',
         builder: (context, state) => const NotificationScreen(),
-        // routes: [
-        //   GoRoute(
-        //     path: 'cart',
-        //     builder: (context, state) => const MyCart(),
-        //   ),
-        // ],
       ),
       GoRoute(
         path: '/messages',
@@ -37,9 +51,8 @@ GoRouter router() {
       ),
       GoRoute(
         path: '/edit_profile/:id',
-        builder: (context, state) => const MeScreen(),
+        builder: (context, state) => EditProfile(),
       ),
-      //GoRoute(path: 'cart', builder: (context, state) => const Cart())
     ],
   );
 }

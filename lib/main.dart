@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:secondhand_book_selling_platform/firebase_options.dart';
+import 'package:secondhand_book_selling_platform/routes/app_routes.dart';
 import 'package:secondhand_book_selling_platform/screens/home_page.dart';
 import 'package:secondhand_book_selling_platform/screens/login_email_password_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/login_screen.dart';
@@ -34,37 +35,37 @@ class MyApp extends StatelessWidget {
           initialData: null,
         ),
       ],
-      child: MaterialApp(
-        title: 'Flutter Firebase Auth Demo',
+      child: MaterialApp.router(
+        title: 'SBS',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const AuthWrapper(),
-        routes: {
-          '/signup-email-password': (context) => const EmailPasswordSignup(),
-          '/login-email-password': (context) => const EmailPasswordLogin(),
-          '/home': (context) => const Homepage(),
-          '/edit-profile':(context) => EditProfile(),
-          // PhoneScreen.routeName: (context) => const PhoneScreen(),
-        },
+        // home: const AuthWrapper(),
+        // routes: {
+        //   '/signup-email-password': (context) => const EmailPasswordSignup(),
+        //   '/login-email-password': (context) => const EmailPasswordLogin(),
+        //   '/home': (context) => const Homepage(),
+        //   '/edit-profile':(context) => EditProfile(),
+        // },
+        routerConfig: router(),
       ),
     );
   }
 }
 
-class AuthWrapper extends StatelessWidget {
-  const AuthWrapper({Key? key}) : super(key: key);
+// class AuthWrapper extends StatelessWidget {
+//   const AuthWrapper({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    final firebaseUser = context.watch<User?>();
+//   @override
+//   Widget build(BuildContext context) {
+//     final firebaseUser = context.watch<User?>();
 
-    if (firebaseUser != null) {
-      return const Homepage();
-    }
-    return const MainScreen();
-  }
-}
+//     if (firebaseUser != null) {
+//       return const Homepage();
+//     }
+//     return const MainScreen();
+//   }
+// }
 
 
 // class FirebaseAuthMethods {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:secondhand_book_selling_platform/services/firebase_auth_methods.dart';
 import 'package:secondhand_book_selling_platform/widgets/custom_button.dart';
@@ -11,6 +12,7 @@ class MeScreen extends StatelessWidget {
     final user = context.read<FirebaseAuthMethods>().user;
     return Scaffold(
       appBar: AppBar(
+        leading: null,
         title: const Text('Profile'),
       ),
       body: Column(
@@ -19,7 +21,7 @@ class MeScreen extends StatelessWidget {
             children: [
               TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/edit-profile');
+                    context.push('/edit_profile/1');
                   },
                   child: const Text('Edit Profile'))
             ],
@@ -107,8 +109,10 @@ class MeScreen extends StatelessWidget {
                                     await context
                                         .read<FirebaseAuthMethods>()
                                         .signOut(context);
-                                    Navigator.pushNamed(
-                                        context, '/login-email-password');
+
+                                    if (!context.mounted) return;
+                                    context.pop(context);
+                                    context.go('/');
                                   },
                                   style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(
@@ -143,7 +147,7 @@ class MeScreen extends StatelessWidget {
                                 const SizedBox(height: 10),
                                 ElevatedButton(
                                   onPressed: () {
-                                    Navigator.pop(context); // Close the dialog
+                                    context.pop(context); // Close the dialog
                                   },
                                   style: ButtonStyle(
                                     shape: MaterialStateProperty.all<

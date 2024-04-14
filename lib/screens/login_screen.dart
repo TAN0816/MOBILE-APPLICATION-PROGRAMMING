@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:secondhand_book_selling_platform/main.dart';
 import 'package:secondhand_book_selling_platform/widgets/custom_button.dart';
 import 'package:secondhand_book_selling_platform/services/firebase_auth_methods.dart';
@@ -41,18 +42,17 @@ class _MainScreenState extends State<MainScreen> {
 
             const Text(
               "Login to enjoy the features\nwe’ve provided!",
-                style: TextStyle(
+              style: TextStyle(
                 fontFamily: "Inter",
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
                 color: Color(0xff707784),
-               
               ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 30),
 
-           Column(
+            Column(
               children: [
                 Container(
                   width: 263,
@@ -63,14 +63,15 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                   child: CustomButton(
                     onTap: () {
-                      Navigator.pushNamed(context, '/login-email-password');
+                      context.push('/login');
                     },
                     text: 'Login',
-                    buttonColor: Color(0xff4a56c1) ,// Set to transparent to use the Container's color
+                    buttonColor: const Color(
+                        0xff4a56c1), // Set to transparent to use the Container's color
                     textColor: Colors.white,
                   ),
                 ),
-                const SizedBox(height: 20), 
+                const SizedBox(height: 20),
                 // Add spacing between the buttons
                 Container(
                   width: 263,
@@ -81,18 +82,18 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                   child: CustomButton(
                     onTap: () {
-                      Navigator.pushNamed(context, '/signup-email-password');
+                      context.push('/signup');
                     },
                     text: 'Sign Up',
-                     // Set to transparent to use the Container's color
+                    // Set to transparent to use the Container's color
                     textColor: Colors.black,
                   ),
                 ),
               ],
             ),
-        ],
+          ],
+        ),
       ),
-    ),
-  );
- }
+    );
+  }
 }

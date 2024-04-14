@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:secondhand_book_selling_platform/widgets/custom_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -49,7 +50,7 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                context.pop();
               },
               child: Text('OK'),
             ),
@@ -231,8 +232,7 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
                             ElevatedButton(
                               onPressed: () {
                                 // Navigate to the home screen
-                                Navigator.pushReplacementNamed(
-                                    context, '/home');
+                                context.go('/home');
                               },
                               style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(
@@ -311,7 +311,7 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
           //   ),
           // ),
 
-          const SizedBox(height: 40),
+          // const SizedBox(height: 40),
 
           // Center(
           //   child: Row(
@@ -382,7 +382,7 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
           //   ),
           // ),
 
-          const SizedBox(height: 40),
+          // const SizedBox(height: 40),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -393,7 +393,7 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
               const SizedBox(width: 4),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, '/signup-email-password');
+                  context.push('/signup');
                 },
                 child: const Text(
                   'Sign Up Now',
