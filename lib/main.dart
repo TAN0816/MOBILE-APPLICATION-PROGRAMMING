@@ -41,9 +41,9 @@ class MyApp extends StatelessWidget {
         ),
         home: const AuthWrapper(),
         routes: {
-          EmailPasswordSignup.routeName: (context) => const EmailPasswordSignup(),
-          EmailPasswordLogin.routeName: (context) => const EmailPasswordLogin(),
-          Homepage.routeName: (context) => const Homepage(),
+          '/signup-email-password': (context) => const EmailPasswordSignup(),
+          '/login-email-password': (context) => const EmailPasswordLogin(),
+          '/home': (context) => const Homepage(),
           '/edit-profile':(context) => EditProfile(),
           // PhoneScreen.routeName: (context) => const PhoneScreen(),
         },
@@ -65,3 +65,23 @@ class AuthWrapper extends StatelessWidget {
     return const MainScreen();
   }
 }
+
+
+// class FirebaseAuthMethods {
+//   final FirebaseAuth _firebaseAuth;
+
+//   FirebaseAuthMethods(this._firebaseAuth);
+
+//   // Method to sign out the user
+//   Future<void> signOut(BuildContext context) async {
+//     try {
+//       await _firebaseAuth.signOut();
+//     } catch (e) {
+//       // Handle sign-out errors here
+//       print('Sign-out failed: $e');
+//     }
+//   }
+
+  // Other authentication methods...
+// }
+

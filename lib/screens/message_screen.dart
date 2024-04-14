@@ -9,7 +9,7 @@ class MessageScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Messages'),
       ),
-      body: Center(
+      body: const Center(
         child: Text(
           'Message Screen',
           style: TextStyle(fontSize: 24),

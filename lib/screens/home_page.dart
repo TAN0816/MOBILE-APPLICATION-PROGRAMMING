@@ -10,7 +10,6 @@ import 'package:provider/provider.dart';
 import 'package:flutter/src/material/button_style.dart';
 
 class Homepage extends StatefulWidget {
-  static const String routeName = '/home';
   const Homepage({Key? key}) : super(key: key);
 
   @override

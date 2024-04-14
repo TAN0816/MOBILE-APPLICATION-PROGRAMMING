@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:secondhand_book_selling_platform/main.dart';
-import 'package:secondhand_book_selling_platform/screens/login_email_password_screen.dart';
-import 'package:secondhand_book_selling_platform/screens/signup_email_password_screen.dart';
 import 'package:secondhand_book_selling_platform/widgets/custom_button.dart';
 import 'package:secondhand_book_selling_platform/services/firebase_auth_methods.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -65,7 +63,7 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                   child: CustomButton(
                     onTap: () {
-                      Navigator.pushNamed(context, EmailPasswordLogin.routeName);
+                      Navigator.pushNamed(context, '/login-email-password');
                     },
                     text: 'Login',
                     buttonColor: Color(0xff4a56c1) ,// Set to transparent to use the Container's color
@@ -83,7 +81,7 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                   child: CustomButton(
                     onTap: () {
-                      Navigator.pushNamed(context, EmailPasswordSignup.routeName);
+                      Navigator.pushNamed(context, '/signup-email-password');
                     },
                     text: 'Sign Up',
                      // Set to transparent to use the Container's color

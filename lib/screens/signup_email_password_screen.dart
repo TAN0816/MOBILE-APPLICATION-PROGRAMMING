@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class EmailPasswordSignup extends StatefulWidget {
-  static String routeName = '/signup-email-password';
   const EmailPasswordSignup({Key? key}) : super(key: key);
 
   @override

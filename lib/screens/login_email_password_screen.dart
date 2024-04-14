@@ -1,19 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:secondhand_book_selling_platform/screens/home_screen.dart';
-import 'package:secondhand_book_selling_platform/services/firebase_auth_methods.dart';
 import 'package:secondhand_book_selling_platform/widgets/custom_textfield.dart';
-import 'package:secondhand_book_selling_platform/widgets/custom_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:secondhand_book_selling_platform/screens/signup_email_password_screen.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:secondhand_book_selling_platform/screens/home_page.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class EmailPasswordLogin extends StatefulWidget {
-  static String routeName = '/login-email-password';
-
   const EmailPasswordLogin({Key? key}) : super(key: key);
 
   @override
@@ -92,7 +83,6 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
           ),
           const SizedBox(height: 20),
           Container(
-            width: 327,
             height: 63,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
@@ -107,7 +97,6 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
           ),
           const SizedBox(height: 20),
           Container(
-            width: 327,
             height: 63,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
@@ -121,14 +110,12 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
                   controller: passwordController,
                   hintText: 'Enter your password',
                   prefixIcon: Icon(Icons.lock),
-                  obscureText:
-                      !isPasswordVisible,
+                  obscureText: !isPasswordVisible,
                 ),
                 GestureDetector(
                   onTap: () {
                     setState(() {
-                      isPasswordVisible =
-                          !isPasswordVisible;
+                      isPasswordVisible = !isPasswordVisible;
                     });
                   },
                   child: Padding(
@@ -169,11 +156,9 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
                         ),
                         textAlign: TextAlign.right,
                       ),
-                      SizedBox(
-                          width: 5),
+                      SizedBox(width: 5),
                       Icon(
-                        Icons
-                            .arrow_forward,
+                        Icons.arrow_forward,
                         color: Colors.red,
                       ),
                     ],
@@ -229,8 +214,7 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
                                     ),
                                   ),
                                   SizedBox(
-                                      height:
-                                          10), // Add spacing between texts
+                                      height: 10), // Add spacing between texts
                                   Text(
                                     "Once again you logged in successfully into SBS app.",
                                     textAlign: TextAlign.center,
@@ -248,9 +232,7 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
                               onPressed: () {
                                 // Navigate to the home screen
                                 Navigator.pushReplacementNamed(
-                                  context,
-                                  Homepage.routeName,
-                                );
+                                    context, '/home');
                               },
                               style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(
@@ -411,7 +393,7 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
               const SizedBox(width: 4),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, EmailPasswordSignup.routeName);
+                  Navigator.pushNamed(context, '/signup-email-password');
                 },
                 child: const Text(
                   'Sign Up Now',
