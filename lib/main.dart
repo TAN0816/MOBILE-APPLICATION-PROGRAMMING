@@ -3,11 +3,10 @@ import 'package:secondhand_book_selling_platform/firebase_options.dart';
 import 'package:secondhand_book_selling_platform/screens/home_page.dart';
 import 'package:secondhand_book_selling_platform/screens/login_email_password_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/login_screen.dart';
-import 'package:secondhand_book_selling_platform/screens/phone_screen.dart';
+import 'package:secondhand_book_selling_platform/screens/edit_profile.dart';
 import 'package:secondhand_book_selling_platform/screens/signup_email_password_screen.dart';
 import 'package:secondhand_book_selling_platform/services/firebase_auth_methods.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:provider/provider.dart';
@@ -17,14 +16,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  // if (kIsWeb) {
-  //   FacebookAuth.i.webInitialize(
-  //     appId: "1129634001214960", // Replace with your app id
-  //     cookie: true,
-  //     xfbml: true,
-  //     version: "v12.0",
-  //   );
-  // }
   runApp(const MyApp());
 }
 
@@ -50,11 +41,10 @@ class MyApp extends StatelessWidget {
         ),
         home: const AuthWrapper(),
         routes: {
-          EmailPasswordSignup.routeName: (context) =>
-              const EmailPasswordSignup(),
+          EmailPasswordSignup.routeName: (context) => const EmailPasswordSignup(),
           EmailPasswordLogin.routeName: (context) => const EmailPasswordLogin(),
           Homepage.routeName: (context) => const Homepage(),
-
+          '/edit-profile':(context) => EditProfile(),
           // PhoneScreen.routeName: (context) => const PhoneScreen(),
         },
       ),

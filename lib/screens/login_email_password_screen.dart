@@ -75,13 +75,13 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
         crossAxisAlignment: CrossAxisAlignment
             .start, // Align children to the start (left) horizontally
         children: [
-          SizedBox(height: 80),
-          Padding(
-            padding: const EdgeInsets.symmetric(
+          const SizedBox(height: 80),
+          const Padding(
+            padding: EdgeInsets.symmetric(
                 horizontal: 30), // Add padding for better visual alignment
             child: Text(
               "Sign in",
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: "Roboto",
                 fontSize: 32,
                 fontWeight: FontWeight.w700,
@@ -90,7 +90,7 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
               ),
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Container(
             width: 327,
             height: 63,
@@ -122,13 +122,13 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
                   hintText: 'Enter your password',
                   prefixIcon: Icon(Icons.lock),
                   obscureText:
-                      !isPasswordVisible, // Hide password if isPasswordVisible is false
+                      !isPasswordVisible,
                 ),
                 GestureDetector(
                   onTap: () {
                     setState(() {
                       isPasswordVisible =
-                          !isPasswordVisible; // Toggle password visibility
+                          !isPasswordVisible;
                     });
                   },
                   child: Padding(
@@ -156,11 +156,11 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
                   onTap: () {
                     // Handle password reset action
                   },
-                  child: Row(
+                  child: const Row(
                     children: [
                       Text(
                         "Forgot your password?",
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: "Roboto",
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -169,12 +169,12 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
                         ),
                         textAlign: TextAlign.right,
                       ),
-                      const SizedBox(
-                          width: 5), // Add spacing between text and icon
+                      SizedBox(
+                          width: 5),
                       Icon(
                         Icons
-                            .arrow_forward, // Choose appropriate icon for password reset
-                        color: Colors.red, // Customize icon color as needed
+                            .arrow_forward,
+                        color: Colors.red,
                       ),
                     ],
                   ),
@@ -183,134 +183,131 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
             ),
           ),
           const SizedBox(height: 40),
-
-          Container(
-            child: Center(
-              child: ElevatedButton(
-                onPressed: () async {
-                  bool loginSuccess = await loginUser(
-                    email: emailController.text,
-                    password: passwordController.text,
+          Center(
+            child: ElevatedButton(
+              onPressed: () async {
+                bool loginSuccess = await loginUser(
+                  email: emailController.text,
+                  password: passwordController.text,
+                  context: context,
+                );
+                if (loginSuccess) {
+                  // Show popup message
+                  showDialog(
                     context: context,
-                  );
-                  if (loginSuccess) {
-                    // Show popup message
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              SizedBox(height: 40),
-                              Container(
-                                width: 90,
-                                height: 90,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Color(0xFFF5F8FF),
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SizedBox(height: 40),
+                            Container(
+                              width: 90,
+                              height: 90,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Color(0xFFF5F8FF),
+                              ),
+                              child: const Center(
+                                child: Icon(
+                                  Icons.done,
+                                  size: 48,
+                                  color: Colors.green,
                                 ),
+                              ),
+                            ),
+                            const SizedBox(height: 40),
+                            // Center-aligned text
+                            const Center(
+                              child: Column(
+                                children: [
+                                  Text(
+                                    "Yeay! Welcome Back",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                      height:
+                                          10), // Add spacing between texts
+                                  Text(
+                                    "Once again you logged in successfully into SBS app.",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 30),
+                            // Button to navigate to the home screen
+                            ElevatedButton(
+                              onPressed: () {
+                                // Navigate to the home screen
+                                Navigator.pushReplacementNamed(
+                                  context,
+                                  Homepage.routeName,
+                                );
+                              },
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                  Color(0xff4a56c1), // Set background color
+                                ),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        25.0), // Set border radius
+                                  ),
+                                ),
+                                textStyle: MaterialStateProperty.all(
+                                  const TextStyle(
+                                      color: Colors.white), // Set text color
+                                ),
+                              ),
+                              child: const SizedBox(
+                                width: 150,
+                                height: 55,
                                 child: Center(
-                                  child: Icon(
-                                    Icons.done,
-                                    size: 48,
-                                    color: Colors.green,
+                                  child: Text(
+                                    "Go to Home",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 16),
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 40),
-                              // Center-aligned text
-                              Center(
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      "Yeay! Welcome Back",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                        height:
-                                            10), // Add spacing between texts
-                                    Text(
-                                      "Once again you logged in successfully into SBS app.",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 30),
-                              // Button to navigate to the home screen
-                              ElevatedButton(
-                                onPressed: () {
-                                  // Navigate to the home screen
-                                  Navigator.pushReplacementNamed(
-                                    context,
-                                    Homepage.routeName,
-                                  );
-                                },
-                                style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                    Color(0xff4a56c1), // Set background color
-                                  ),
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          25.0), // Set border radius
-                                    ),
-                                  ),
-                                  textStyle: MaterialStateProperty.all(
-                                    const TextStyle(
-                                        color: Colors.white), // Set text color
-                                  ),
-                                ),
-                                child: SizedBox(
-                                  width: 150,
-                                  height: 55,
-                                  child: const Center(
-                                    child: Text(
-                                      "Go to Home",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 16),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  }
-                },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                    Color(0xff4a56c1), // Set background color
-                  ),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(25.0), // Set border radius
-                    ),
-                  ),
-                  textStyle: MaterialStateProperty.all(
-                    const TextStyle(color: Colors.white), // Set text color
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                }
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                  const Color(0xff4a56c1), // Set background color
+                ),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(25.0), // Set border radius
                   ),
                 ),
-                child: SizedBox(
-                  width: 290,
-                  height: 50,
-                  child: const Center(
-                    child: Text(
-                      "LOGIN",
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
+                textStyle: MaterialStateProperty.all(
+                  const TextStyle(color: Colors.white), // Set text color
+                ),
+              ),
+              child: const SizedBox(
+                width: 290,
+                height: 50,
+                child: Center(
+                  child: Text(
+                    "LOGIN",
+                    style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),
               ),
@@ -416,7 +413,7 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
                 onTap: () {
                   Navigator.pushNamed(context, EmailPasswordSignup.routeName);
                 },
-                child: Text(
+                child: const Text(
                   'Sign Up Now',
                   style: TextStyle(
                     color: Colors.black,

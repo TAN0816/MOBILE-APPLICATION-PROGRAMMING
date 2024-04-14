@@ -29,9 +29,9 @@ class _MainScreenState extends State<MainScreen> {
               height: 275,
             ),
 
-            Text(
-              "Let’s get started!",
-              style: const TextStyle(
+            const Text(
+              "Let's get started!",
+              style: TextStyle(
                 fontFamily: "Inter",
                 fontSize: 22,
                 fontWeight: FontWeight.w700,
@@ -41,9 +41,9 @@ class _MainScreenState extends State<MainScreen> {
               textAlign: TextAlign.center,
             ),
 
-            Text(
+            const Text(
               "Login to enjoy the features\nwe’ve provided!",
-                style: const TextStyle(
+                style: TextStyle(
                 fontFamily: "Inter",
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
@@ -52,7 +52,7 @@ class _MainScreenState extends State<MainScreen> {
               ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
 
            Column(
               children: [
@@ -72,7 +72,7 @@ class _MainScreenState extends State<MainScreen> {
                     textColor: Colors.white,
                   ),
                 ),
-                SizedBox(height: 20), 
+                const SizedBox(height: 20), 
                 // Add spacing between the buttons
                 Container(
                   width: 263,

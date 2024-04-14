@@ -47,7 +47,7 @@ class _BottomNavBarState extends State<Homepage> {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        items: <BottomNavigationBarItem>[
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
@@ -66,7 +66,7 @@ class _BottomNavBarState extends State<Homepage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Color(0xff4a56c1), // Selected item color
+        selectedItemColor: const Color(0xff4a56c1), // Selected item color
         unselectedItemColor: Colors.black, // Unselected item color
         onTap: _onItemTapped,
         backgroundColor: Colors.white, // Background color of the navigation bar
