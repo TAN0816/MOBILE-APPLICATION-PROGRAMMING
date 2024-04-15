@@ -11,7 +11,34 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-  final onPressed = () => {};
+  String username = 'User 1';
+  String mobile = '012345678';
+  String email = 'user1@gmail.com';
+  String address = '123, abcStreet';
+
+  void updateUserName(String username) {
+    setState(() {
+      this.username = username;
+    });
+  }
+
+  void updateMobile(String mobile) {
+    setState(() {
+      this.mobile = mobile;
+    });
+  }
+
+  void updateEmail(String email) {
+    setState(() {
+      this.email = email;
+    });
+  }
+
+  void updateAddress(String address) {
+    setState(() {
+      this.address = address;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,10 +76,10 @@ class _EditProfileState extends State<EditProfile> {
               ),
             ),
           ),
-          ProfileEditOption(title: 'Full Name', placeholder: 'User1'),
-          ProfileEditOption(title: 'Mobile', placeholder: '012345678'),
-          ProfileEditOption(title: 'Email', placeholder: 'user1@gmail.com'),
-          ProfileEditOption(title: 'Address', placeholder: '123, abcStreet'),
+          ProfileEditOption(title: 'Full Name', placeholder: username, updateProfile: updateUserName,),
+          ProfileEditOption(title: 'Mobile', placeholder: mobile, updateProfile: updateMobile,),
+          ProfileEditOption(title: 'Email', placeholder: email, updateProfile: updateEmail,),
+          ProfileEditOption(title: 'Address', placeholder: address, updateProfile: updateAddress,),
         ],
       ),
     );

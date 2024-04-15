@@ -22,8 +22,8 @@ class DefaultFirebaseOptions {
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
-      // case TargetPlatform.iOS:
-      //   return ios;
+      case TargetPlatform.iOS:
+        return ios;
       // case TargetPlatform.macOS:
       //   return macos;
       default:
@@ -33,40 +33,23 @@ class DefaultFirebaseOptions {
     }
   }
 
-  // static const FirebaseOptions web = FirebaseOptions(
-  //   apiKey: 'AIzaSyC_ubN3n0_aJZAugjyEeVWPy-CwD1H5nK4',
-  //   appId: '1:599030350718:web:ca91f6b1d6769be8b6292f',
-  //   messagingSenderId: '599030350718',
-  //   projectId: 'fir-auth-demo-ec48c',
-  //   authDomain: 'fir-auth-demo-ec48c.firebaseapp.com',
-  //   storageBucket: 'fir-auth-demo-ec48c.appspot.com',
-  // );
-
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAmIPuMaQQ3MtVQv-AoIUpNM55Qnrr_Mi4',
     appId: '1:397661049180:android:741d9bae52e2afe90e3199',
-    messagingSenderId: '599030350718',
+    messagingSenderId: '397661049180',
     projectId: 'secondhand-book-selling-ddda4',
     storageBucket: 'secondhand-book-selling-ddda4.appspot.com',
   );
 
-  // static const FirebaseOptions ios = FirebaseOptions(
-  //   apiKey: 'AIzaSyC9wBMEJ1WDl8WkUoxHqIVqPLvwClaTYxs',
-  //   appId: '1:599030350718:ios:d4aadf3cf97a599eb6292f',
-  //   messagingSenderId: '599030350718',
-  //   projectId: 'fir-auth-demo-ec48c',
-  //   storageBucket: 'fir-auth-demo-ec48c.appspot.com',
-  //   iosClientId: '599030350718-rt5diuiggpna5fmco6k05teqm2km0f66.apps.googleusercontent.com',
-  //   iosBundleId: 'com.example.firebaseAuthDemo',
-  // );
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyAX1W0CeLjT05JSebFNK7KDxPH1xl_FNSA',
+    appId: '1:397661049180:ios:b635a7c3078649570e3199',
+    messagingSenderId: '397661049180',
+    projectId: 'secondhand-book-selling-ddda4',
+    storageBucket: 'secondhand-book-selling-ddda4.appspot.com',
+    androidClientId: '397661049180-ksbtj4a397tokbmsl24gearh54broht7.apps.googleusercontent.com',
+    iosClientId: '397661049180-qveehr5acs62s6vfj3r4re80q6klt6ns.apps.googleusercontent.com',
+    iosBundleId: 'com.example.secondhandBookSellingPlatform',
+  );
 
-  // static const FirebaseOptions macos = FirebaseOptions(
-  //   apiKey: 'AIzaSyC9wBMEJ1WDl8WkUoxHqIVqPLvwClaTYxs',
-  //   appId: '1:599030350718:ios:d4aadf3cf97a599eb6292f',
-  //   messagingSenderId: '599030350718',
-  //   projectId: 'fir-auth-demo-ec48c',
-  //   storageBucket: 'fir-auth-demo-ec48c.appspot.com',
-  //   iosClientId: '599030350718-rt5diuiggpna5fmco6k05teqm2km0f66.apps.googleusercontent.com',
-  //   iosBundleId: 'com.example.firebaseAuthDemo',
-  // );
 }

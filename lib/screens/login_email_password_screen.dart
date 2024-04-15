@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:secondhand_book_selling_platform/widgets/custom_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:secondhand_book_selling_platform/screens/home_page.dart';
 
 class EmailPasswordLogin extends StatefulWidget {
   const EmailPasswordLogin({Key? key}) : super(key: key);

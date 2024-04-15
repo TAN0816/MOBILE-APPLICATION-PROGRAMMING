@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 
 class ProfileEditOption extends StatefulWidget {
   final String title;
-  String placeholder;
+  final String placeholder;
+  final Function(String) updateProfile;
 
-  ProfileEditOption({
+  const ProfileEditOption({
     super.key,
     required this.title,
     required this.placeholder,
+    required this.updateProfile,
   });
 
   @override
@@ -90,7 +92,7 @@ class _ProfileEditOptionState extends State<ProfileEditOption> {
                         String inputText = _textEditingController.text;
                         // Handle submit action here
                         print('Submitted: $inputText');
-                        updatePlaceholder('$inputText');
+                        widget.updateProfile('$inputText');
                         Navigator.of(context).pop(); // Close bottom sheet
                       }
                     },
@@ -162,9 +164,9 @@ class _ProfileEditOptionState extends State<ProfileEditOption> {
   }
 
   // Method to update the placeholder text
-  void updatePlaceholder(String newPlaceholder) {
-    setState(() {
-      widget.placeholder = newPlaceholder;
-    });
-  }
+  // void updatePlaceholder(String newPlaceholder) {
+  //   setState(() {
+  //     widget.placeholder = newPlaceholder;
+  //   });
+  // }
 }

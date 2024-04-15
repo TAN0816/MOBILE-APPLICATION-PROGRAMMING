@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:secondhand_book_selling_platform/main.dart';
 import 'package:secondhand_book_selling_platform/widgets/custom_button.dart';
-import 'package:secondhand_book_selling_platform/services/firebase_auth_methods.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);

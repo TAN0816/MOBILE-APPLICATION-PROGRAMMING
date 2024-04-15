@@ -37,6 +37,13 @@
             {
               "client_id": "397661049180-ur1227r6khocm4lv3ud76aiu3t3futns.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "397661049180-qveehr5acs62s6vfj3r4re80q6klt6ns.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.secondhandBookSellingPlatform"
+              }
             }
           ]
         }

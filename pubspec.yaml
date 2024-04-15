@@ -1,33 +1,31 @@
 name: secondhand_book_selling_platform
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
-  sdk: '>=3.3.1 <4.0.0'
+    sdk: ">=3.3.1 <4.0.0"
 
 dependencies:
-  firebase_auth: ^4.19.1
-  firebase_core: ^2.28.0
-  flutter:
-    sdk: flutter
-  flutter_facebook_auth: ^6.2.0
-  go_router: ^13.2.3
-  google_sign_in: ^6.2.1
-  provider: ^6.1.2
+    cloud_firestore: ^4.16.1
+    firebase_auth: ^4.19.1
+    firebase_core: ^2.28.0
+    flutter:
+        sdk: flutter
+    flutter_facebook_auth: ^6.2.0
+    go_router: ^13.2.3
+    google_sign_in: ^6.2.1
+    provider: ^6.1.2
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_lints: ^3.0.0
+    flutter_test:
+        sdk: flutter
+    flutter_lints: ^3.0.0
 
 flutter:
-  uses-material-design: true
+    uses-material-design: true
 
-
-  assets:
-    - assets/logo.png
-    - assets/facebook_logo.png
-    - assets/Google.png
-
-
+    assets:
+        - assets/logo.png
+        - assets/facebook_logo.png
+        - assets/Google.png

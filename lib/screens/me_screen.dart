@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:secondhand_book_selling_platform/services/firebase_auth_methods.dart';
-import 'package:secondhand_book_selling_platform/widgets/custom_button.dart';
 
 class MeScreen extends StatelessWidget {
   const MeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final user = context.read<FirebaseAuthMethods>().user;
+    
     return Scaffold(
       appBar: AppBar(
         leading: null,
