@@ -8,52 +8,196 @@ class MeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
+    const sellerRating = 4;
     return Scaffold(
       appBar: AppBar(
-        leading: null,
-        title: const Text('Profile'),
+        title: const Text(
+          'Profile',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w500, // Set the font weight to bold
+          ),
+        ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1.0),
+          child: Container(
+            color: const Color.fromARGB(255, 214, 214, 214),
+            height: 1.0,
+          ),
+        ),
       ),
       body: Column(
         children: [
-          Row(
-            children: [
-              TextButton(
-                  onPressed: () {
-                    context.push('/edit_profile/1');
-                  },
-                  child: const Text('Edit Profile'))
-            ],
+          Container(
+            alignment: Alignment.center,
+            margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+            child: const CircleAvatar(
+              radius: 50,
+              backgroundImage: AssetImage('assets/images/profile.jpg'),
+            ),
           ),
-          // if (!user.emailVerified && !user.isAnonymous)
-          //   CustomButton(
-          //     onTap: () {
-          //       context
-          //           .read<FirebaseAuthMethods>()
-          //           .sendEmailVerification(context);
-          //     },
-          //     text: 'Verify Email',
-          //   ),
-
-          // CustomButton(
-          //   onTap: () {
-          //     context.read<FirebaseAuthMethods>().deleteAccount(context);
-          //   },
-          //   text: 'Delete Account',
-          // ),
-          // CustomButton(
-          //   onTap: () {
-          //     context.read<FirebaseAuthMethods>().signOut(context);
-          //   },
-          //   text: 'Sign Out',
-          // ),
-          // Text(user.uid),
-          // Place the ElevatedButton at the top
+          Container(
+            alignment: Alignment.center,
+            margin: const EdgeInsets.fromLTRB(0, 10, 0, 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(5, (index) {
+                return Icon(
+                  Icons.star,
+                  color: sellerRating > index ? Colors.amber[400] : Colors.grey,
+                );
+              }),
+            ),
+          ),
+          TextButton(
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.zero,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero,
+                ),
+              ),
+              onPressed: () {
+                context.push('/edit_profile/1');
+              },
+              child: Container(
+                margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                padding: const EdgeInsets.fromLTRB(20.0, 20, 20.0, 20.0),
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      width: 1,
+                      color: Color.fromARGB(255, 211, 211, 211),
+                    ),
+                  ),
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'My orders',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
+                          ),
+                        ),
+                        Text(
+                          'Already have 12 orders',
+                          style: TextStyle(
+                            color: Color.fromARGB(100, 0, 0, 0),
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Icon(Icons.arrow_forward_ios_rounded),
+                  ],
+                ),
+              )),
+          TextButton(
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.zero,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero,
+                ),
+              ),
+              onPressed: () {
+                context.push('/edit_profile/1');
+              },
+              child: Container(
+                margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                padding: const EdgeInsets.fromLTRB(20.0, 20, 20.0, 20.0),
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      width: 1,
+                      color: Color.fromARGB(255, 211, 211, 211),
+                    ),
+                  ),
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Order History',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
+                          ),
+                        ),
+                        Text(
+                          '15 orders had made',
+                          style: TextStyle(
+                            color: Color.fromARGB(100, 0, 0, 0),
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Icon(Icons.arrow_forward_ios_rounded),
+                  ],
+                ),
+              )),
+          TextButton(
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.zero,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero,
+                ),
+              ),
+              onPressed: () {
+                context.push('/edit_profile/1');
+              },
+              child: Container(
+                margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                padding: const EdgeInsets.fromLTRB(20.0, 20, 20.0, 20.0),
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      width: 1,
+                      color: Color.fromARGB(255, 211, 211, 211),
+                    ),
+                  ),
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Profile',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
+                          ),
+                        ),
+                        Text(
+                          'Edit your personal information',
+                          style: TextStyle(
+                            color: Color.fromARGB(100, 0, 0, 0),
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Icon(Icons.arrow_forward_ios_rounded),
+                  ],
+                ),
+              )),
           Container(
             alignment: Alignment.bottomCenter,
             child: Padding(
               padding: const EdgeInsets.only(
-                  top: 200.0), // Adjust bottom padding as needed
+                  top: 150.0), // Adjust bottom padding as needed
               child: ElevatedButton(
                 onPressed: () {
                   showDialog(
