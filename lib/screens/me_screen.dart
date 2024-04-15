@@ -36,6 +36,14 @@ class MeScreen extends StatelessWidget {
               backgroundImage: AssetImage('assets/images/profile.jpg'),
             ),
           ),
+          const Text(
+            'Evelyn Lim Olivia',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 17,
+              fontWeight: FontWeight.bold, 
+            ),
+          ),
           Container(
             alignment: Alignment.center,
             margin: const EdgeInsets.fromLTRB(0, 10, 0, 20),
@@ -197,7 +205,7 @@ class MeScreen extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             child: Padding(
               padding: const EdgeInsets.only(
-                  top: 150.0), // Adjust bottom padding as needed
+                  top: 100.0), // Adjust bottom padding as needed
               child: ElevatedButton(
                 onPressed: () {
                   showDialog(
