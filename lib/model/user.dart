@@ -6,8 +6,9 @@ class UserModel{
   String mobile;
   String address;
   String role;
+  String image;
  
-  UserModel({required this.username, required this.email, required this.mobile, required this.address});
+  UserModel({required this.username, required this.email, required this.mobile, required this.address, required this.role, required this.image});
 
   void setUsername(String newUsername) {
     username = newUsername;
@@ -27,5 +28,7 @@ class UserModel{
   String get getEmail => email;
   String get getMobile => mobile;
   String get getAddress => address;
+  String get getRole => role;
+  String get getImage => image;
 
 }

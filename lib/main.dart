@@ -6,13 +6,18 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:secondhand_book_selling_platform/services/user_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  // runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (context) => UserService(),
+    builder: ((context, child) => const MyApp()),
+  ));
 }
 
 class MyApp extends StatelessWidget {
