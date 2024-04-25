@@ -31,7 +31,7 @@ class _ProfileEditOptionState extends State<ProfileEditOption> {
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
           child: Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Form(
               key: _profileFormKey,
               child: Column(
@@ -92,7 +92,7 @@ class _ProfileEditOptionState extends State<ProfileEditOption> {
                         String inputText = _textEditingController.text;
                         // Handle submit action here
                         print('Submitted: $inputText');
-                        widget.updateProfile('$inputText');
+                        widget.updateProfile(inputText);
                         Navigator.of(context).pop(); // Close bottom sheet
                       }
                     },
@@ -163,10 +163,4 @@ class _ProfileEditOptionState extends State<ProfileEditOption> {
         ));
   }
 
-  // Method to update the placeholder text
-  // void updatePlaceholder(String newPlaceholder) {
-  //   setState(() {
-  //     widget.placeholder = newPlaceholder;
-  //   });
-  // }
 }

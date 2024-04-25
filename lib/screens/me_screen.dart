@@ -8,6 +8,7 @@ class MeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String userId = '1234';
     const sellerRating = 4;
     return Scaffold(
       appBar: AppBar(
@@ -41,7 +42,7 @@ class MeScreen extends StatelessWidget {
             style: TextStyle(
               color: Colors.black,
               fontSize: 17,
-              fontWeight: FontWeight.bold, 
+              fontWeight: FontWeight.bold,
             ),
           ),
           Container(
@@ -161,7 +162,7 @@ class MeScreen extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                context.push('/edit_profile/1');
+                context.push('/edit_profile/$userId');
               },
               child: Container(
                 margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -256,8 +257,8 @@ class MeScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 ElevatedButton(
-                                  onPressed: () async {
-                                    await context
+                                  onPressed: () {
+                                    context
                                         .read<FirebaseAuthMethods>()
                                         .signOut(context);
 

@@ -49,8 +49,12 @@ GoRouter router() {
         builder: (context, state) => const MeScreen(),
       ),
       GoRoute(
-        path: '/edit_profile/:id',
-        builder: (context, state) => EditProfile(),
+        path: '/edit_profile/:userId',
+        //builder: (context, state) => EditProfile(userId: '1234',),
+        builder: (context, state) {
+          final String? userId = state.pathParameters['userId'];
+          return EditProfile(userId: userId!);
+        },
       ),
     ],
   );
