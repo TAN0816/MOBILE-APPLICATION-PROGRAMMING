@@ -6,7 +6,6 @@ class UserModel{
   String mobile;
   String address;
   String? role;
-  String role;
   String image;
  
   UserModel({required this.username, required this.email, required this.mobile, required this.address, required this.role, required this.image});
