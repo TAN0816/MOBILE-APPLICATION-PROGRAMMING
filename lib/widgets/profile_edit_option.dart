@@ -121,7 +121,8 @@ class _ProfileEditOptionState extends State<ProfileEditOption> {
             borderRadius: BorderRadius.zero,
           ),
         ),
-        onPressed: () => {_showModalBottomSheet(context)},
+        onPressed: () =>
+            {if (widget.title != "Email") _showModalBottomSheet(context)},
         child: Container(
           margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
           padding: const EdgeInsets.fromLTRB(20.0, 20, 20.0, 20.0),
@@ -155,7 +156,8 @@ class _ProfileEditOptionState extends State<ProfileEditOption> {
                     ),
                   ),
                   const SizedBox(width: 10),
-                  const Icon(Icons.arrow_forward_ios_rounded),
+                  if (widget.title != 'Email')
+                    const Icon(Icons.arrow_forward_ios_rounded),
                 ],
               ),
             ],

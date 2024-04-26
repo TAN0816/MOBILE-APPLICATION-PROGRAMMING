@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import 'package:secondhand_book_selling_platform/services/firebase_auth_methods.dart';
-import 'package:secondhand_book_selling_platform/services/user_service.dart';
 import 'package:secondhand_book_selling_platform/widgets/custom_textfield.dart';
 
 class EmailPasswordSignup extends StatefulWidget {
@@ -31,7 +29,7 @@ class _EmailPasswordSignupState extends State<EmailPasswordSignup> {
         passwordController.text.isEmpty ||
         cpasswordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Please fill in all fields.'),
           backgroundColor: Colors.red,
         ),
@@ -42,7 +40,7 @@ class _EmailPasswordSignupState extends State<EmailPasswordSignup> {
     if (passwordController.text != cpasswordController.text) {
       //passwords dont match, show an error message or handle it as needed return
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Passwords do not match.'),
           backgroundColor: Colors.red,
         ),
@@ -51,11 +49,11 @@ class _EmailPasswordSignupState extends State<EmailPasswordSignup> {
     }
 
     // Validate email format
-    final emailPattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+    const emailPattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
     final regExp = RegExp(emailPattern);
     if (!regExp.hasMatch(emailController.text)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Please enter a valid email address.'),
           backgroundColor: Colors.red,
         ),
@@ -65,7 +63,7 @@ class _EmailPasswordSignupState extends State<EmailPasswordSignup> {
 
     String role =
         isBuyerSelected ? 'Buyer' : (isSellerSelected ? 'Seller' : '');
-    UserService().signUpWithEmail(
+    FirebaseAuthMethods().signUpWithEmail(
       email: emailController.text,
       password: passwordController.text,
       username: usernameController.text,
@@ -80,7 +78,7 @@ class _EmailPasswordSignupState extends State<EmailPasswordSignup> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -88,12 +86,15 @@ class _EmailPasswordSignupState extends State<EmailPasswordSignup> {
               const SizedBox(height: 60),
               const Text(
                 "Sign Up",
-                style: TextStyle(fontSize: 30),
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.w700,
+                ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 30),
-              Padding(
-                padding: const EdgeInsets.only(left: 15),
+              const Padding(
+                padding: EdgeInsets.only(left: 15),
                 child: Text(
                   "Select a role:",
                   style: TextStyle(
@@ -211,7 +212,7 @@ class _EmailPasswordSignupState extends State<EmailPasswordSignup> {
                 height: 63,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(4),
-                  color: Color(0xfff4f4f4),
+                  color: const Color(0xfff4f4f4),
                 ),
                 child: Stack(
                   alignment: Alignment.centerRight,
@@ -268,7 +269,8 @@ class _EmailPasswordSignupState extends State<EmailPasswordSignup> {
               ElevatedButton(
                 onPressed: signUpUser,
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Color(0xff4a56c1)),
+                  backgroundColor:
+                      MaterialStateProperty.all(const Color(0xff4a56c1)),
                   textStyle: MaterialStateProperty.all(
                     const TextStyle(color: Colors.white),
                   ),

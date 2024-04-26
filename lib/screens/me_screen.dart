@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:secondhand_book_selling_platform/services/firebase_auth_methods.dart';
+import 'package:secondhand_book_selling_platform/services/user_service.dart';
 
 class MeScreen extends StatelessWidget {
   const MeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String userId = 'hA3DiP8v1VQXzeGSme2k7qj1V3D3';
+    String userId = UserService().getUserId;
     const sellerRating = 4;
     return Scaffold(
       appBar: AppBar(

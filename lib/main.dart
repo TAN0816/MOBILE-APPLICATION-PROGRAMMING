@@ -14,10 +14,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   // runApp(const MyApp());
-  runApp(ChangeNotifierProvider(
-    create: (context) => UserService(),
-    builder: ((context, child) => const MyApp()),
-  ));
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -28,7 +25,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider<FirebaseAuthMethods>(
-          create: (_) => FirebaseAuthMethods(FirebaseAuth.instance),
+          create: (_) => FirebaseAuthMethods(),
         ),
         StreamProvider(
           create: (context) => context.read<FirebaseAuthMethods>().authState,

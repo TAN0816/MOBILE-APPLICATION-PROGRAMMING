@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:provider/provider.dart';
 import 'package:secondhand_book_selling_platform/model/user.dart';
 import 'package:secondhand_book_selling_platform/services/user_service.dart';
 import '../widgets/profile_edit_option.dart';
@@ -22,7 +21,7 @@ class _EditProfileState extends State<EditProfile> {
   UserService userService = UserService();
   UserModel? userData;
   String username = '';
-  String mobile = '';
+  String phone = '';
   String email = '';
   String address = '';
   String imageUrl = '';
@@ -31,19 +30,7 @@ class _EditProfileState extends State<EditProfile> {
   @override
   void initState() {
     super.initState();
-    // fetchUserData();
-    userService = Provider.of<UserService>(context, listen: false);
-
-    userData = userService.getUser;
-    if (userData == null) {
-      fetchUserData();
-    } else {
-      username = userData!.username;
-      mobile = userData!.mobile;
-      email = userData!.email;
-      address = userData!.address;
-      imageUrl = userData?.image ?? '';
-    }
+    fetchUserData();
   }
 
   void fetchUserData() async {
@@ -51,7 +38,7 @@ class _EditProfileState extends State<EditProfile> {
     setState(() {
       userData = user;
       username = user.getUsername;
-      mobile = user.getMobile;
+      phone = user.getPhone;
       email = user.getEmail;
       address = user.getAddress;
       imageUrl = user.getImage;
@@ -64,9 +51,9 @@ class _EditProfileState extends State<EditProfile> {
     });
   }
 
-  void updateMobile(String mobile) {
+  void updatephone(String phone) {
     setState(() {
-      this.mobile = mobile;
+      this.phone = phone;
     });
   }
 
@@ -136,9 +123,9 @@ class _EditProfileState extends State<EditProfile> {
             updateProfile: updateUserName,
           ),
           ProfileEditOption(
-            title: 'Mobile',
-            placeholder: mobile,
-            updateProfile: updateMobile,
+            title: 'Phone',
+            placeholder: phone,
+            updateProfile: updatephone,
           ),
           ProfileEditOption(
             title: 'Email',
@@ -182,7 +169,7 @@ class _EditProfileState extends State<EditProfile> {
                     }
 
                     userService
-                        .updateProfile(widget.userId, username, mobile, email,
+                        .updateProfile(widget.userId, username, email, phone,
                             address, imageUrl)
                         .then((_) {
                       context.pop();

@@ -13,7 +13,7 @@ import 'package:secondhand_book_selling_platform/screens/signup_email_password_s
 
 GoRouter router() {
   return GoRouter(
-    initialLocation: '/signup',
+    initialLocation: '/',
     routes: [
       GoRoute(
         path: '/',

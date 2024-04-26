@@ -87,7 +87,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           //     style: TextStyle(fontSize: 20),
           //   ),
           // ),
-          Padding(
+          const Padding(
             padding: EdgeInsets.symmetric(
                 horizontal: 40), // Add padding for better visual alignment
             child: Align(
@@ -104,7 +104,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               ),
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Container(
             height: 63,
             decoration: BoxDecoration(
@@ -118,7 +118,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               prefixIcon: Icon(Icons.email),
             ),
           ),
-          SizedBox(height: 30),
+          const SizedBox(height: 30),
           ElevatedButton(
             onPressed: passwordReset,
             style: ButtonStyle(

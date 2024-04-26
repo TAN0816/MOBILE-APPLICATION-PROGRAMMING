@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:go_router/go_router.dart';
 import 'package:secondhand_book_selling_platform/utils/showOTPDialog.dart';
 import 'package:secondhand_book_selling_platform/utils/showSnackbar.dart';
 import 'package:flutter/foundation.dart';
@@ -7,8 +9,8 @@ import 'package:flutter/material.dart';
 // import 'package:google_sign_in/google_sign_in.dart';
 
 class FirebaseAuthMethods {
-  final FirebaseAuth _auth;
-  FirebaseAuthMethods(this._auth);
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseAuthMethods();
 
   // FOR EVERY FUNCTION HERE
   // POP THE ROUTE USING: Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
@@ -29,23 +31,37 @@ class FirebaseAuthMethods {
   Future<void> signUpWithEmail({
     required String email,
     required String password,
+    required String username,
+    required String phone,
+    required String role,
     required BuildContext context,
   }) async {
     try {
-      await _auth.createUserWithEmailAndPassword(
+      // Create user with email and password
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      await sendEmailVerification(context);
-    } on FirebaseAuthException catch (e) {
-      // if you want to display your own custom error message
-      if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
-      }
-      showSnackBar(
-          context, e.message!); // Displaying the usual firebase error message
+
+      // Get the user ID
+      String userId = userCredential.user!.uid;
+
+      // Store additional user data in Firestore
+      await FirebaseFirestore.instance.collection('users').doc(userId).set({
+        'username': username,
+        'email': email,
+        'phone': phone,
+        'role': role,
+        // Add more fields as needed
+      });
+
+      // Navigate to home screen or any other screen after successful sign-up
+      context.push('/login');
+    } catch (e) {
+      // Handle sign-up errors
+      print('Sign up error: $e');
+      // You can show an error message to the user here
     }
   }
 
