@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 
-class UserModel{
+class UserModel {
   String username;
   String email;
   String mobile;
   String address;
-  String? role;
+  String role;
   String image;
- 
-  UserModel({required this.username, required this.email, required this.mobile, required this.address, required this.role, required this.image});
+
+  UserModel(
+      {required this.username,
+      required this.email,
+      required this.mobile,
+      required this.address,
+      required this.role,
+      required this.image});
 
   void setUsername(String newUsername) {
     username = newUsername;
@@ -17,9 +23,11 @@ class UserModel{
   void setEmail(String newEmail) {
     email = newEmail;
   }
+
   void setMobile(String newmobile) {
     mobile = newmobile;
   }
+
   void setAddress(String newAddress) {
     address = newAddress;
   }
@@ -30,5 +38,4 @@ class UserModel{
   String get getAddress => address;
   String get getRole => role;
   String get getImage => image;
-
 }
