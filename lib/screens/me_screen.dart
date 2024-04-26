@@ -8,7 +8,7 @@ class MeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String userId = '1234';
+    String userId = 'hA3DiP8v1VQXzeGSme2k7qj1V3D3';
     const sellerRating = 4;
     return Scaffold(
       appBar: AppBar(

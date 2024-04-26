@@ -51,7 +51,6 @@ GoRouter router() {
       ),
       GoRoute(
         path: '/edit_profile/:userId',
-        //builder: (context, state) => EditProfile(userId: '1234',),
         builder: (context, state) {
           final String? userId = state.pathParameters['userId'];
           return EditProfile(userId: userId!);

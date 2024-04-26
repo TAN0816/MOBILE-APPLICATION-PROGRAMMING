@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:secondhand_book_selling_platform/model/user.dart';
 
@@ -52,14 +53,17 @@ class UserService {
   }
 
   Future<void> updateProfile(String userId, String username, String email,
-      String mobile, String address) async {
+      String mobile, String address, String imageUrl) async {
     try {
       await FirebaseFirestore.instance.collection('users').doc(userId).update({
         'username': username,
         'email': email,
         'mobile': mobile,
         'address': address,
+        'image': imageUrl,
       });
+      _user = await getUserData(userId);
+      notifyListeners();
     } catch (e) {
       print('Error updating profile: $e');
       rethrow;
@@ -75,7 +79,9 @@ class UserService {
       username: userData['username'],
       email: userData['email'],
       mobile: userData['mobile'],
-      address: userData['address'],
+      address: userData['address'] ?? "",
+      role: userData['role'],
+      image: userData['image'] ?? "",
     );
     return user;
   }

@@ -162,5 +162,4 @@ class _ProfileEditOptionState extends State<ProfileEditOption> {
           ),
         ));
   }
-
 }
