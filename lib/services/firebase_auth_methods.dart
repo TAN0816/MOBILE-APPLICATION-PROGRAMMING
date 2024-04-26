@@ -205,6 +205,15 @@ class FirebaseAuthMethods {
     }
   }
 
+  //Forget Password
+  Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   // SIGN OUT
   Future<void> signOut(BuildContext context) async {
     try {

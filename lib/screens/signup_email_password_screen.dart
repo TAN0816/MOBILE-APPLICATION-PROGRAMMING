@@ -1,7 +1,9 @@
-import 'package:secondhand_book_selling_platform/services/firebase_auth_methods.dart';
-import 'package:secondhand_book_selling_platform/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:secondhand_book_selling_platform/services/firebase_auth_methods.dart';
+import 'package:secondhand_book_selling_platform/services/user_service.dart';
+import 'package:secondhand_book_selling_platform/widgets/custom_textfield.dart';
 
 class EmailPasswordSignup extends StatefulWidget {
   const EmailPasswordSignup({Key? key}) : super(key: key);
@@ -11,61 +13,277 @@ class EmailPasswordSignup extends StatefulWidget {
 }
 
 class _EmailPasswordSignupState extends State<EmailPasswordSignup> {
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController cpasswordController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool isBuyerSelected = false;
+  bool isSellerSelected = false;
+  bool isPasswordVisible = false;
+  bool iscPasswordVisible = false;
 
   void signUpUser() async {
-    context.read<FirebaseAuthMethods>().signUpWithEmail(
-          email: emailController.text,
-          password: passwordController.text,
-          context: context,
-        );
+    // Check if all fields are filled in
+    if (usernameController.text.isEmpty ||
+        emailController.text.isEmpty ||
+        phoneController.text.isEmpty ||
+        passwordController.text.isEmpty ||
+        cpasswordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please fill in all fields.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+    //Check if password match
+    if (passwordController.text != cpasswordController.text) {
+      //passwords dont match, show an error message or handle it as needed return
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Passwords do not match.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // Validate email format
+    final emailPattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+    final regExp = RegExp(emailPattern);
+    if (!regExp.hasMatch(emailController.text)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please enter a valid email address.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    String role =
+        isBuyerSelected ? 'Buyer' : (isSellerSelected ? 'Seller' : '');
+    UserService().signUpWithEmail(
+      email: emailController.text,
+      password: passwordController.text,
+      username: usernameController.text,
+      phone: phoneController.text,
+      role: role,
+      context: context,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text(
-            "Sign Up",
-            style: TextStyle(fontSize: 30),
-          ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.08),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20),
-            child: CustomTextField(
-              controller: emailController,
-              hintText: 'Enter your email',
-            ),
-          ),
-          const SizedBox(height: 20),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20),
-            child: CustomTextField(
-              controller: passwordController,
-              hintText: 'Enter your password',
-            ),
-          ),
-          const SizedBox(height: 40),
-          ElevatedButton(
-            onPressed: signUpUser,
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.blue),
-              textStyle: MaterialStateProperty.all(
-                const TextStyle(color: Colors.white),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(height: 60),
+              const Text(
+                "Sign Up",
+                style: TextStyle(fontSize: 30),
+                textAlign: TextAlign.center,
               ),
-              minimumSize: MaterialStateProperty.all(
-                Size(MediaQuery.of(context).size.width / 2.5, 50),
+              const SizedBox(height: 30),
+              Padding(
+                padding: const EdgeInsets.only(left: 15),
+                child: Text(
+                  "Select a role:",
+                  style: TextStyle(
+                    color: Color(0xff4a56c1),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
               ),
-            ),
-            child: const Text(
-              "Sign Up",
-              style: TextStyle(color: Colors.white, fontSize: 16),
-            ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        isBuyerSelected = !isBuyerSelected;
+                        if (isBuyerSelected) {
+                          isSellerSelected = false;
+                        }
+                      });
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                          (states) => isBuyerSelected
+                              ? const Color.fromARGB(255, 98, 104, 211)
+                              : const Color.fromARGB(255, 133, 150, 163)),
+                      minimumSize: MaterialStateProperty.all(
+                        const Size(150, 50),
+                      ),
+                    ),
+                    child: const Text(
+                      "Buyer",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        isSellerSelected = !isSellerSelected;
+                        if (isSellerSelected) {
+                          isBuyerSelected = false;
+                        }
+                      });
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                          (states) => isSellerSelected
+                              ? const Color.fromARGB(255, 98, 104, 211)
+                              : const Color.fromARGB(255, 133, 150, 163)),
+                      minimumSize: MaterialStateProperty.all(
+                        const Size(150, 50),
+                      ),
+                    ),
+                    child: const Text(
+                      "Seller",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              CustomTextField(
+                controller: usernameController,
+                hintText: 'Username',
+              ),
+              const SizedBox(height: 20),
+              CustomTextField(
+                controller: emailController,
+                hintText: 'Email',
+              ),
+              const SizedBox(height: 20),
+              CustomTextField(
+                controller: phoneController,
+                hintText: 'Phone Number',
+              ),
+              const SizedBox(height: 20),
+              Container(
+                height: 63,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  color: Color(0xfff4f4f4),
+                ),
+                child: Stack(
+                  alignment: Alignment.centerRight,
+                  children: [
+                    CustomTextField(
+                      controller: passwordController,
+                      hintText: 'Enter your password',
+                      // prefixIcon: Icon(Icons.lock),
+                      obscureText: !isPasswordVisible,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          isPasswordVisible = !isPasswordVisible;
+                        });
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: Icon(
+                          isPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              Container(
+                height: 63,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  color: Color(0xfff4f4f4),
+                ),
+                child: Stack(
+                  alignment: Alignment.centerRight,
+                  children: [
+                    CustomTextField(
+                      controller: cpasswordController,
+                      hintText: 'Confirm password',
+                      // prefixIcon: Icon(Icons.lock),
+                      obscureText: !iscPasswordVisible,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          iscPasswordVisible = !iscPasswordVisible;
+                        });
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: Icon(
+                          iscPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Already have an account?",
+                    style: TextStyle(color: Colors.grey[700]),
+                  ),
+                  const SizedBox(width: 4),
+                  GestureDetector(
+                    onTap: () {
+                      context.push('/login');
+                    },
+                    child: const Text(
+                      'Login in Now',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 40),
+              ElevatedButton(
+                onPressed: signUpUser,
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Color(0xff4a56c1)),
+                  textStyle: MaterialStateProperty.all(
+                    const TextStyle(color: Colors.white),
+                  ),
+                  minimumSize: MaterialStateProperty.all(
+                    Size(MediaQuery.of(context).size.width / 2.5, 50),
+                  ),
+                ),
+                child: const Text(
+                  "Register",
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

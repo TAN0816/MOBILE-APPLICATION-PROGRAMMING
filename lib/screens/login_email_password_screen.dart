@@ -141,7 +141,8 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    // Handle password reset action
+                    context.push('/forgot_password');
+                    //Navigator.of(context).push(MaterialPageRoute(builder: (context) { return const ForgotPasswordPage()}));
                   },
                   child: const Row(
                     children: [
