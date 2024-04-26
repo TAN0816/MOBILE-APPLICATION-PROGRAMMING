@@ -47,6 +47,7 @@ class UserService {
       email: userData['email'],
       mobile: userData['mobile'],
       address: userData['address'],
+      role: userData['role'],
     );
     return user;
   }
