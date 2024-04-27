@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:provider/provider.dart';
 import 'package:secondhand_book_selling_platform/model/user.dart';
 import 'package:secondhand_book_selling_platform/services/user_service.dart';
+import 'package:secondhand_book_selling_platform/state/user_state.dart';
 import '../widgets/profile_edit_option.dart';
 import '../widgets/appbar_with_back.dart';
 
@@ -19,6 +21,7 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   UserService userService = UserService();
+  UserState userState = UserState();
   UserModel? userData;
   String username = '';
   String phone = '';
@@ -30,7 +33,21 @@ class _EditProfileState extends State<EditProfile> {
   @override
   void initState() {
     super.initState();
-    fetchUserData();
+    // fetchUserData();
+
+    userState = Provider.of<UserState>(context, listen: false);
+    userState.getUserData(widget.userId);
+    userData = userState.getUserState;
+    if (userData != null) {
+      userData = userData;
+      username = userData!.getUsername;
+      phone = userData!.getPhone;
+      email = userData!.getEmail;
+      address = userData!.getAddress;
+      imageUrl = userData!.getImage;
+    } else {
+      fetchUserData();
+    }
   }
 
   void fetchUserData() async {
@@ -168,7 +185,7 @@ class _EditProfileState extends State<EditProfile> {
                       imageUrl = await storageRef.getDownloadURL();
                     }
 
-                    userService
+                    userState
                         .updateProfile(widget.userId, username, email, phone,
                             address, imageUrl)
                         .then((_) {
