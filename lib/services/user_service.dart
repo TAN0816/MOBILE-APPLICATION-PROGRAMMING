@@ -3,39 +3,38 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:secondhand_book_selling_platform/model/user.dart';
 
 class UserService {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore db = FirebaseFirestore.instance;
+  String userId = FirebaseAuth.instance.currentUser!.uid;
 
-  Future<void> addUser(String userId, String username, String email,
-      String mobile, String address, String role) {
-    return FirebaseFirestore.instance.collection('user').doc(userId).set({
-      'username': username,
-      'email': email,
-      'mobile': mobile,
-      'address': address,
-      'role': role,
-    });
-  }
-
-  String? getCurrentUserId() {
-    User? user = _auth.currentUser;
-    return user?.uid;
-  }
+  String get getUserId => userId;
 
   Future<void> updateProfile(String userId, String username, String email,
-      String mobile, String address) async {
+      String phone, String address, String imageUrl) async {
     try {
       await FirebaseFirestore.instance.collection('users').doc(userId).update({
         'username': username,
         'email': email,
-        'mobile': mobile,
+        'phone': phone,
         'address': address,
+        'image': imageUrl,
       });
     } catch (e) {
       print('Error updating profile: $e');
       rethrow;
     }
   }
+
+  // Future<void> updateEmail(String email) async {
+  //   User? user = FirebaseAuth.instance.currentUser;
+  //   if (user != null) {
+  //     await user.verifyBeforeUpdateEmail(email).then((value) async =>
+  //         await FirebaseFirestore.instance
+  //             .collection('users')
+  //             .doc(userId)
+  //             .update({
+  //           'email': email,
+  //         }));
+  //   }
+  // }
 
   Future<UserModel> getUserData(String userId) async {
     DocumentSnapshot<Map<String, dynamic>> docSnapshot =
@@ -45,9 +44,10 @@ class UserService {
     UserModel user = UserModel(
       username: userData['username'],
       email: userData['email'],
-      mobile: userData['mobile'],
-      address: userData['address'],
+      phone: userData['phone'],
+      address: userData['address'] ?? "",
       role: userData['role'],
+      image: userData['image'] ?? "",
     );
     return user;
   }

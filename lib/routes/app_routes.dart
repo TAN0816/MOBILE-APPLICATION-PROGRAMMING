@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:secondhand_book_selling_platform/screens/forgot_password.dart';
 import 'package:secondhand_book_selling_platform/screens/home_page.dart';
 import 'package:secondhand_book_selling_platform/screens/login_email_password_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/login_screen.dart';
@@ -47,15 +48,19 @@ GoRouter router() {
       GoRoute(
         path: '/me',
         builder: (context, state) => const MeScreen(),
+       
       ),
       GoRoute(
         path: '/edit_profile/:userId',
-        //builder: (context, state) => EditProfile(userId: '1234',),
         builder: (context, state) {
           final String? userId = state.pathParameters['userId'];
           return EditProfile(userId: userId!);
         },
       ),
+      GoRoute(
+        path: '/forgot_password',
+        builder: (context, state) => const ForgotPassword(),
+      )
     ],
   );
 }
