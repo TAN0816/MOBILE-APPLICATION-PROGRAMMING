@@ -5,6 +5,8 @@ import 'package:secondhand_book_selling_platform/utils/showOTPDialog.dart';
 import 'package:secondhand_book_selling_platform/utils/showSnackbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:secondhand_book_selling_platform/screens/login_email_password_screen.dart';
+
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 // import 'package:google_sign_in/google_sign_in.dart';
 
@@ -56,12 +58,142 @@ class FirebaseAuthMethods {
         // Add more fields as needed
       });
 
-      // Navigate to home screen or any other screen after successful sign-up
-      context.push('/login');
+// Show a pop-up dialog indicating successful registration
+//       showDialog(
+//         context: context,
+//         builder: (BuildContext context) {
+//           return AlertDialog(
+//             title: Text('Registration Successful'),
+//             content: Text('You have successfully registered.'),
+//             actions: <Widget>[
+//               TextButton(
+//                 onPressed: () {
+//                   Navigator.of(context).pop();
+//                   Navigator.of(context)
+//                       .push(MaterialPageRoute(builder: (context) {
+//                     return const EmailPasswordLogin();
+//                   }));
+//                 },
+//                 child: Text('OK'),
+//               ),
+//             ],
+//           );
+//         },
+//       );
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 40),
+                Container(
+                  width: 90,
+                  height: 90,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0xFFF5F8FF),
+                  ),
+                  child: const Center(
+                    child: Icon(
+                      Icons.done,
+                      size: 48,
+                      color: Colors.green,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 40),
+                // Center-aligned text
+                const Center(
+                  child: Column(
+                    children: [
+                      Text(
+                        "Registration Successful",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      SizedBox(height: 10), // Add spacing between texts
+                      Text(
+                        "You have successfully registered.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 30),
+                // Button to navigate to the home screen
+                ElevatedButton(
+                  // onPressed: () {
+                  //   // Navigate to the home screen
+                  //   context.go('/home');
+                  // },
+
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) {
+                      return const EmailPasswordLogin();
+                    }));
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                      Color(0xff4a56c1), // Set background color
+                    ),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(25.0), // Set border radius
+                      ),
+                    ),
+                    textStyle: MaterialStateProperty.all(
+                      const TextStyle(color: Colors.white), // Set text color
+                    ),
+                  ),
+                  child: const SizedBox(
+                    width: 150,
+                    height: 55,
+                    child: Center(
+                      child: Text(
+                        "Go to Login",
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
     } catch (e) {
       // Handle sign-up errors
       print('Sign up error: $e');
-      // You can show an error message to the user here
+      // Show error message to the user
+      String errorMessage =
+          'An error occurred during sign-up. Please try again.';
+      if (e is FirebaseAuthException) {
+        if (e.code == 'email-already-in-use') {
+          errorMessage =
+              'The email address is already in use by another account.';
+        } else {
+          errorMessage = e.message ?? errorMessage;
+        }
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errorMessage),
+          backgroundColor: Colors.red, // Set the background color to red
+          duration: Duration(seconds: 3),
+        ),
+      );
     }
   }
 

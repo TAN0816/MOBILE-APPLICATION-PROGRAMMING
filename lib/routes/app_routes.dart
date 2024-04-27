@@ -12,7 +12,6 @@ import 'package:secondhand_book_selling_platform/screens/edit_profile.dart';
 import 'package:secondhand_book_selling_platform/screens/signup_email_password_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/reset.dart';
 
-
 GoRouter router() {
   return GoRouter(
     initialLocation: '/',
