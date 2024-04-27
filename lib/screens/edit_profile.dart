@@ -33,7 +33,6 @@ class _EditProfileState extends State<EditProfile> {
   @override
   void initState() {
     super.initState();
-    // fetchUserData();
 
     userState = Provider.of<UserState>(context, listen: false);
     userState.getUserData(widget.userId);
@@ -190,7 +189,7 @@ class _EditProfileState extends State<EditProfile> {
                             address, imageUrl)
                         .then((_) {
                       context.pop();
-                      context.pop();
+                      context.go('/home/3');
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text('Profile updated successfully')));
                     }).catchError((error) {

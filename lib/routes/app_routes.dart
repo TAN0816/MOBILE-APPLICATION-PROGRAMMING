@@ -36,8 +36,21 @@ GoRouter router() {
       ),
       GoRoute(
         path: '/home',
-        builder: (context, state) => const Homepage(),
+        builder: (context, state) =>
+            const Homepage(), // Handle route without tab parameter
       ),
+      GoRoute(
+          path: '/home/:tab',
+          // builder: (context, state) => const Homepage(),
+          builder: (context, state) {
+            String? tab = state.pathParameters['tab'];
+            print(tab);
+            int index = 0;
+            if (tab != null) {
+              index = int.tryParse(tab) ?? 0;
+            }
+            return Homepage(bottomIndex: index);
+          }),
       GoRoute(
         path: '/notification',
         builder: (context, state) => const NotificationScreen(),
@@ -49,7 +62,6 @@ GoRouter router() {
       GoRoute(
         path: '/me',
         builder: (context, state) => const MeScreen(),
-       
       ),
       GoRoute(
         path: '/resetscreen',

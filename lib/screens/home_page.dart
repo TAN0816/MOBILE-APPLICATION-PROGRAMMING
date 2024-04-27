@@ -5,7 +5,8 @@ import 'package:secondhand_book_selling_platform/screens/me_screen.dart';
 import 'package:flutter/material.dart';
 
 class Homepage extends StatefulWidget {
-  const Homepage({super.key});
+  final int bottomIndex;
+  const Homepage({super.key, this.bottomIndex = 0});
 
   @override
   _BottomNavBarState createState() => _BottomNavBarState();
@@ -20,8 +21,12 @@ class _BottomNavBarState extends State<Homepage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    _selectedIndex = widget.bottomIndex;
+  }
 
+  @override
+  Widget build(BuildContext context) {
     Widget getBodyWidget(int index) {
       switch (index) {
         case 0:
@@ -31,8 +36,8 @@ class _BottomNavBarState extends State<Homepage> {
         case 2:
           return const MessageScreen();
         case 3:
-        return const MeScreen();
-        
+          return const MeScreen();
+
         default:
           return const HomeScreen(); // Default to HomeScreen if index is out of range
       }
