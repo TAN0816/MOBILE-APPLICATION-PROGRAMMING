@@ -10,6 +10,8 @@ import 'package:secondhand_book_selling_platform/screens/message_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/me_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/edit_profile.dart';
 import 'package:secondhand_book_selling_platform/screens/signup_email_password_screen.dart';
+import 'package:secondhand_book_selling_platform/screens/reset.dart';
+
 
 GoRouter router() {
   return GoRouter(
@@ -48,6 +50,10 @@ GoRouter router() {
       GoRoute(
         path: '/me',
         builder: (context, state) => const MeScreen(),
+      ),
+      GoRoute(
+        path: '/resetscreen',
+        builder: (context, state) => const DetailsScreen(),
       ),
       GoRoute(
         path: '/edit_profile/:userId',

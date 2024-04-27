@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:secondhand_book_selling_platform/services/firebase_auth_methods.dart';
 // import 'package:secondhand_book_selling_platform/services/user_service.dart';
 import 'package:secondhand_book_selling_platform/widgets/custom_textfield.dart';
+import 'package:secondhand_book_selling_platform/screens/reset.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({Key? key}) : super(key: key);
@@ -26,13 +27,18 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     try {
       await FirebaseAuth.instance
           .sendPasswordResetEmail(email: emailController.text.trim());
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              content: Text('Success'),
-            );
-          });
+      // Navigate to the detail screen after sending the reset password email
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => DetailsScreen()),
+      );
+      // showDialog(
+      //     context: context,
+      //     builder: (context) {
+      //       return AlertDialog(
+      //         content: Text('Success'),
+      //       );
+      //     });
       // showDialog(
       //   context: context,
       //   builder: (context) {
