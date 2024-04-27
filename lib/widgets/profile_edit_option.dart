@@ -18,8 +18,8 @@ class ProfileEditOption extends StatefulWidget {
 
 class _ProfileEditOptionState extends State<ProfileEditOption> {
   void _showModalBottomSheet(BuildContext context) {
-    final GlobalKey<FormState> _profileFormKey = GlobalKey<FormState>();
-    final TextEditingController _textEditingController =
+    final GlobalKey<FormState> profileFormKey = GlobalKey<FormState>();
+    final TextEditingController textEditingController =
         TextEditingController(text: widget.placeholder);
 
     showModalBottomSheet(
@@ -33,7 +33,7 @@ class _ProfileEditOptionState extends State<ProfileEditOption> {
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Form(
-              key: _profileFormKey,
+              key: profileFormKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
@@ -66,7 +66,7 @@ class _ProfileEditOptionState extends State<ProfileEditOption> {
                     ),
                   ),
                   TextFormField(
-                    controller: _textEditingController,
+                    controller: textEditingController,
                     decoration: InputDecoration(
                       labelText: 'Enter ${widget.title}: ',
                       labelStyle: const TextStyle(
@@ -82,14 +82,14 @@ class _ProfileEditOptionState extends State<ProfileEditOption> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 30.0),
+                  const SizedBox(height: 30.0),
                   TextButton(
                     style: TextButton.styleFrom(
                       backgroundColor: const Color(0xff4a56c1),
                     ),
                     onPressed: () {
-                      if (_profileFormKey.currentState!.validate()) {
-                        String inputText = _textEditingController.text;
+                      if (profileFormKey.currentState!.validate()) {
+                        String inputText = textEditingController.text;
                         // Handle submit action here
                         print('Submitted: $inputText');
                         widget.updateProfile(inputText);

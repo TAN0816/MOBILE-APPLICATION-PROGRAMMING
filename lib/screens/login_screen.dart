@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:secondhand_book_selling_platform/widgets/custom_button.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  const MainScreen({super.key});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -56,7 +56,7 @@ class _MainScreenState extends State<MainScreen> {
                   height: 56,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(32),
-                    color: Color(0xff4a56c1),
+                    color: const Color(0xff4a56c1),
                   ),
                   child: CustomButton(
                     onTap: () {

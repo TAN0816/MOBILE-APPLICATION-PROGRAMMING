@@ -4,7 +4,7 @@ import 'package:secondhand_book_selling_platform/services/firebase_auth_methods.
 import 'package:secondhand_book_selling_platform/widgets/custom_textfield.dart';
 
 class EmailPasswordSignup extends StatefulWidget {
-  const EmailPasswordSignup({Key? key}) : super(key: key);
+  const EmailPasswordSignup({super.key});
 
   @override
   _EmailPasswordSignupState createState() => _EmailPasswordSignupState();
@@ -177,7 +177,7 @@ class _EmailPasswordSignupState extends State<EmailPasswordSignup> {
                 height: 63,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(4),
-                  color: Color(0xfff4f4f4),
+                  color: const Color(0xfff4f4f4),
                 ),
                 child: Stack(
                   alignment: Alignment.centerRight,

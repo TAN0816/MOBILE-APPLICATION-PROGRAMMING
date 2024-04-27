@@ -49,6 +49,7 @@ GoRouter router() {
       GoRoute(
         path: '/me',
         builder: (context, state) => const MeScreen(),
+       
       ),
       GoRoute(
         path: '/resetscreen',

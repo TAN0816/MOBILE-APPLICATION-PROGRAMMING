@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class EmailPasswordLogin extends StatefulWidget {
-  const EmailPasswordLogin({Key? key}) : super(key: key);
+  const EmailPasswordLogin({super.key});
 
   @override
   _EmailPasswordLoginState createState() => _EmailPasswordLoginState();
@@ -44,14 +44,14 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Login Failed'),
-          content: Text('Invalid email or password. Please try again.'),
+          title: const Text('Login Failed'),
+          content: const Text('Invalid email or password. Please try again.'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 context.pop();
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         );
@@ -86,13 +86,13 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
             height: 63,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
-              color: Color(0xfff4f4f4),
+              color: const Color(0xfff4f4f4),
             ),
             margin: const EdgeInsets.symmetric(horizontal: 30),
             child: CustomTextField(
               controller: emailController,
               hintText: 'Enter your email',
-              prefixIcon: Icon(Icons.email),
+              prefixIcon: const Icon(Icons.email),
             ),
           ),
           const SizedBox(height: 20),
@@ -100,7 +100,7 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
             height: 63,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
-              color: Color(0xfff4f4f4),
+              color: const Color(0xfff4f4f4),
             ),
             margin: const EdgeInsets.symmetric(horizontal: 30),
             child: Stack(
@@ -109,7 +109,7 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
                 CustomTextField(
                   controller: passwordController,
                   hintText: 'Enter your password',
-                  prefixIcon: Icon(Icons.lock),
+                  prefixIcon: const Icon(Icons.lock),
                   obscureText: !isPasswordVisible,
                 ),
                 GestureDetector(
@@ -186,7 +186,7 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
                         content: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            SizedBox(height: 40),
+                            const SizedBox(height: 40),
                             Container(
                               width: 90,
                               height: 90,
@@ -236,7 +236,7 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
                               },
                               style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(
-                                  Color(0xff4a56c1), // Set background color
+                                  const Color(0xff4a56c1), // Set background color
                                 ),
                                 shape: MaterialStateProperty.all<
                                     RoundedRectangleBorder>(
