@@ -16,7 +16,7 @@ class MeScreen extends StatefulWidget {
 
 class _MeScreenState extends State<MeScreen> {
   UserService userService = UserService();
-  UserState userState = UserState();
+  // UserState userState = UserState();
   UserModel? userData;
   String userId = '';
   String username = '';
@@ -29,16 +29,16 @@ class _MeScreenState extends State<MeScreen> {
   void initState() {
     super.initState();
     userId = UserService().getUserId;
-    userState = Provider.of<UserState>(context, listen: false);
-    userData = userState.getUserState;
-    if (userData != null) {
-      userData = userData;
-      username = userData!.getUsername;
-      imageUrl = userData!.getImage;
-      role = userData!.getRole;
-    } else {
+    // userState = Provider.of<UserState>(context, listen: false);
+    // userData = userState.getUserState;
+    // if (userData != null) {
+    //   userData = userData;
+    //   username = userData!.getUsername;
+    //   imageUrl = userData!.getImage;
+    //   role = userData!.getRole;
+    // } else {
       fetchUserData();
-    }
+    // }
   }
 
   void fetchUserData() async {

@@ -21,7 +21,7 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   UserService userService = UserService();
-  UserState userState = UserState();
+  // UserState userState = UserState();
   UserModel? userData;
   String username = '';
   String phone = '';
@@ -34,19 +34,19 @@ class _EditProfileState extends State<EditProfile> {
   void initState() {
     super.initState();
 
-    userState = Provider.of<UserState>(context, listen: false);
-    userState.getUserData(widget.userId);
-    userData = userState.getUserState;
-    if (userData != null) {
-      userData = userData;
-      username = userData!.getUsername;
-      phone = userData!.getPhone;
-      email = userData!.getEmail;
-      address = userData!.getAddress;
-      imageUrl = userData!.getImage;
-    } else {
-      fetchUserData();
-    }
+    // userState = Provider.of<UserState>(context, listen: false);
+    // userState.getUserData(widget.userId);
+    // userData = userState.getUserState;
+    // if (userData != null) {
+    //   userData = userData;
+    //   username = userData!.getUsername;
+    //   phone = userData!.getPhone;
+    //   email = userData!.getEmail;
+    //   address = userData!.getAddress;
+    //   imageUrl = userData!.getImage;
+    // } else {
+    fetchUserData();
+    // }
   }
 
   void fetchUserData() async {
@@ -184,7 +184,8 @@ class _EditProfileState extends State<EditProfile> {
                       imageUrl = await storageRef.getDownloadURL();
                     }
 
-                    userState
+                    // userState
+                    userService
                         .updateProfile(widget.userId, username, email, phone,
                             address, imageUrl)
                         .then((_) {
