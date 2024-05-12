@@ -10,6 +10,34 @@ class EmailPasswordSignup extends StatefulWidget {
   _EmailPasswordSignupState createState() => _EmailPasswordSignupState();
 }
 
+// Inside CustomTextField widget
+class CustomTextField extends StatelessWidget {
+  final TextEditingController controller;
+  final String hintText;
+  final bool obscureText;
+  final String? errorMessage; // Add error message parameter
+
+  const CustomTextField({
+    Key? key,
+    required this.controller,
+    required this.hintText,
+    this.obscureText = false,
+    this.errorMessage, // Add error message parameter
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      obscureText: obscureText,
+      decoration: InputDecoration(
+        hintText: hintText,
+        errorText: errorMessage, // Show error message
+      ),
+    );
+  }
+}
+
 class _EmailPasswordSignupState extends State<EmailPasswordSignup> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
@@ -21,6 +49,50 @@ class _EmailPasswordSignupState extends State<EmailPasswordSignup> {
   bool isPasswordVisible = false;
   bool iscPasswordVisible = false;
 
+  String? emailErrorMessage; // Error message for email field
+  String? phoneErrorMessage;
+
+  @override
+  void initState() {
+    super.initState();
+    emailController.addListener(validateEmail); // Add listener for email field
+    phoneController
+        .addListener(validatePhoneNumber); // Add listener for phone field
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    phoneController.dispose();
+    super.dispose();
+  }
+
+// Regular expression pattern for validating email addresses
+  static const emailPattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+
+  // Function to validate email
+  void validateEmail() {
+    final regExp = RegExp(emailPattern);
+    setState(() {
+      if (!regExp.hasMatch(emailController.text)) {
+        emailErrorMessage = 'Please enter a valid email address.';
+      } else {
+        emailErrorMessage = null;
+      }
+    });
+  }
+
+  // Function to validate phone number
+  void validatePhoneNumber() {
+    setState(() {
+      if (!isValidMalaysianPhoneNumber(phoneController.text)) {
+        phoneErrorMessage = 'Please enter a valid phone number.';
+      } else {
+        phoneErrorMessage = null;
+      }
+    });
+  }
+
   void signUpUser() async {
     // Check if all fields are filled in
     if (usernameController.text.isEmpty ||
@@ -28,36 +100,31 @@ class _EmailPasswordSignupState extends State<EmailPasswordSignup> {
         phoneController.text.isEmpty ||
         passwordController.text.isEmpty ||
         cpasswordController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please fill in all fields.'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      showErrorSnackBar('Please fill in all fields.');
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   const SnackBar(
+      //     content: Text('Please fill in all fields.'),
+      //     backgroundColor: Colors.red,
+      //   ),
+      // );
       return;
     }
-    //Check if password match
+
+    // Check if password matches
     if (passwordController.text != cpasswordController.text) {
-      //passwords dont match, show an error message or handle it as needed return
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Passwords do not match.'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      showErrorSnackBar('Passwords do not match.');
       return;
     }
 
     // Validate email format
-    const emailPattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
     final regExp = RegExp(emailPattern);
     if (!regExp.hasMatch(emailController.text)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter a valid email address.'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      showErrorSnackBar('Please enter a valid email address.');
+      return;
+    }
+
+    if (!isValidMalaysianPhoneNumber(phoneController.text)) {
+      showErrorSnackBar('Please enter a valid phone number.');
       return;
     }
 
@@ -70,6 +137,22 @@ class _EmailPasswordSignupState extends State<EmailPasswordSignup> {
       phone: phoneController.text,
       role: role,
       context: context,
+    );
+  }
+
+  // Function to validate Malaysian phone number format
+  bool isValidMalaysianPhoneNumber(String phoneNumber) {
+    // Malaysian phone numbers should start with 0 and have 10 digits
+    return phoneNumber.startsWith('0') && phoneNumber.length == 10;
+  }
+
+  // Function to display error snackbar
+  void showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+      ),
     );
   }
 
@@ -158,20 +241,69 @@ class _EmailPasswordSignupState extends State<EmailPasswordSignup> {
                 ],
               ),
               const SizedBox(height: 20),
-              CustomTextField(
-                controller: usernameController,
-                hintText: 'Username',
+
+              Container(
+                height: 63,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  color: const Color(0xfff4f4f4),
+                ),
+                child: Stack(
+                  alignment: Alignment.centerRight,
+                  children: [
+                    CustomTextField(
+                      controller: usernameController,
+                      hintText: 'Username',
+                    ),
+                  ],
+                ),
               ),
+
               const SizedBox(height: 20),
-              CustomTextField(
-                controller: emailController,
-                hintText: 'Email',
+
+              Container(
+                height: 63,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  color: const Color(0xfff4f4f4),
+                ),
+                child: Stack(
+                  alignment: Alignment.centerRight,
+                  children: [
+                    CustomTextField(
+                      controller: emailController,
+                      hintText: 'Email',
+                      errorMessage: emailErrorMessage,
+                    ),
+                  ],
+                ),
               ),
+
               const SizedBox(height: 20),
-              CustomTextField(
-                controller: phoneController,
-                hintText: 'Phone Number',
+
+              Container(
+                height: 63,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  color: const Color(0xfff4f4f4),
+                ),
+                child: Stack(
+                  alignment: Alignment.centerRight,
+                  children: [
+                    CustomTextField(
+                      controller: phoneController,
+                      hintText: 'Phone Number',
+                      errorMessage: phoneErrorMessage,
+                    ),
+                  ],
+                ),
               ),
+
+              // CustomTextField(
+              //   controller: phoneController,
+              //   hintText: 'Phone Number',
+              //   errorMessage: phoneErrorMessage, // Pass error message
+              // ),
               const SizedBox(height: 20),
               Container(
                 height: 63,
