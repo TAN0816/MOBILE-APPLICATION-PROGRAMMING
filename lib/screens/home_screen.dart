@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-// home_screen.dart
-=======
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
->>>>>>> 76e1e3434e8ea9b6fdcb7d67c7f9753b8da94606
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:go_router/go_router.dart';
@@ -44,7 +37,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -107,7 +99,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       IconButton(
                         icon: Icon(Icons.shopping_cart),
-                        onPressed: () {},
+                        onPressed: () {
+                          context.push('/cart');
+                        },
                       ),
                     ],
                   ),
@@ -133,7 +127,8 @@ class _HomeScreenState extends State<HomeScreen> {
           }
           if (snapshot.hasError) {
             print('Error in FutureBuilder: ${snapshot.error}');
-            return Center(child: Text('Something went wrong: ${snapshot.error}'));
+            return Center(
+                child: Text('Something went wrong: ${snapshot.error}'));
           }
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return Center(child: Text('No books found'));
@@ -149,9 +144,12 @@ class _HomeScreenState extends State<HomeScreen> {
               }
               if (streamSnapshot.hasError) {
                 print('Error in StreamBuilder: ${streamSnapshot.error}');
-                return Center(child: Text('Something went wrong: ${streamSnapshot.error}'));
+                return Center(
+                    child:
+                        Text('Something went wrong: ${streamSnapshot.error}'));
               }
-              if (!streamSnapshot.hasData || streamSnapshot.data!.docs.isEmpty) {
+              if (!streamSnapshot.hasData ||
+                  streamSnapshot.data!.docs.isEmpty) {
                 return Center(child: Text('No books found'));
               }
 
@@ -159,7 +157,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   children: [
                     Container(
-                      color: Colors.white, // Set filter row background color to white
+                      color: Colors
+                          .white, // Set filter row background color to white
                       padding: EdgeInsets.symmetric(vertical: 3.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -168,16 +167,22 @@ class _HomeScreenState extends State<HomeScreen> {
                             onPressed: () {
                               // Handle filter button press
                             },
-                            icon: Icon(Icons.filter_list, color: Color.fromARGB(255, 87, 86, 86)),
-                            label: Text('Filters', style: TextStyle(color: Color.fromARGB(255, 87, 86, 86))),
+                            icon: Icon(Icons.filter_list,
+                                color: Color.fromARGB(255, 87, 86, 86)),
+                            label: Text('Filters',
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 87, 86, 86))),
                           ),
                           SizedBox(width: 16),
                           TextButton.icon(
                             onPressed: () {
                               // Handle sorting button press
                             },
-                            icon: Icon(Icons.sort, color: Color.fromARGB(255, 87, 86, 86)),
-                            label: Text('Price: lowest to high', style: TextStyle(color: Color.fromARGB(255, 87, 86, 86))),
+                            icon: Icon(Icons.sort,
+                                color: Color.fromARGB(255, 87, 86, 86)),
+                            label: Text('Price: lowest to high',
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 87, 86, 86))),
                           ),
                         ],
                       ),
@@ -208,13 +213,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemCount: books.length,
                       itemBuilder: (context, index) {
                         var book = books[index];
-                        var imageUrl = book.images.isNotEmpty ? book.images[0] : '';
+                        var imageUrl =
+                            book.images.isNotEmpty ? book.images[0] : '';
                         var bookName = book.name;
                         var bookPrice = book.price.toString();
 
                         return Card(
                           color: Colors.white, // Set card color to white
-                          margin: EdgeInsets.all(8.0), // Reduce the margin to make space between cards smaller
+                          margin: EdgeInsets.all(
+                              8.0), // Reduce the margin to make space between cards smaller
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -223,26 +230,37 @@ class _HomeScreenState extends State<HomeScreen> {
                                   aspectRatio: 2,
                                   child: imageUrl.isNotEmpty
                                       ? (imageUrl.startsWith('http')
-                                          ? Image.network(imageUrl, fit: BoxFit.cover)
-                                          : Image.asset(imageUrl, fit: BoxFit.cover))
-                                      : Image.asset('assets/image5.png', fit: BoxFit.cover),
+                                          ? Image.network(imageUrl,
+                                              fit: BoxFit.cover)
+                                          : Image.asset(imageUrl,
+                                              fit: BoxFit.cover))
+                                      : Image.asset('assets/image5.png',
+                                          fit: BoxFit.cover),
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsets.fromLTRB(22.0, 15.0, 15.0, 6.0),
-                                child: Text(bookName, style: TextStyle(fontSize: 16)),
+                                padding:
+                                    EdgeInsets.fromLTRB(22.0, 15.0, 15.0, 6.0),
+                                child: Text(bookName,
+                                    style: TextStyle(fontSize: 16)),
                               ),
                               Padding(
-                                padding: EdgeInsets.only(left: 22.0, right: 5.0),
+                                padding:
+                                    EdgeInsets.only(left: 22.0, right: 5.0),
                                 child: Row(
                                   children: [
                                     Text(
                                       'RM${double.parse(bookPrice).toStringAsFixed(2)}',
-                                      style: TextStyle(fontSize: 16, color: Color(0xFF4A56C1)),
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: Color(0xFF4A56C1)),
                                     ),
                                     Spacer(),
                                     IconButton(
-                                      icon: Icon(Icons.add_shopping_cart_outlined, size: 18, color: Color(0xFF4A56C1)),
+                                      icon: Icon(
+                                          Icons.add_shopping_cart_outlined,
+                                          size: 18,
+                                          color: Color(0xFF4A56C1)),
                                       onPressed: () {},
                                     ),
                                   ],
@@ -263,21 +281,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-=======
-    return Center(
-      child: TextButton(
-        style: TextButton.styleFrom(
-          padding: EdgeInsets.zero,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero,
-          ),
-        ),
-        onPressed: () {
-          context.push('/productdetailseller');
-        },
-        child: const Text('ProductDetail'),
-      ),
-    );
-  }
-}
->>>>>>> 76e1e3434e8ea9b6fdcb7d67c7f9753b8da94606
