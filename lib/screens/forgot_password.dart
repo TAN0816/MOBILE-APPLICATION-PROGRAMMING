@@ -8,7 +8,7 @@ import 'package:secondhand_book_selling_platform/widgets/custom_textfield.dart';
 import 'package:secondhand_book_selling_platform/screens/reset.dart';
 
 class ForgotPassword extends StatefulWidget {
-  const ForgotPassword({Key? key}) : super(key: key);
+  const ForgotPassword({super.key});
 
   @override
   State<ForgotPassword> createState() => _ForgotPasswordState();
@@ -30,7 +30,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       // Navigate to the detail screen after sending the reset password email
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => DetailsScreen()),
+        MaterialPageRoute(builder: (context) => const DetailsScreen()),
       );
       // showDialog(
       //     context: context,
@@ -55,7 +55,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         showDialog(
           context: context,
           builder: (context) {
-            return AlertDialog(
+            return const AlertDialog(
               content: Text('The email is not registered or is invalid.'),
             );
           },
@@ -83,7 +83,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       ),
       body: Column(
         children: [
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
 
           // Padding(
           //   padding: EdgeInsets.symmetric(horizontal: 25.0),
@@ -115,20 +115,20 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             height: 63,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
-              color: Color(0xfff4f4f4),
+              color: const Color(0xfff4f4f4),
             ),
             margin: const EdgeInsets.symmetric(horizontal: 30),
             child: CustomTextField(
               controller: emailController,
               hintText: 'Enter your email',
-              prefixIcon: Icon(Icons.email),
+              prefixIcon: const Icon(Icons.email),
             ),
           ),
           const SizedBox(height: 30),
           ElevatedButton(
             onPressed: passwordReset,
             style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Color(0xff4a56c1)),
+              backgroundColor: MaterialStateProperty.all(const Color(0xff4a56c1)),
               textStyle: MaterialStateProperty.all(
                 const TextStyle(color: Colors.white),
               ),
