@@ -14,9 +14,11 @@ import 'package:secondhand_book_selling_platform/screens/reset.dart';
 import 'package:secondhand_book_selling_platform/screens/product/productdetailbuyer.dart';
 import 'package:secondhand_book_selling_platform/screens/product/productdetailseller.dart';
 
+import '../screens/add_product.dart';
+
 GoRouter router() {
   return GoRouter(
-    initialLocation: '/',
+    initialLocation: '/add_product',
     routes: [
       GoRoute(
         path: '/',
@@ -75,6 +77,10 @@ GoRouter router() {
           final String? userId = state.pathParameters['userId'];
           return EditProfile(userId: userId!);
         },
+      ),
+      GoRoute(
+        path: '/add_product',
+        builder: (context, state) => AddNewBookPage(),
       ),
       GoRoute(
         path: '/forgot_password',
