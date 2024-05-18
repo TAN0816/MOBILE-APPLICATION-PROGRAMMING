@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:go_router/go_router.dart';
+// import 'package:go_router/go_router.dart';
 import 'package:secondhand_book_selling_platform/utils/showOTPDialog.dart';
 import 'package:secondhand_book_selling_platform/utils/showSnackbar.dart';
 import 'package:flutter/foundation.dart';
@@ -145,7 +145,7 @@ class FirebaseAuthMethods {
                   },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
-                      Color(0xff4a56c1), // Set background color
+                      const Color(0xff4a56c1), // Set background color
                     ),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(

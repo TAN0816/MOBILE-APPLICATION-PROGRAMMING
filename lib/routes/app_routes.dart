@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:secondhand_book_selling_platform/screens/cart/cart_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/forgot_password.dart';
 import 'package:secondhand_book_selling_platform/screens/home_page.dart';
 import 'package:secondhand_book_selling_platform/screens/login_email_password_screen.dart';
@@ -77,6 +78,10 @@ GoRouter router() {
       GoRoute(
         path: '/forgot_password',
         builder: (context, state) => const ForgotPassword(),
+      ),
+      GoRoute(
+        path: '/cart',
+        builder: (context, state) => CartScreen(),
       )
     ],
   );
