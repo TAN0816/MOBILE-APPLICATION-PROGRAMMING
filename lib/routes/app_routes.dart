@@ -11,6 +11,8 @@ import 'package:secondhand_book_selling_platform/screens/me_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/edit_profile.dart';
 import 'package:secondhand_book_selling_platform/screens/signup_email_password_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/reset.dart';
+import 'package:secondhand_book_selling_platform/screens/product/productdetailbuyer.dart';
+import 'package:secondhand_book_selling_platform/screens/product/productdetailseller.dart';
 
 GoRouter router() {
   return GoRouter(
@@ -44,7 +46,7 @@ GoRouter router() {
           // builder: (context, state) => const Homepage(),
           builder: (context, state) {
             String? tab = state.pathParameters['tab'];
-            print(tab);
+ 
             int index = 0;
             if (tab != null) {
               index = int.tryParse(tab) ?? 0;
@@ -77,6 +79,14 @@ GoRouter router() {
       GoRoute(
         path: '/forgot_password',
         builder: (context, state) => const ForgotPassword(),
+      ),
+       GoRoute(
+        path: '/productdetailbuyer',
+        builder: (context, state) => const ProductDetailBuyer(),
+      ),
+      GoRoute(
+        path: '/productdetailseller',
+        builder: (context, state) => const ProductDetailSeller(),
       )
     ],
   );

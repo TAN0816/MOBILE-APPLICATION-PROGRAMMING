@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:go_router/go_router.dart';
 import 'package:secondhand_book_selling_platform/utils/showOTPDialog.dart';
 import 'package:secondhand_book_selling_platform/utils/showSnackbar.dart';
 import 'package:flutter/foundation.dart';
@@ -88,7 +87,7 @@ class FirebaseAuthMethods {
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
                 Container(
                   width: 90,
                   height: 90,
@@ -145,7 +144,7 @@ class FirebaseAuthMethods {
                   },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
-                      Color(0xff4a56c1), // Set background color
+                      const Color(0xff4a56c1), // Set background color
                     ),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
@@ -191,7 +190,7 @@ class FirebaseAuthMethods {
         SnackBar(
           content: Text(errorMessage),
           backgroundColor: Colors.red, // Set the background color to red
-          duration: Duration(seconds: 3),
+          duration: const Duration(seconds: 3),
         ),
       );
     }
@@ -358,7 +357,7 @@ class FirebaseAuthMethods {
     try {
       await _auth.sendPasswordResetEmail(email: email);
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 

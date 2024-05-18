@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:secondhand_book_selling_platform/screens/login_email_password_screen.dart';
 
 class DetailsScreen extends StatelessWidget {
-  const DetailsScreen({Key? key}) : super(key: key);
+  const DetailsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class DetailsScreen extends StatelessWidget {
               height: 250, // Adjust height as needed
             ),
             const SizedBox(height: 20),
-            Text(
+            const Text(
               "We Sent you an Email to reset your password.",
               style: TextStyle(
                 fontFamily: "Inter",
@@ -35,16 +35,16 @@ class DetailsScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => EmailPasswordLogin()),
+                  MaterialPageRoute(builder: (context) => const EmailPasswordLogin()),
                 );
               },
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Color(0xff4a56c1)),
+                backgroundColor: MaterialStateProperty.all(const Color(0xff4a56c1)),
                 textStyle: MaterialStateProperty.all(
                   const TextStyle(color: Colors.white),
                 ),
                 minimumSize: MaterialStateProperty.all(
-                  Size(100, 50), // Adjust the width as needed
+                  const Size(100, 50), // Adjust the width as needed
                 ),
               ),
               child: const Text(
