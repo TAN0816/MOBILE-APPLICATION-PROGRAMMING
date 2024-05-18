@@ -1,157 +1,7 @@
-// import 'package:flutter/material.dart';
-
-// class AddNewBookPage extends StatefulWidget {
-//   @override
-//   _AddNewBookPageState createState() => _AddNewBookPageState();
-// }
-
-// class _AddNewBookPageState extends State<AddNewBookPage> {
-//   // Define variables to store book information
-//   String _bookName = '';
-//   double _bookPrice = 0.0;
-//   String _bookDetails = '';
-//   String? _selectedCourse; // Nullable type
-//   String? _selectedYear; // Nullable type
-//   int _quantity = 1;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Add New Book'),
-//         leading: IconButton(
-//           icon: Icon(Icons.arrow_back),
-//           onPressed: () {
-//             Navigator.pop(context);
-//           },
-//         ),
-//       ),
-//       body: SingleChildScrollView(
-//         padding: EdgeInsets.all(20.0),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             // Book Name
-//             TextField(
-//               decoration: InputDecoration(labelText: 'Book Name'),
-//               onChanged: (value) {
-//                 setState(() {
-//                   _bookName = value;
-//                 });
-//               },
-//             ),
-//             SizedBox(height: 20.0),
-//             // Book Price
-//             TextField(
-//               decoration: InputDecoration(labelText: 'Book Price'),
-//               keyboardType: TextInputType.number,
-//               onChanged: (value) {
-//                 setState(() {
-//                   _bookPrice = double.tryParse(value) ?? 0.0;
-//                 });
-//               },
-//             ),
-//             SizedBox(height: 20.0),
-//             // Book Details
-//             TextField(
-//               decoration: InputDecoration(labelText: 'Book Details'),
-//               maxLines: 3,
-//               onChanged: (value) {
-//                 setState(() {
-//                   _bookDetails = value;
-//                 });
-//               },
-//             ),
-//             SizedBox(height: 20.0),
-//             // Course Dropdown
-//             DropdownButtonFormField<String>(
-//               value: _selectedCourse,
-//               decoration: InputDecoration(labelText: 'Course'),
-//               items: ['Course A', 'Course B', 'Course C']
-//                   .map((course) => DropdownMenuItem(
-//                         value: course,
-//                         child: Text(course),
-//                       ))
-//                   .toList(),
-//               onChanged: (value) {
-//                 setState(() {
-//                   _selectedCourse = value!;
-//                 });
-//               },
-//             ),
-//             SizedBox(height: 20.0),
-//             // Year Dropdown
-//             DropdownButtonFormField<String>(
-//               value: _selectedYear,
-//               decoration: InputDecoration(labelText: 'Year'),
-//               items: ['Year 1', 'Year 2', 'Year 3']
-//                   .map((year) => DropdownMenuItem(
-//                         value: year,
-//                         child: Text(year),
-//                       ))
-//                   .toList(),
-//               onChanged: (value) {
-//                 setState(() {
-//                   _selectedYear = value;
-//                 });
-//               },
-//             ),
-//             SizedBox(height: 20.0),
-//             // Quantity Selector
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//               children: [
-//                 Text('Quantity: '),
-//                 Row(
-//                   children: [
-//                     IconButton(
-//                       icon: Icon(Icons.remove),
-//                       onPressed: () {
-//                         setState(() {
-//                           if (_quantity > 1) _quantity--;
-//                         });
-//                       },
-//                     ),
-//                     Text('$_quantity'),
-//                     IconButton(
-//                       icon: Icon(Icons.add),
-//                       onPressed: () {
-//                         setState(() {
-//                           _quantity++;
-//                         });
-//                       },
-//                     ),
-//                   ],
-//                 ),
-//               ],
-//             ),
-//             SizedBox(height: 20.0),
-//             // Submit Button
-//             Center(
-//               child: ElevatedButton(
-//                 onPressed: () {
-//                   // Handle submission here
-//                   // You can access all the entered data using _bookName, _bookPrice, etc.
-//                 },
-//                 child: Text('Submit'),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// void main() {
-//   runApp(MaterialApp(
-//     home: AddNewBookPage(),
-//   ));
-// }
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
@@ -169,7 +19,7 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
   final TextEditingController _bookPriceController = TextEditingController();
   final TextEditingController _bookDetailController = TextEditingController();
   String _selectedCourse = "Course 1";
-  String _selectedYear = "2024";
+  String _selectedYear = "Year 1";
   int _quantity = 1;
 
   Future<void> _pickImages() async {
@@ -241,14 +91,27 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
         title: Text('Add New Book'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(22.0),
         child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ElevatedButton(
-                onPressed: _pickImages,
-                child: Text('Upload Book Images'),
+              Text(
+                'Upload book images',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
+              SizedBox(height: 20),
+              Center(
+                // Centers the button
+                child: ElevatedButton(
+                  onPressed: _pickImages,
+                  child: Text('Upload '),
+                ),
+              ),
+              SizedBox(height: 12),
               _images.isNotEmpty
                   ? SizedBox(
                       height: 100,
@@ -259,52 +122,176 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
                             Image.file(_images[index]),
                       ),
                     )
-                  : Text('No images selected'),
-              TextField(
-                controller: _bookNameController,
-                decoration: InputDecoration(labelText: 'Book Name'),
+                  : Center(
+                      child: Text('No images selected'),
+                    ),
+              SizedBox(height: 16),
+              Text(
+                'Book Name',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              TextField(
-                controller: _bookPriceController,
-                decoration: InputDecoration(labelText: 'Book Price'),
-                keyboardType: TextInputType.number,
+              SizedBox(height: 8),
+              Container(
+                height: 63,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  color: const Color(0xfff4f4f4),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: TextField(
+                    controller: _bookNameController,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Enter book name',
+                      hintStyle: TextStyle(color: Colors.grey),
+                    ),
+                  ),
+                ),
               ),
-              TextField(
-                controller: _bookDetailController,
-                decoration: InputDecoration(labelText: 'Book Detail'),
+              SizedBox(height: 16),
+              Text(
+                'Book Price',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
-              DropdownButton<String>(
-                value: _selectedCourse,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _selectedCourse = newValue!;
-                  });
-                },
-                items: <String>['Course 1', 'Course 2', 'Course 3']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
+              Container(
+                height: 63,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  color: const Color(0xfff4f4f4),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: TextField(
+                    controller: _bookPriceController,
+                    keyboardType: TextInputType
+                        .number, // Sets the keyboard type to number
+
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Enter book price',
+                      hintStyle: TextStyle(color: Colors.grey),
+                    ),
+                  ),
+                ),
               ),
-              DropdownButton<String>(
-                value: _selectedYear,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _selectedYear = newValue!;
-                  });
-                },
-                items: <String>['2023', '2024', '2025']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
+              SizedBox(height: 16),
+              Text(
+                'Book Detail',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
+              SizedBox(height: 8),
+              Container(
+                height: 63,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  color: const Color(0xfff4f4f4),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: TextField(
+                    controller: _bookDetailController,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Enter book detail',
+                      hintStyle: TextStyle(color: Colors.grey),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16),
+              Text(
+                'Course',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 8),
+              Container(
+                height: 63,
+                width: double.infinity, // Adjusts width to the available space
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  color: const Color(0xfff4f4f4),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      value: _selectedCourse,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedCourse = newValue!;
+                        });
+                      },
+                      isExpanded: true,
+                      items: <String>['Course 1', 'Course 2', 'Course 3']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16),
+              Text(
+                'Year',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 8),
+              Container(
+                height: 63,
+                width: double.infinity, // Adjusts width to the available space
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  color: const Color(0xfff4f4f4),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      value: _selectedYear,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedYear = newValue!;
+                        });
+                      },
+                      isExpanded: true,
+                      items: <String>['Year 1', 'Year 2', 'Year 3', 'Year 4']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 18),
               Row(
                 children: [
+                  Text(
+                    'Quantity: $_quantity',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Spacer(), // Adds space between the text and the buttons
                   IconButton(
                     icon: Icon(Icons.remove),
                     onPressed: () {
@@ -313,7 +300,6 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
                       });
                     },
                   ),
-                  Text('$_quantity'),
                   IconButton(
                     icon: Icon(Icons.add),
                     onPressed: () {
@@ -324,9 +310,26 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
                   ),
                 ],
               ),
-              ElevatedButton(
-                onPressed: _uploadBook,
-                child: Text('Submit'),
+              SizedBox(height: 16),
+              Center(
+                child: Container(
+                  width: 263,
+                  height: 56,
+                  child: ElevatedButton(
+                    onPressed: _uploadBook,
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      textStyle: TextStyle(fontSize: 18),
+                      backgroundColor:
+                          const Color(0xff4a56c1), // Change button color
+                    ),
+                    child: Text(
+                      'Submit',
+                      style:
+                          TextStyle(color: Colors.white), // Change text color
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
