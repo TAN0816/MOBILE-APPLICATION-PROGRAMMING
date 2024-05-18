@@ -82,12 +82,12 @@ GoRouter router() {
         path: '/forgot_password',
         builder: (context, state) => const ForgotPassword(),
       ),
-<<<<<<< HEAD
+
       GoRoute(
         path: '/search',
         builder: (context, state) => const SearchPage(),
       ),
-=======
+
        GoRoute(
         path: '/productdetailbuyer',
         builder: (context, state) => const ProductDetailBuyer(),
@@ -96,7 +96,6 @@ GoRouter router() {
         path: '/productdetailseller',
         builder: (context, state) => const ProductDetailSeller(),
       )
->>>>>>> 76e1e3434e8ea9b6fdcb7d67c7f9753b8da94606
     ],
   );
 }
