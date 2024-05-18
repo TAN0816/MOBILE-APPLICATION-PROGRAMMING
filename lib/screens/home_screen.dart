@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-// home_screen.dart
-=======
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
->>>>>>> 76e1e3434e8ea9b6fdcb7d67c7f9753b8da94606
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -44,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -263,21 +257,5 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-=======
-    return Center(
-      child: TextButton(
-        style: TextButton.styleFrom(
-          padding: EdgeInsets.zero,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero,
-          ),
-        ),
-        onPressed: () {
-          context.push('/productdetailseller');
-        },
-        child: const Text('ProductDetail'),
-      ),
-    );
-  }
-}
->>>>>>> 76e1e3434e8ea9b6fdcb7d67c7f9753b8da94606
+
+
