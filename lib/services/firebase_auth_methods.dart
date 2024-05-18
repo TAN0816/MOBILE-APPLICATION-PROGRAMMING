@@ -5,7 +5,7 @@ import 'package:secondhand_book_selling_platform/utils/showOTPDialog.dart';
 import 'package:secondhand_book_selling_platform/utils/showSnackbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:secondhand_book_selling_platform/screens/login_email_password_screen.dart';
+import 'package:secondhand_book_selling_platform/screens/login_screen.dart';
 
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 // import 'package:google_sign_in/google_sign_in.dart';

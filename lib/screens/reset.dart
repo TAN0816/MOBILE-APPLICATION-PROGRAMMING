@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:secondhand_book_selling_platform/screens/login_email_password_screen.dart';
+import 'package:secondhand_book_selling_platform/screens/login_screen.dart';
 
 class DetailsScreen extends StatelessWidget {
   const DetailsScreen({Key? key}) : super(key: key);
