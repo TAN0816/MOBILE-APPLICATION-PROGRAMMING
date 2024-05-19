@@ -56,7 +56,7 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     appBar: AppBar(
+      appBar: AppBar(
         leading: Padding(
           padding: const EdgeInsets.only(left: 16.0),
           child: CircleAvatar(
@@ -94,7 +94,7 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
             color: Color.fromARGB(255, 214, 214, 214),
           ),
         ),
-     ),
+      ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _book == null
@@ -243,9 +243,11 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
                               children: [
                                 CircleAvatar(
                                   radius: 25,
-                                  backgroundImage: _seller?.image != null
+                                  backgroundImage: _seller?.image != null &&
+                                          _seller?.image != ""
                                       ? NetworkImage(_seller!.image)
-                                      : const AssetImage('assets/images/profile.jpg')
+                                      : const AssetImage(
+                                              'assets/images/profile.jpg')
                                           as ImageProvider,
                                 ),
                                 const SizedBox(
@@ -316,8 +318,8 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                   content: Text('Product added to cart successfully')));
             }).catchError((error) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Failed to add product to cart')));
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('Failed to add product to cart')));
             });
           },
           child: const Row(

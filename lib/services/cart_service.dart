@@ -124,7 +124,7 @@ class CartService {
             quantity: bookData['quantity'] ?? 0,
             images: List<String>.from(bookData['images'] ?? []),
             year: bookData['year'] ?? 'Unknown Year',
-            course: bookData['course'] ?? 'Unknown Course',
+            faculty: bookData['faculty'] ?? 'Unknown Faculty',
             detail: bookData['detail'] ?? 'No details available',
           );
 

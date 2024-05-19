@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:secondhand_book_selling_platform/model/book.dart';
 
 
 class ProductService {
@@ -9,20 +10,22 @@ class ProductService {
     String name,
     double price,
     String detail,
-    String course,
+    String faculty,
     String year,
     int quantity,
     List<String> imageUrls,
+    String sellerId,
   ) async {
     try {
       await _firestore.collection('books').add({
         'name': name,
         'price': price,
         'detail': detail,
-        'course': course,
+        'faculty': faculty,
         'year': year,
         'quantity': quantity,
         'images': imageUrls,
+        'sellerId':sellerId,
       });
     } catch (e) {
       print('Error uploading book: $e');
@@ -30,12 +33,23 @@ class ProductService {
     }
   }
 
-  // // Method to retrieve a book from Firestore by its ID
-  // Future<Book> getBookById(String bookId) async {
-  //   DocumentSnapshot snapshot =
-  //       await _firestore.collection('books').doc(bookId).get();
-  //   return Book.fromSnapshot(snapshot);
-  // }
+// Method to retrieve a book from Firestore by its ID
+  Future<Book> getBookById(String bookId) async {
+    DocumentSnapshot snapshot =
+        await _firestore.collection('books').doc(bookId).get();
+    Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+    return Book(
+      id: snapshot.id,
+      sellerId: data['sellerId'], // Ensure your Firestore document has a sellerId field
+      name: data['name'],
+      price: data['price'],
+      quantity: data['quantity'],
+      detail: data['detail'],
+      images: List<String>.from(data['images']),
+      year: data['year'],
+      faculty: data['faculty'],
+    );
+  }
 
   // Method to update a book in Firestore
   Future<void> updateBook(
@@ -43,7 +57,7 @@ class ProductService {
     String name,
     double price,
     String detail,
-    String course,
+    String faculty,
     String year,
     int quantity,
     List<String> imageUrls,
@@ -52,10 +66,20 @@ class ProductService {
       'name': name,
       'price': price,
       'detail': detail,
-      'course': course,
+      'faculty': faculty,
       'year': year,
       'quantity': quantity,
       'images': imageUrls,
     });
   }
+
+  // // Method to delete a book from Firestore
+  // Future<void> deleteBook(String bookId) async {
+  //   try {
+  //     await _firestore.collection('books').doc(bookId).delete();
+  //   } catch (e) {
+  //     print('Error deleting book: $e');
+  //     throw e;
+  //   }
+  // }
 }

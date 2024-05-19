@@ -20,33 +20,32 @@ class BookService {
         detail: data['detail'] ?? 'No detail available.',
         images: List<String>.from(data['images'] ?? []),
         year: data['year'] ?? 'Unknown Year',
-        course: data['course'] ?? 'Unknown Course',
+        faculty: data['faculty'] ?? 'Unknown Faculty',
       );
     }).toList();
   }
 
+  Future<List<Book>> getAllBooksBySellerId(String userId) async {
+    QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
+        .collection('books')
+        .where('sellerId', isEqualTo: userId)
+        .get();
 
-   Future<List<Book>> getAllBooksBySellerId(String userId) async {
-  QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
-      .collection('books')
-      .where('sellerId', isEqualTo: userId)
-      .get();
-
-  return querySnapshot.docs.map((doc) {
-    var data = doc.data();
-    return Book(
-      id: doc.id,
-      sellerId: data['sellerId'] ?? 'Unknown Seller',
-      name: data['name'] ?? 'Unknown Title',
-      price: (data['price'] ?? 0.0).toDouble(),
-      quantity: data['quantity'] ?? 0,
-      detail: data['detail'] ?? 'No detail available.',
-      images: List<String>.from(data['images'] ?? []),
-      year: data['year'] ?? 'Unknown Year',
-      course: data['course'] ?? 'Unknown Course',
-    );
-  }).toList();
-}
+    return querySnapshot.docs.map((doc) {
+      var data = doc.data();
+      return Book(
+        id: doc.id,
+        sellerId: data['sellerId'] ?? 'Unknown Seller',
+        name: data['name'] ?? 'Unknown Title',
+        price: (data['price'] ?? 0.0).toDouble(),
+        quantity: data['quantity'] ?? 0,
+        detail: data['detail'] ?? 'No detail available.',
+        images: List<String>.from(data['images'] ?? []),
+        year: data['year'] ?? 'Unknown Year',
+        faculty: data['faculty'] ?? 'Unknown Faculty',
+      );
+    }).toList();
+  }
 
   Stream<QuerySnapshot> getBooksStream() {
     return _firestore.collection('books').snapshots();
@@ -70,7 +69,7 @@ class BookService {
         detail: data['detail'] ?? 'No detail available.',
         images: List<String>.from(data['images'] ?? []),
         year: data['year'] ?? 'Unknown Year',
-        course: data['course'] ?? 'Unknown Course',
+        faculty: data['faculty'] ?? 'Unknown Course',
       );
     }).toList();
   }
@@ -90,7 +89,7 @@ class BookService {
         detail: data['detail'] ?? 'No detail available.',
         images: List<String>.from(data['images'] ?? []),
         year: data['year'] ?? 'Unknown Year',
-        course: data['course'] ?? 'Unknown Course',
+        faculty: data['faculty'] ?? 'Unknown Faculty',
       );
     } else {
       return null; // Book not found
@@ -103,7 +102,7 @@ class BookService {
           await FirebaseFirestore.instance
               .collection('users')
               .doc(sellerId)
-              .get(); 
+              .get();
 
       if (docSnapshot.exists) {
         Map<String, dynamic>? userData = docSnapshot.data();
@@ -116,17 +115,25 @@ class BookService {
             role: userData['role'] ?? '',
             image: userData['image'] ?? '',
           );
-   
+
           return seller;
-          
         }
       }
-   
+
       return null;
     } catch (e) {
       // Handle errors appropriately here
       print('Error fetching seller data: $e');
       return null;
+    }
+  }
+
+  Future<void> deleteBook(String bookId) async {
+    try {
+      await _firestore.collection('books').doc(bookId).delete();
+    } catch (e) {
+      print('Error deleting book: $e');
+      throw e;
     }
   }
 }
