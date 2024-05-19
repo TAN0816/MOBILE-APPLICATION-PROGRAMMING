@@ -102,9 +102,12 @@ class CartService {
         await FirebaseFirestore.instance.collection('cart').doc(userId).get();
 
     List<CartItem> cartItemList = [];
+    bool cartUpdated = false;
+
     if (docSnapshot.exists) {
       Map<String, dynamic> cartData = docSnapshot.data()!;
       var cartList = cartData['cartList'];
+      List<Map<String, dynamic>> updatedCartList = [];
       for (var cartItemData in cartList) {
         DocumentSnapshot<Map<String, dynamic>> bookSnapshot =
             await FirebaseFirestore.instance
@@ -131,7 +134,15 @@ class CartService {
           );
 
           cartItemList.add(cartItem);
+          updatedCartList.add(cartItemData);
+        } else {
+          cartUpdated = true;
         }
+      }
+      if (cartUpdated) {
+        await FirebaseFirestore.instance.collection('cart').doc(userId).update({
+          'cartList': updatedCartList,
+        });
       }
     }
     return cartItemList;
@@ -160,21 +171,32 @@ class CartService {
   Future<Map<String, UserModel>> fetchSellers(Set<String> sellerIds) async {
     Map<String, UserModel> sellers = {};
     for (var sellerId in sellerIds) {
-      DocumentSnapshot<Map<String, dynamic>> docSnapshot =
-          await FirebaseFirestore.instance
-              .collection('users')
-              .doc(sellerId)
-              .get();
-      Map<String, dynamic> sellerData = docSnapshot.data()!;
-      UserModel seller = UserModel(
-        username: sellerData['username'],
-        email: sellerData['email'],
-        phone: sellerData['phone'],
-        address: sellerData['address'] ?? "",
-        role: sellerData['role'],
-        image: sellerData['image'] ?? "",
-      );
-      sellers[sellerId] = seller;
+      if (sellerId == "") {
+        sellers['others'] = UserModel(
+          username: "",
+          email: "",
+          phone: "",
+          address: "",
+          role: "",
+          image: "",
+        );
+      } else {
+        DocumentSnapshot<Map<String, dynamic>> docSnapshot =
+            await FirebaseFirestore.instance
+                .collection('users')
+                .doc(sellerId)
+                .get();
+        Map<String, dynamic> sellerData = docSnapshot.data()!;
+        UserModel seller = UserModel(
+          username: sellerData['username'],
+          email: sellerData['email'],
+          phone: sellerData['phone'],
+          address: sellerData['address'] ?? "",
+          role: sellerData['role'],
+          image: sellerData['image'] ?? "",
+        );
+        sellers[sellerId] = seller;
+      }
     }
     return sellers;
   }
