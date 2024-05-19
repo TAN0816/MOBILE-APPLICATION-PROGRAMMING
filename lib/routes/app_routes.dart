@@ -10,6 +10,8 @@ import 'package:secondhand_book_selling_platform/screens/message_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/me_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/edit_profile.dart';
 import 'package:secondhand_book_selling_platform/screens/signup_email_password_screen.dart';
+import 'package:secondhand_book_selling_platform/screens/edit_product.dart';
+
 import 'package:secondhand_book_selling_platform/screens/reset.dart';
 
 import '../screens/add_product.dart';
@@ -17,6 +19,7 @@ import '../screens/add_product.dart';
 GoRouter router() {
   return GoRouter(
     initialLocation: '/add_product',
+    // initialLocation: '/edit_product',
     routes: [
       GoRoute(
         path: '/',
@@ -79,6 +82,13 @@ GoRouter router() {
       GoRoute(
         path: '/add_product',
         builder: (context, state) => AddNewBookPage(),
+      ),
+      GoRoute(
+        path: '/edit_product/:bookId',
+        builder: (context, state) {
+          final bookId = state.pathParameters['bookId']!;
+          return EditProductPage(bookId: bookId);
+        },
       ),
       GoRoute(
         path: '/forgot_password',
