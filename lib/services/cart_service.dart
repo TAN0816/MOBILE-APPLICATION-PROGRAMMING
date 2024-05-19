@@ -8,7 +8,7 @@ class CartService {
   List<CartItem> cartList = [];
   String userId = FirebaseAuth.instance.currentUser!.uid;
 
-  CartService() {}
+  CartService();
 
   // List<CartItem> get getCartList => cartList;
 

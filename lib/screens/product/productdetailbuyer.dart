@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:secondhand_book_selling_platform/model/book.dart';
 import 'package:secondhand_book_selling_platform/services/book_service.dart';
@@ -15,7 +14,7 @@ class ProductDetailBuyer extends StatefulWidget {
 class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
-  BookService _bookService = BookService();
+  final BookService _bookService = BookService();
   Book? _book;
   bool _isLoading = true;
 
@@ -121,43 +120,43 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
                           ),
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Delivery Method',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              'Delivery',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w300,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      // const Padding(
+                      //   padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                      //   child: Column(
+                      //     crossAxisAlignment: CrossAxisAlignment.start,
+                      //     children: [
+                      //       Text(
+                      //         'Delivery Method',
+                      //         style: TextStyle(
+                      //           color: Colors.black,
+                      //           fontSize: 18,
+                      //           fontWeight: FontWeight.bold,
+                      //         ),
+                      //       ),
+                      //       Text(
+                      //         'Delivery',
+                      //         style: TextStyle(
+                      //           color: Colors.black,
+                      //           fontSize: 14,
+                      //           fontWeight: FontWeight.w300,
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              'Description of Product',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            // const Text(
+                            //   'Description of Product',
+                            //   style: TextStyle(
+                            //     color: Colors.black,
+                            //     fontSize: 18,
+                            //     fontWeight: FontWeight.bold,
+                            //   ),
+                            // ),
                             Text(
                               _book!.detail ?? 'No description available.',
                               style: const TextStyle(
@@ -251,7 +250,7 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
             fixedSize: MaterialStateProperty.all(const Size(300, 50)),
           ),
           onPressed: () {
-            // Add your onPressed logic here
+           
           },
           child: const Text(
             'Add to Cart',

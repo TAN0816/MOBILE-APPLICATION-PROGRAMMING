@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:secondhand_book_selling_platform/screens/cart/cart_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/forgot_password.dart';
-import 'package:secondhand_book_selling_platform/screens/home_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/nav.dart';
 import 'package:secondhand_book_selling_platform/screens/login_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/landing_screen.dart';
@@ -83,7 +82,7 @@ GoRouter router() {
       ),
       GoRoute(
         path: '/add_product',
-        builder: (context, state) => AddNewBookPage(),
+        builder: (context, state) => const AddNewBookPage(),
       ),
       GoRoute(
         path: '/forgot_password',
@@ -91,7 +90,7 @@ GoRouter router() {
       ),
       GoRoute(
         path: '/cart',
-        builder: (context, state) => CartScreen(),
+        builder: (context, state) => const CartScreen(),
       ),
 
       GoRoute(

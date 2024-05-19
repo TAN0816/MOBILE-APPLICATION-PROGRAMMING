@@ -158,6 +158,8 @@ import 'dart:io';
 
 
 class AddNewBookPage extends StatefulWidget {
+  const AddNewBookPage({super.key});
+
   @override
   _AddNewBookPageState createState() => _AddNewBookPageState();
 }
@@ -174,12 +176,10 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
 
   Future<void> _pickImages() async {
     final pickedFiles = await _picker.pickMultiImage();
-    if (pickedFiles != null) {
-      setState(() {
-        _images = pickedFiles.map((file) => File(file.path)).toList();
-      });
+    setState(() {
+      _images = pickedFiles.map((file) => File(file.path)).toList();
+    });
     }
-  }
 
   Future<void> _uploadBook() async {
     if (_images.isEmpty) {
@@ -226,11 +226,11 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
 
       // Provide user feedback
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Book added successfully!')));
+          .showSnackBar(const SnackBar(content: Text('Book added successfully!')));
     } catch (e) {
       print('Error uploading book: $e');
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Failed to add book.')));
+          .showSnackBar(const SnackBar(content: Text('Failed to add book.')));
     }
   }
 
@@ -238,7 +238,7 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add New Book'),
+        title: const Text('Add New Book'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -247,7 +247,7 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
             children: [
               ElevatedButton(
                 onPressed: _pickImages,
-                child: Text('Upload Book Images'),
+                child: const Text('Upload Book Images'),
               ),
               _images.isNotEmpty
                   ? SizedBox(
@@ -259,19 +259,19 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
                             Image.file(_images[index]),
                       ),
                     )
-                  : Text('No images selected'),
+                  : const Text('No images selected'),
               TextField(
                 controller: _bookNameController,
-                decoration: InputDecoration(labelText: 'Book Name'),
+                decoration: const InputDecoration(labelText: 'Book Name'),
               ),
               TextField(
                 controller: _bookPriceController,
-                decoration: InputDecoration(labelText: 'Book Price'),
+                decoration: const InputDecoration(labelText: 'Book Price'),
                 keyboardType: TextInputType.number,
               ),
               TextField(
                 controller: _bookDetailController,
-                decoration: InputDecoration(labelText: 'Book Detail'),
+                decoration: const InputDecoration(labelText: 'Book Detail'),
               ),
               DropdownButton<String>(
                 value: _selectedCourse,
@@ -306,7 +306,7 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
               Row(
                 children: [
                   IconButton(
-                    icon: Icon(Icons.remove),
+                    icon: const Icon(Icons.remove),
                     onPressed: () {
                       setState(() {
                         if (_quantity > 1) _quantity--;
@@ -315,7 +315,7 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
                   ),
                   Text('$_quantity'),
                   IconButton(
-                    icon: Icon(Icons.add),
+                    icon: const Icon(Icons.add),
                     onPressed: () {
                       setState(() {
                         _quantity++;
@@ -326,7 +326,7 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
               ),
               ElevatedButton(
                 onPressed: _uploadBook,
-                child: Text('Submit'),
+                child: const Text('Submit'),
               ),
             ],
           ),

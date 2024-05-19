@@ -13,7 +13,7 @@ class ProductDetailSeller extends StatefulWidget {
 class _ProductDetailSellerState extends State<ProductDetailSeller> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
-  BookService _bookService = BookService();
+  final BookService _bookService = BookService();
   Book? _book;
   bool _isLoading = true;
 
@@ -83,7 +83,9 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                               ),
                               child: Column(
                                 children: [
-                                  const SizedBox(height: 10), // Adjust the height as needed
+                                  const SizedBox(
+                                      height:
+                                          10), // Adjust the height as needed
                                   _buildPageIndicator(),
                                 ],
                               ),
@@ -119,26 +121,56 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                           ),
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                       Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              'Delivery Method',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            const Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Delivery Method',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                Text(
+                                  'Delivery',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                ),
+                              ],
                             ),
-                            Text(
-                              'Delivery',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w300,
-                              ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Year',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 100,
+                                  child: Text(
+                                     _book!.year,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -153,21 +185,23 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Text(
-                                  'Course and Year',
+                                  'Course',
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 18,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                Text(
-                                  '${_book!.course} Year ${_book!.year}',
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w300,
+                               
+                                 Text(
+                                    _book!.course,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w300,
+                                    ),
                                   ),
-                                ),
+                                
                               ],
                             ),
                             Column(
@@ -178,10 +212,12 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 18,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                Text(
+                                 SizedBox(
+                                  width: 100,
+                                  child:Text(
                                   '${_book!.quantity} left',
                                   style: const TextStyle(
                                     color: Colors.black,
@@ -189,27 +225,28 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                                     fontWeight: FontWeight.w300,
                                   ),
                                 ),
+                                ),
                               ],
                             ),
                           ],
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               'Description of Product',
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 18,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                             Text(
-                              'The C++ Programming Language is a computer programming book first published in October 1985. It was the first book to describe the C++ programming language, written by the languages creator, Bjarne Stroustrup. In the absence of an official standard, the book served for several years as the de facto documentation for the evolving C++ language, until the release of the ISO/IEC 14882:1998: Programming Language C++ standard on 1 September 1998',
-                              style: TextStyle(
+                               _book!.detail ?? 'No description available.',
+                              style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w300,
@@ -224,43 +261,48 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                 ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(8.0),
-    child:Row(
-  mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Adjust alignment as needed
-  children: [
-    ElevatedButton(
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(const Color(0xff4a56c1)),
-        fixedSize: MaterialStateProperty.all(const Size(200, 50)), // Adjust button size as needed
-      ),
-      onPressed: () {
-        // Add your onPressed logic for editing here
-      },
-      child: const Text(
-        'Edit Product',
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 18,
+        child: Row(
+          mainAxisAlignment:
+              MainAxisAlignment.spaceEvenly, // Adjust alignment as needed
+          children: [
+            ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all(const Color(0xff4a56c1)),
+                fixedSize: MaterialStateProperty.all(
+                    const Size(200, 50)), // Adjust buttonf size as needed
+              ),
+              onPressed: () {
+                // Add your onPressed logic for editing here
+              },
+              child: const Text(
+                'Edit Product',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+            ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                    Colors.red), // Change button color to red for delete
+                fixedSize: MaterialStateProperty.all(
+                    const Size(140, 50)), // Adjust button size as needed
+              ),
+              onPressed: () {
+                // Add your onPressed logic for deleting here
+              },
+              child: const Text(
+                'Delete',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ],
         ),
-      ),
-    ),
-    ElevatedButton(
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(Colors.red), // Change button color to red for delete
-        fixedSize: MaterialStateProperty.all(const Size(140, 50)), // Adjust button size as needed
-      ),
-      onPressed: () {
-        // Add your onPressed logic for deleting here
-      },
-      child: const Text(
-        'Delete',
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 18,
-        ),
-      ),
-    ),
-  ],
-),
       ),
     );
   }
