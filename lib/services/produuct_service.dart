@@ -59,4 +59,6 @@ class ProductService {
       'images': imageUrls,
     });
   }
+
+  getBookById(String bookId) {}
 }

@@ -62,7 +62,8 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
         String downloadUrl = await taskSnapshot.ref.getDownloadURL();
         imageUrls.add(downloadUrl);
       }
-      // String userId = UserService().getUserId;
+      
+      String userId = UserService().getUserId;
 
       // // Save book details to Firestore
       // await FirebaseFirestore.instance.collection('books').add({

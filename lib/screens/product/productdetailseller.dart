@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:secondhand_book_selling_platform/model/book.dart';
+import 'package:secondhand_book_selling_platform/screens/edit_product.dart';
 import 'package:secondhand_book_selling_platform/services/book_service.dart';
 
 class ProductDetailSeller extends StatefulWidget {
@@ -271,7 +272,12 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                     const Size(200, 50)), // Adjust buttonf size as needed
               ),
               onPressed: () {
-                // Add your onPressed logic for editing here
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditProductPage(bookId: 'book_1_id'),
+                  ),
+                );
               },
               child: const Text(
                 'Edit Product',
@@ -288,9 +294,7 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                 fixedSize: MaterialStateProperty.all(
                     const Size(140, 50)), // Adjust button size as needed
               ),
-              onPressed: () {
-                // Add your onPressed logic for deleting here
-              },
+              onPressed: () {},
               child: const Text(
                 'Delete',
                 style: TextStyle(
