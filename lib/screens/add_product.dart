@@ -30,7 +30,7 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
     setState(() {
       _images = pickedFiles.map((file) => File(file.path)).toList();
     });
-    }
+  }
 
   Future<void> _uploadBook() async {
     if (_images.isEmpty) {
@@ -99,8 +99,9 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
       });
 
       // Provide user feedback
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Book added successfully!')));
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Book added successfully!')));
+      Navigator.of(context).pop();
     } catch (e) {
       print('Error uploading book: $e');
       ScaffoldMessenger.of(context)

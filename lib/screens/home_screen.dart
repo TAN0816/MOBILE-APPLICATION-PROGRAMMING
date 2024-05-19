@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:go_router/go_router.dart';
 import 'package:secondhand_book_selling_platform/model/book.dart';
+import 'package:secondhand_book_selling_platform/screens/add_product.dart';
 import 'package:secondhand_book_selling_platform/services/book_service.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -280,12 +281,21 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Add your onPressed logic here
+        onPressed: () async {
+          // Navigate to the AddNewBookPage and wait for the result
+          final result = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddNewBookPage()),
+          );
+
+          // If result is true, fetch the updated list of books
+          if (result == true) {
+            fetchBooks();
+          }
         },
-        backgroundColor: const Color(0xff4a56c1),
+        child: Icon(Icons.add, color: Colors.white),
+        backgroundColor: Color(0xff4a56c1),
         elevation: 4,
-        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
