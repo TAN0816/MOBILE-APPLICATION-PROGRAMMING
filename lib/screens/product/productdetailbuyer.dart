@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'package:secondhand_book_selling_platform/model/book.dart';
+import 'package:secondhand_book_selling_platform/services/book_service.dart';
 
 class ProductDetailBuyer extends StatefulWidget {
-  const ProductDetailBuyer({super.key});
+  final String bookId;
+  const ProductDetailBuyer({super.key, required this.bookId});
 
   @override
-  _ProductDetailBuyer createState() => _ProductDetailBuyer();
+  _ProductDetailBuyerState createState() => _ProductDetailBuyerState();
 }
 
-class _ProductDetailBuyer extends State<ProductDetailBuyer> {
-  final List<String> images = [
-    'assets/images/hci.jpg',
-    'assets/images/profile.jpg',
-  ];
+class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
   final PageController _pageController = PageController();
-
   int _currentPage = 0;
+  BookService _bookService = BookService();
+  Book? _book;
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -24,6 +27,15 @@ class _ProductDetailBuyer extends State<ProductDetailBuyer> {
         _currentPage = _pageController.page!.round();
       });
     });
+    _fetchBookDetails();
+  }
+
+  Future<void> _fetchBookDetails() async {
+    Book? book = await _bookService.getBookById(widget.bookId);
+    setState(() {
+      _book = book;
+      _isLoading = false;
+    });
   }
 
   @override
@@ -32,205 +44,205 @@ class _ProductDetailBuyer extends State<ProductDetailBuyer> {
       appBar: AppBar(
         title: const Text('Product Detail'),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
-              children: [
-                SizedBox(
-                  height: 500,
-                  width: double.infinity,
-                  child: PageView.builder(
-                    controller: _pageController,
-                    itemCount: images.length,
-                    itemBuilder: (context, index) {
-                      return Image.asset(
-                        images[index],
-                        height: 500,
-                        width: MediaQuery.of(context).size.width,
-                        fit: BoxFit.cover,
-                      );
-                    },
-                  ),
-                ),
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    height: 18,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30),
-                      ),
-                      color: Colors.white,
-                    ),
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 10), // Adjust the height as needed
-                        _buildPageIndicator(),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
-              child: Container(
-                alignment: Alignment.centerLeft,
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'HCI Textbook', // Placeholder for product details
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 24,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Text(
-                      'RM141', // Placeholder for product details
-                      style: TextStyle(
-                        color: Color(0xff4a56c1),
-                        fontSize: 24,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
-              child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start, // Align the text to the left
-                children: [
-                  Text(
-                    'Delivery Method',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    'Delivery',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w300,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Description of Product',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    'The C++ programming language provides a model that comprises memory and computation,(lan­guage constructs) enable programmers to introduce and use new types of objects that resemble the con­cepts of an applicationThe C++ programming language provides a model that comprises memory and computation, and these are very similar to that of most computers. And also, its powerful and flexible ', // Placeholder for product details
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w300,
-                    ),
-                     textAlign: TextAlign.justify,
-                  ),
-                ],
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
-              child: Divider(
-                color: Colors.grey,
-                thickness: 0.5,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : _book == null
+              ? const Center(child: Text('Book not found'))
+              : SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CircleAvatar(
-                        radius: 25,
-                        backgroundImage:
-                            AssetImage('assets/images/profile.jpg'),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      Stack(
                         children: [
-                          Text(
-                            'Evelyn Lim', // Placeholder for product details
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 17,
-                              fontWeight: FontWeight.w500,
+                          SizedBox(
+                            height: 500,
+                            width: double.infinity,
+                            child: PageView.builder(
+                              controller: _pageController,
+                              itemCount: _book!.images.length,
+                              itemBuilder: (context, index) {
+                                return Image.network(
+                                  _book!.images[index],
+                                  height: 500,
+                                  width: MediaQuery.of(context).size.width,
+                                  fit: BoxFit.cover,
+                                );
+                              },
                             ),
                           ),
-                          Text(
-                            '4.5/5', // Placeholder for product details
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 83, 83, 83),
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
+                          Positioned(
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            child: Container(
+                              height: 18,
+                              decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(30),
+                                  topRight: Radius.circular(30),
+                                ),
+                                color: Colors.white,
+                              ),
+                              child: Column(
+                                children: [
+                                  const SizedBox(height: 10), // Adjust the height as needed
+                                  _buildPageIndicator(),
+                                ],
+                              ),
                             ),
                           ),
                         ],
                       ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                _book!.name,
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                'RM${_book!.price.toStringAsFixed(2)}',
+                                style: const TextStyle(
+                                  color: Color(0xff4a56c1),
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Delivery Method',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              'Delivery',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Description of Product',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              _book!.detail ?? 'No description available.',
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w300,
+                              ),
+                              textAlign: TextAlign.justify,
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                        child: Divider(
+                          color: Colors.grey,
+                          thickness: 0.5,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                CircleAvatar(
+                                  radius: 25,
+                                  backgroundImage: AssetImage('assets/images/profile.jpg'),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Evelyn Lim',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    Text(
+                                      '4.5/5',
+                                      style: TextStyle(
+                                        color: Color.fromARGB(255, 83, 83, 83),
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.zero,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                                ),
+                                side: const BorderSide(
+                                    color: Color.fromARGB(255, 72, 72, 72), width: 1),
+                              ),
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/productdetailbuyer');
+                              },
+                              child: const Text('Chat'),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                        child: Divider(
+                          color: Colors.grey,
+                          thickness: 0.5,
+                        ),
+                      ),
                     ],
                   ),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                      ),
-                      side: const BorderSide(
-                          color: Color.fromARGB(255, 72, 72, 72),
-                          width: 1), // Add border side
-                    ),
-                    onPressed: () {
-                      Navigator.pushNamed(context,
-                          '/productdetailbuyer'); // Navigation function
-                    },
-                    child: const Text('Chat'),
-                  ),
-                ],
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
-              child: Divider(
-                color: Colors.grey,
-                thickness: 0.5,
-              ),
-            ),
-          ],
-        ),
-      ),
+                ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextButton(
@@ -255,7 +267,7 @@ class _ProductDetailBuyer extends State<ProductDetailBuyer> {
 
   Widget _buildPageIndicator() {
     List<Widget> indicators = [];
-    for (int i = 0; i < images.length; i++) {
+    for (int i = 0; i < _book!.images.length; i++) {
       indicators.add(i == _currentPage ? _indicator(true) : _indicator(false));
     }
     return Row(

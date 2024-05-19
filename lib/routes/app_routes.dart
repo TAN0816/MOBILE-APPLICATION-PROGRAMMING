@@ -95,12 +95,19 @@ GoRouter router() {
       ),
 
        GoRoute(
-        path: '/productdetailbuyer',
-        builder: (context, state) => const ProductDetailBuyer(),
+        path: '/productdetailbuyer/:bookId',
+        builder: (context, state) {
+          final String? bookId = state.pathParameters['bookId'];
+          return ProductDetailBuyer(bookId: bookId!);
+        },
+        
       ),
       GoRoute(
-        path: '/productdetailseller',
-        builder: (context, state) => const ProductDetailSeller(),
+        path: '/productdetailseller/:bookId',
+       builder: (context, state) {
+          final String? bookId = state.pathParameters['bookId'];
+          return ProductDetailSeller(bookId: bookId!);
+        },
       )
     ],
   );

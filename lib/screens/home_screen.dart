@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-// home_screen.dart
-=======
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
->>>>>>> 76e1e3434e8ea9b6fdcb7d67c7f9753b8da94606
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:go_router/go_router.dart';
@@ -44,7 +37,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -212,43 +204,50 @@ class _HomeScreenState extends State<HomeScreen> {
                         var bookName = book.name;
                         var bookPrice = book.price.toString();
 
-                        return Card(
-                          color: Colors.white, // Set card color to white
-                          margin: EdgeInsets.all(8.0), // Reduce the margin to make space between cards smaller
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: AspectRatio(
-                                  aspectRatio: 2,
-                                  child: imageUrl.isNotEmpty
-                                      ? (imageUrl.startsWith('http')
-                                          ? Image.network(imageUrl, fit: BoxFit.cover)
-                                          : Image.asset(imageUrl, fit: BoxFit.cover))
-                                      : Image.asset('assets/image5.png', fit: BoxFit.cover),
+                        return InkWell(
+                          onTap: () {
+                           context.push('/productdetailseller/4uHADDd1D8w8GHSMmZIl');
+                          },
+                          child: Card(
+                            color: Colors.white, // Set card color to white
+                            margin: EdgeInsets.all(8.0), // Reduce the margin to make space between cards smaller
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: AspectRatio(
+                                    aspectRatio: 2,
+                                    child: imageUrl.isNotEmpty
+                                        ? (imageUrl.startsWith('http')
+                                            ? Image.network(imageUrl, fit: BoxFit.cover)
+                                            : Image.asset(imageUrl, fit: BoxFit.cover))
+                                        : Image.asset('assets/image5.png', fit: BoxFit.cover),
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(22.0, 15.0, 15.0, 6.0),
-                                child: Text(bookName, style: TextStyle(fontSize: 16)),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(left: 22.0, right: 5.0),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      'RM${double.parse(bookPrice).toStringAsFixed(2)}',
-                                      style: TextStyle(fontSize: 16, color: Color(0xFF4A56C1)),
-                                    ),
-                                    Spacer(),
-                                    IconButton(
-                                      icon: Icon(Icons.add_shopping_cart_outlined, size: 18, color: Color(0xFF4A56C1)),
-                                      onPressed: () {},
-                                    ),
-                                  ],
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(22.0, 15.0, 15.0, 6.0),
+                                  child: Text(bookName, style: TextStyle(fontSize: 16)),
                                 ),
-                              ),
-                            ],
+                                Padding(
+                                  padding: EdgeInsets.only(left: 22.0, right: 5.0),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        'RM${double.parse(bookPrice).toStringAsFixed(2)}',
+                                        style: TextStyle(fontSize: 16, color: Color(0xFF4A56C1)),
+                                      ),
+                                      Spacer(),
+                                      IconButton(
+                                        icon: Icon(Icons.add_shopping_cart_outlined, size: 18, color: Color(0xFF4A56C1)),
+                                        onPressed: () {
+                                          context.push('/productdetailseller/4uHADDd1D8w8GHSMmZIl');
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         );
                       },
@@ -263,21 +262,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-=======
-    return Center(
-      child: TextButton(
-        style: TextButton.styleFrom(
-          padding: EdgeInsets.zero,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero,
-          ),
-        ),
-        onPressed: () {
-          context.push('/productdetailseller');
-        },
-        child: const Text('ProductDetail'),
-      ),
-    );
-  }
-}
->>>>>>> 76e1e3434e8ea9b6fdcb7d67c7f9753b8da94606

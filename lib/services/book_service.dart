@@ -15,7 +15,10 @@ class BookService {
         name: data['name'] ?? 'Unknown Title',
         price: (data['price'] ?? 0.0).toDouble(),
         quantity: data['quantity'] ?? 0,
+        detail: data['detail'] ?? 'No detail available.',
         images: List<String>.from(data['images'] ?? []),
+        year: data['year'] ?? 'Unknown Year',
+        course: data['course'] ?? 'Unknown Course',
       );
     }).toList();
   }
@@ -35,12 +38,37 @@ class BookService {
       var data = doc.data();
       return Book(
         id: doc.id,
-        sellerId: data['sellerId'] ?? 'Unknown Seller',
+       sellerId: data['sellerId'] ?? 'Unknown Seller',
         name: data['name'] ?? 'Unknown Title',
         price: (data['price'] ?? 0.0).toDouble(),
         quantity: data['quantity'] ?? 0,
+        detail: data['detail'] ?? 'No detail available.',
         images: List<String>.from(data['images'] ?? []),
+        year: data['year'] ?? 'Unknown Year',
+        course: data['course'] ?? 'Unknown Course',
       );
     }).toList();
+  }
+
+
+  Future<Book?> getBookById(String id) async {
+    DocumentSnapshot<Map<String, dynamic>> docSnapshot = await _firestore.collection('books').doc(id).get();
+
+    if (docSnapshot.exists) {
+      var data = docSnapshot.data()!;
+      return Book(
+        id: docSnapshot.id,
+       sellerId: data['sellerId'] ?? 'Unknown Seller',
+        name: data['name'] ?? 'Unknown Title',
+        price: (data['price'] ?? 0.0).toDouble(),
+        quantity: data['quantity'] ?? 0,
+        detail: data['detail'] ?? 'No detail available.',
+        images: List<String>.from(data['images'] ?? []),
+        year: data['year'] ?? 'Unknown Year',
+        course: data['course'] ?? 'Unknown Course',
+      );
+    } else {
+      return null; // Book not found
+    }
   }
 }

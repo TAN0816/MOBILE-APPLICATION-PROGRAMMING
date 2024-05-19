@@ -155,7 +155,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-import 'package:secondhand_book_selling_platform/services/user_service.dart';
+
 
 class AddNewBookPage extends StatefulWidget {
   @override
