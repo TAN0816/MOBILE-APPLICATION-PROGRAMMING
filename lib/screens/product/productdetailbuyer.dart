@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:secondhand_book_selling_platform/model/book.dart';
 import 'package:secondhand_book_selling_platform/model/user.dart';
@@ -55,9 +56,45 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Product Detail'),
-      ),
+     appBar: AppBar(
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 16.0),
+          child: CircleAvatar(
+            radius: 30,
+            backgroundColor: const Color.fromARGB(244, 255, 255, 255),
+            child: IconButton(
+              icon: const Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: Colors.black,
+              ),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
+        ),
+        title: const Text(
+          'Product Detail',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w500, // Set the font weight to medium
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.shopping_cart),
+            onPressed: () {
+              context.push('/cart');
+            },
+          ),
+          const SizedBox(width: 16), // Adding padding to the right
+        ],
+        bottom: const PreferredSize(
+          preferredSize: Size.fromHeight(1.0),
+          child: Divider(
+            height: 1.0,
+            color: Color.fromARGB(255, 214, 214, 214),
+          ),
+        ),
+     ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _book == null
