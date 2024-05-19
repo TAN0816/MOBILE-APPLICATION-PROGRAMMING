@@ -121,7 +121,7 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                           ),
                         ),
                       ),
-                       Padding(
+                      Padding(
                         padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -162,7 +162,7 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                                 SizedBox(
                                   width: 100,
                                   child: Text(
-                                     _book!.year,
+                                    _book!.year,
                                     style: const TextStyle(
                                       color: Colors.black,
                                       fontSize: 14,
@@ -192,16 +192,14 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                               
-                                 Text(
-                                    _book!.course,
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w300,
-                                    ),
+                                Text(
+                                  _book!.course,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w300,
                                   ),
-                                
+                                ),
                               ],
                             ),
                             Column(
@@ -215,16 +213,16 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                 SizedBox(
+                                SizedBox(
                                   width: 100,
-                                  child:Text(
-                                  '${_book!.quantity} left',
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w300,
+                                  child: Text(
+                                    '${_book!.quantity} left',
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w300,
+                                    ),
                                   ),
-                                ),
                                 ),
                               ],
                             ),
@@ -245,7 +243,7 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                               ),
                             ),
                             Text(
-                               _book!.detail ?? 'No description available.',
+                              _book!.detail ?? 'No description available.',
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 14,

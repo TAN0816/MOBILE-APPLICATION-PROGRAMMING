@@ -81,7 +81,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 borderRadius: BorderRadius.circular(20),
                                 borderSide: BorderSide.none,
                               ),
-                              contentPadding: const EdgeInsets.fromLTRB(16, 10, 0, 8),
+                              contentPadding:
+                                  const EdgeInsets.fromLTRB(16, 10, 0, 8),
                               suffixIcon: IconButton(
                                 icon: const Icon(Icons.search),
                                 onPressed: () {
@@ -206,7 +207,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     GridView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         childAspectRatio: 0.67,
                       ),
@@ -220,11 +222,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         return InkWell(
                           onTap: () {
-                           context.push('/productdetailseller/4uHADDd1D8w8GHSMmZIl');
+                            context.push(
+                                '/productdetailseller/4uHADDd1D8w8GHSMmZIl');
                           },
                           child: Card(
                             color: Colors.white, // Set card color to white
-                            margin: const EdgeInsets.all(8.0), // Reduce the margin to make space between cards smaller
+                            margin: const EdgeInsets.all(
+                                8.0), // Reduce the margin to make space between cards smaller
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -233,25 +237,32 @@ class _HomeScreenState extends State<HomeScreen> {
                                     aspectRatio: 2,
                                     child: imageUrl.isNotEmpty
                                         ? (imageUrl.startsWith('http')
-                                            ? Image.network(imageUrl, fit: BoxFit.cover)
-                                            : Image.asset(imageUrl, fit: BoxFit.cover))
-                                        : Image.asset('assets/image5.png', fit: BoxFit.cover),
+                                            ? Image.network(imageUrl,
+                                                fit: BoxFit.cover)
+                                            : Image.asset(imageUrl,
+                                                fit: BoxFit.cover))
+                                        : Image.asset('assets/image5.png',
+                                            fit: BoxFit.cover),
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.fromLTRB(22.0, 15.0, 15.0, 6.0),
-                                  child: Text(bookName, style: TextStyle(fontSize: 16)),
+                                  padding: const EdgeInsets.fromLTRB(
+                                      22.0, 15.0, 15.0, 6.0),
+                                  child: Text(bookName,
+                                      style: const TextStyle(fontSize: 16)),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(left: 22.0, right: 5.0,bottom:5.0),
+                                  padding: const EdgeInsets.only(
+                                      left: 22.0, right: 5.0, bottom: 5.0),
                                   child: Row(
                                     children: [
                                       Text(
                                         'RM${double.parse(bookPrice).toStringAsFixed(2)}',
-                                        style: const TextStyle(fontSize: 16, color: Color(0xFF4A56C1)),
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            color: Color(0xFF4A56C1)),
                                       ),
                                       const Spacer(),
-                                     
                                     ],
                                   ),
                                 ),
@@ -268,11 +279,9 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         },
       ),
-
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Add your onPressed logic here
-
         },
         backgroundColor: const Color(0xff4a56c1),
         elevation: 4,

@@ -52,7 +52,7 @@ GoRouter router() {
           // builder: (context, state) => const Homepage(),
           builder: (context, state) {
             String? tab = state.pathParameters['tab'];
- 
+
             int index = 0;
             if (tab != null) {
               index = int.tryParse(tab) ?? 0;
@@ -86,13 +86,13 @@ GoRouter router() {
         path: '/add_product',
         builder: (context, state) => const AddNewBookPage(),
       ),
-      GoRoute(
-        path: '/edit_product/:bookId',
-        builder: (context, state) {
-          final bookId = state.pathParameters['bookId']!;
-          return EditProductPage(bookId: bookId);
-        },
-      ),
+      // GoRoute(
+      //   path: '/edit_product/:bookId',
+      //   builder: (context, state) {
+      //     final bookId = state.pathParameters['bookId']!;
+      //     return EditProductPage(bookId: bookId);
+      //   },
+      // ),
       GoRoute(
         path: '/forgot_password',
         builder: (context, state) => const ForgotPassword(),
@@ -107,17 +107,16 @@ GoRouter router() {
         builder: (context, state) => const SearchPage(),
       ),
 
-       GoRoute(
+      GoRoute(
         path: '/productdetailbuyer/:bookId',
         builder: (context, state) {
           final String? bookId = state.pathParameters['bookId'];
           return ProductDetailBuyer(bookId: bookId!);
         },
-        
       ),
       GoRoute(
         path: '/productdetailseller/:bookId',
-       builder: (context, state) {
+        builder: (context, state) {
           final String? bookId = state.pathParameters['bookId'];
           return ProductDetailSeller(bookId: bookId!);
         },

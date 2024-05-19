@@ -31,12 +31,12 @@ class ProductService {
     }
   }
 
-  // Method to retrieve a book from Firestore by its ID
-  Future<Book> getBookById(String bookId) async {
-    DocumentSnapshot snapshot =
-        await _firestore.collection('books').doc(bookId).get();
-    return Book.fromSnapshot(snapshot);
-  }
+  // // Method to retrieve a book from Firestore by its ID
+  // Future<Book> getBookById(String bookId) async {
+  //   DocumentSnapshot snapshot =
+  //       await _firestore.collection('books').doc(bookId).get();
+  //   return Book.fromSnapshot(snapshot);
+  // }
 
   // Method to update a book in Firestore
   Future<void> updateBook(
