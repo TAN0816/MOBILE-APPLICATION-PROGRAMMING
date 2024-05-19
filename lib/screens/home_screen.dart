@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:go_router/go_router.dart';
 import 'package:secondhand_book_selling_platform/model/book.dart';
+import 'package:secondhand_book_selling_platform/screens/add_product.dart';
 import 'package:secondhand_book_selling_platform/services/book_service.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -81,7 +82,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 borderRadius: BorderRadius.circular(20),
                                 borderSide: BorderSide.none,
                               ),
-                              contentPadding: const EdgeInsets.fromLTRB(16, 10, 0, 8),
+                              contentPadding:
+                                  const EdgeInsets.fromLTRB(16, 10, 0, 8),
                               suffixIcon: IconButton(
                                 icon: const Icon(Icons.search),
                                 onPressed: () {
@@ -206,7 +208,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     GridView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         childAspectRatio: 0.67,
                       ),
@@ -224,7 +227,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                           child: Card(
                             color: Colors.white, // Set card color to white
-                            margin: const EdgeInsets.all(8.0), // Reduce the margin to make space between cards smaller
+                            margin: const EdgeInsets.all(
+                                8.0), // Reduce the margin to make space between cards smaller
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -233,25 +237,32 @@ class _HomeScreenState extends State<HomeScreen> {
                                     aspectRatio: 2,
                                     child: imageUrl.isNotEmpty
                                         ? (imageUrl.startsWith('http')
-                                            ? Image.network(imageUrl, fit: BoxFit.cover)
-                                            : Image.asset(imageUrl, fit: BoxFit.cover))
-                                        : Image.asset('assets/image5.png', fit: BoxFit.cover),
+                                            ? Image.network(imageUrl,
+                                                fit: BoxFit.cover)
+                                            : Image.asset(imageUrl,
+                                                fit: BoxFit.cover))
+                                        : Image.asset('assets/image5.png',
+                                            fit: BoxFit.cover),
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.fromLTRB(22.0, 15.0, 15.0, 6.0),
-                                  child: Text(bookName, style: TextStyle(fontSize: 16)),
+                                  padding: const EdgeInsets.fromLTRB(
+                                      22.0, 15.0, 15.0, 6.0),
+                                  child: Text(bookName,
+                                      style: const TextStyle(fontSize: 16)),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(left: 22.0, right: 5.0,bottom:5.0),
+                                  padding: const EdgeInsets.only(
+                                      left: 22.0, right: 5.0, bottom: 5.0),
                                   child: Row(
                                     children: [
                                       Text(
                                         'RM${double.parse(bookPrice).toStringAsFixed(2)}',
-                                        style: const TextStyle(fontSize: 16, color: Color(0xFF4A56C1)),
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            color: Color(0xFF4A56C1)),
                                       ),
                                       const Spacer(),
-                                     
                                     ],
                                   ),
                                 ),
@@ -268,15 +279,22 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         },
       ),
-
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Add your onPressed logic here
+        onPressed: () async {
+          // Navigate to the AddNewBookPage and wait for the result
+          final result = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddNewBookPage()),
+          );
 
+          // If result is true, fetch the updated list of books
+          if (result == true) {
+            fetchBooks();
+          }
         },
-        backgroundColor: const Color(0xff4a56c1),
+        child: Icon(Icons.add, color: Colors.white),
+        backgroundColor: Color(0xff4a56c1),
         elevation: 4,
-        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }

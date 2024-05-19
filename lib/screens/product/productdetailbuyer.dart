@@ -85,7 +85,9 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
                               ),
                               child: Column(
                                 children: [
-                                  const SizedBox(height: 10), // Adjust the height as needed
+                                  const SizedBox(
+                                      height:
+                                          10), // Adjust the height as needed
                                   _buildPageIndicator(),
                                 ],
                               ),
@@ -188,7 +190,8 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
                               children: [
                                 CircleAvatar(
                                   radius: 25,
-                                  backgroundImage: AssetImage('assets/images/profile.jpg'),
+                                  backgroundImage:
+                                      AssetImage('assets/images/profile.jpg'),
                                 ),
                                 SizedBox(
                                   width: 10,
@@ -220,13 +223,16 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
                               style: TextButton.styleFrom(
                                 padding: EdgeInsets.zero,
                                 shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
                                 ),
                                 side: const BorderSide(
-                                    color: Color.fromARGB(255, 72, 72, 72), width: 1),
+                                    color: Color.fromARGB(255, 72, 72, 72),
+                                    width: 1),
                               ),
                               onPressed: () {
-                                Navigator.pushNamed(context, '/productdetailbuyer');
+                                Navigator.pushNamed(
+                                    context, '/productdetailbuyer');
                               },
                               child: const Text('Chat'),
                             ),
