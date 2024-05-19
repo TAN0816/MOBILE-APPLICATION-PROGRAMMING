@@ -25,6 +25,29 @@ class BookService {
     }).toList();
   }
 
+
+   Future<List<Book>> getAllBooksBySellerId(String userId) async {
+  QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
+      .collection('books')
+      .where('sellerId', isEqualTo: userId)
+      .get();
+
+  return querySnapshot.docs.map((doc) {
+    var data = doc.data();
+    return Book(
+      id: doc.id,
+      sellerId: data['sellerId'] ?? 'Unknown Seller',
+      name: data['name'] ?? 'Unknown Title',
+      price: (data['price'] ?? 0.0).toDouble(),
+      quantity: data['quantity'] ?? 0,
+      detail: data['detail'] ?? 'No detail available.',
+      images: List<String>.from(data['images'] ?? []),
+      year: data['year'] ?? 'Unknown Year',
+      course: data['course'] ?? 'Unknown Course',
+    );
+  }).toList();
+}
+
   Stream<QuerySnapshot> getBooksStream() {
     return _firestore.collection('books').snapshots();
   }

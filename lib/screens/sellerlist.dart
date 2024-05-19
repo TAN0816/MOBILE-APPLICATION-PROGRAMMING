@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:secondhand_book_selling_platform/model/book.dart';
 import 'package:secondhand_book_selling_platform/services/book_service.dart';
+import 'package:secondhand_book_selling_platform/services/user_service.dart';
 
 class SellerList extends StatefulWidget {
   const SellerList({super.key});
@@ -14,25 +16,48 @@ class SellerList extends StatefulWidget {
 class _SellerList extends State<SellerList> {
   BookService bookService = BookService();
   List<Book> books = [];
+  List<Book> filteredBooks = [];
+  String userId = '';
+  String searchQuery = '';
 
   @override
   void initState() {
     super.initState();
+    userId = UserService().getUserId;
     fetchBooks();
   }
 
   void fetchBooks() async {
     try {
-      List<Book> fetchedBooks = await bookService.getAllBooks();
+      List<Book> fetchedBooks = await bookService.getAllBooksBySellerId(userId);
       setState(() {
         books = fetchedBooks;
+        filteredBooks = applySearchFilter(fetchedBooks);
       });
     } catch (error) {
       print('Error fetching books: $error');
       setState(() {
         books = [];
+        filteredBooks = [];
       });
     }
+  }
+
+  List<Book> applySearchFilter(List<Book> books) {
+    if (searchQuery.isEmpty) {
+      return books;
+    }
+    return books
+        .where((book) =>
+            book.name.toLowerCase().contains(searchQuery.toLowerCase()))
+        .toList();
+  }
+
+  void onSearchChanged(String query) {
+    setState(() {
+      searchQuery = query;
+      filteredBooks = applySearchFilter(books);
+    });
   }
 
   @override
@@ -65,10 +90,7 @@ class _SellerList extends State<SellerList> {
                         child: Container(
                           margin: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: TextField(
-                            onTap: () {
-                              // Navigate to the search page
-                              GoRouter.of(context).go('/search');
-                            },
+                            onChanged: onSearchChanged,
                             decoration: InputDecoration(
                               filled: true,
                               fillColor: Colors.grey[200],
@@ -85,10 +107,7 @@ class _SellerList extends State<SellerList> {
                                   const EdgeInsets.fromLTRB(16, 10, 0, 8),
                               suffixIcon: IconButton(
                                 icon: const Icon(Icons.search),
-                                onPressed: () {
-                                  // Handle search button press
-                                  print('Search button pressed');
-                                },
+                                onPressed: () {},
                               ),
                               suffixIconConstraints: const BoxConstraints(
                                 minWidth: 40,
@@ -97,12 +116,6 @@ class _SellerList extends State<SellerList> {
                             ),
                           ),
                         ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.shopping_cart),
-                        onPressed: () {
-                          context.push('/cart');
-                        },
                       ),
                     ],
                   ),
@@ -121,7 +134,7 @@ class _SellerList extends State<SellerList> {
         ),
       ),
       body: FutureBuilder<List<Book>>(
-        future: bookService.getAllBooks(),
+        future: bookService.getAllBooksBySellerId(userId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -136,146 +149,85 @@ class _SellerList extends State<SellerList> {
           }
 
           books = snapshot.data!;
+          filteredBooks = applySearchFilter(books);
 
-          return StreamBuilder<QuerySnapshot>(
-            stream: bookService.getBooksStream(),
-            builder: (context, streamSnapshot) {
-              if (streamSnapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              if (streamSnapshot.hasError) {
-                print('Error in StreamBuilder: ${streamSnapshot.error}');
-                return Center(
-                    child:
-                        Text('Something went wrong: ${streamSnapshot.error}'));
-              }
-              if (!streamSnapshot.hasData ||
-                  streamSnapshot.data!.docs.isEmpty) {
-                return const Center(child: Text('No books found'));
-              }
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                filteredBooks.isEmpty
+                    ? const Center(child: Text('No books found'))
+                    : const SizedBox(height: 12),
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 0.67,
+                  ),
+                  itemCount: filteredBooks.length,
+                  itemBuilder: (context, index) {
+                    var book = filteredBooks[index];
+                    var imageUrl = book.images.isNotEmpty ? book.images[0] : '';
+                    var bookName = book.name;
+                    var bookPrice = book.price.toString();
+                    var bookId = book.id.toString();
 
-              return SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Container(
-                      color: Colors
-                          .white, // Set filter row background color to white
-                      padding: const EdgeInsets.symmetric(vertical: 3.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextButton.icon(
-                            onPressed: () {
-                              // Handle filter button press
-                            },
-                            icon: const Icon(Icons.filter_list,
-                                color: Color.fromARGB(255, 87, 86, 86)),
-                            label: const Text('Filters',
-                                style: TextStyle(
-                                    color: Color.fromARGB(255, 87, 86, 86))),
-                          ),
-                          const SizedBox(width: 16),
-                          TextButton.icon(
-                            onPressed: () {
-                              // Handle sorting button press
-                            },
-                            icon: const Icon(Icons.sort,
-                                color: Color.fromARGB(255, 87, 86, 86)),
-                            label: const Text('Price: lowest to high',
-                                style: TextStyle(
-                                    color: Color.fromARGB(255, 87, 86, 86))),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      height: 1,
-                      margin: const EdgeInsets.symmetric(horizontal: 10),
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 203, 202, 202),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            spreadRadius: 1,
-                            blurRadius: 2,
-                            offset: const Offset(0, 1),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 0.67,
-                      ),
-                      itemCount: books.length,
-                      itemBuilder: (context, index) {
-                        var book = books[index];
-                        var imageUrl =
-                            book.images.isNotEmpty ? book.images[0] : '';
-                        var bookName = book.name;
-                        var bookPrice = book.price.toString();
-                        var bookId=book.id.toString();
-
-                        return InkWell(
-                          onTap: () {
-                           context.push('/productdetailbuyer/$bookId');
-                          },
-                          child: Card(
-                            color: Colors.white, // Set card color to white
-                            margin: const EdgeInsets.all(
-                                8.0), // Reduce the margin to make space between cards smaller
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: AspectRatio(
-                                    aspectRatio: 2,
-                                    child: imageUrl.isNotEmpty
-                                        ? (imageUrl.startsWith('http')
-                                            ? Image.network(imageUrl,
-                                                fit: BoxFit.cover)
-                                            : Image.asset(imageUrl,
-                                                fit: BoxFit.cover))
-                                        : Image.asset('assets/image5.png',
-                                            fit: BoxFit.cover),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(
-                                      22.0, 15.0, 15.0, 6.0),
-                                  child: Text(bookName,
-                                      style: const TextStyle(fontSize: 16)),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: 22.0, right: 5.0),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        'RM${double.parse(bookPrice).toStringAsFixed(2)}',
-                                        style: const TextStyle(
-                                            fontSize: 16,
-                                            color: Color(0xFF4A56C1)),
-                                      ),
-                                      const Spacer(),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
+                    return InkWell(
+                      onTap: () {
+                        context.push('/productdetailbuyer/$bookId');
                       },
-                    ),
-                  ],
+                      child: Card(
+                        color: Colors.white,
+                        margin: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: AspectRatio(
+                                aspectRatio: 2,
+                                child: imageUrl.isNotEmpty
+                                    ? (imageUrl.startsWith('http')
+                                        ? Image.network(imageUrl,
+                                            fit: BoxFit.cover)
+                                        : Image.asset(imageUrl,
+                                            fit: BoxFit.cover))
+                                    : Image.asset('assets/image5.png',
+                                        fit: BoxFit.cover),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(
+                                  22.0, 15.0, 15.0, 6.0),
+                              child: Text(bookName,
+                                  style: const TextStyle(fontSize: 18)),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(
+                                  22.0, 5.0, 15.0, 10.0),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    'RM${double.parse(bookPrice).toStringAsFixed(2)}',
+                                    style: GoogleFonts.alegreya(
+                                      textStyle: const TextStyle(
+                                        color: Color(0xff4a56c1),
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
+              ],
+            ),
           );
         },
       ),
