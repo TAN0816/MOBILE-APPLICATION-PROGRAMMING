@@ -22,6 +22,7 @@ class _BottomNavBarState extends State<Homepage> {
 
   @override
   void initState() {
+    super.initState();
     _selectedIndex = widget.bottomIndex;
   }
 

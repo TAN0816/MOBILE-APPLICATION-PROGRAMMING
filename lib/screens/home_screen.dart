@@ -99,7 +99,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       IconButton(
                         icon: Icon(Icons.shopping_cart),
-                        onPressed: () {},
+                        onPressed: () {
+                          context.push('/cart');
+                        },
                       ),
                     ],
                   ),
@@ -125,7 +127,8 @@ class _HomeScreenState extends State<HomeScreen> {
           }
           if (snapshot.hasError) {
             print('Error in FutureBuilder: ${snapshot.error}');
-            return Center(child: Text('Something went wrong: ${snapshot.error}'));
+            return Center(
+                child: Text('Something went wrong: ${snapshot.error}'));
           }
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return Center(child: Text('No books found'));
@@ -141,9 +144,12 @@ class _HomeScreenState extends State<HomeScreen> {
               }
               if (streamSnapshot.hasError) {
                 print('Error in StreamBuilder: ${streamSnapshot.error}');
-                return Center(child: Text('Something went wrong: ${streamSnapshot.error}'));
+                return Center(
+                    child:
+                        Text('Something went wrong: ${streamSnapshot.error}'));
               }
-              if (!streamSnapshot.hasData || streamSnapshot.data!.docs.isEmpty) {
+              if (!streamSnapshot.hasData ||
+                  streamSnapshot.data!.docs.isEmpty) {
                 return Center(child: Text('No books found'));
               }
 
@@ -151,7 +157,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   children: [
                     Container(
-                      color: Colors.white, // Set filter row background color to white
+                      color: Colors
+                          .white, // Set filter row background color to white
                       padding: EdgeInsets.symmetric(vertical: 3.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -160,16 +167,22 @@ class _HomeScreenState extends State<HomeScreen> {
                             onPressed: () {
                               // Handle filter button press
                             },
-                            icon: Icon(Icons.filter_list, color: Color.fromARGB(255, 87, 86, 86)),
-                            label: Text('Filters', style: TextStyle(color: Color.fromARGB(255, 87, 86, 86))),
+                            icon: Icon(Icons.filter_list,
+                                color: Color.fromARGB(255, 87, 86, 86)),
+                            label: Text('Filters',
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 87, 86, 86))),
                           ),
                           SizedBox(width: 16),
                           TextButton.icon(
                             onPressed: () {
                               // Handle sorting button press
                             },
-                            icon: Icon(Icons.sort, color: Color.fromARGB(255, 87, 86, 86)),
-                            label: Text('Price: lowest to high', style: TextStyle(color: Color.fromARGB(255, 87, 86, 86))),
+                            icon: Icon(Icons.sort,
+                                color: Color.fromARGB(255, 87, 86, 86)),
+                            label: Text('Price: lowest to high',
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 87, 86, 86))),
                           ),
                         ],
                       ),
@@ -200,7 +213,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemCount: books.length,
                       itemBuilder: (context, index) {
                         var book = books[index];
-                        var imageUrl = book.images.isNotEmpty ? book.images[0] : '';
+                        var imageUrl =
+                            book.images.isNotEmpty ? book.images[0] : '';
                         var bookName = book.name;
                         var bookPrice = book.price.toString();
 
