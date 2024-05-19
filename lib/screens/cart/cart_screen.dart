@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:secondhand_book_selling_platform/model/cart_model.dart';
 import 'package:secondhand_book_selling_platform/model/user.dart';
 import 'package:secondhand_book_selling_platform/services/cart_service.dart';
-import 'package:secondhand_book_selling_platform/services/user_service.dart';
 import 'package:secondhand_book_selling_platform/widgets/appbar_with_back.dart';
 
 class CartScreen extends StatefulWidget {

@@ -1,11 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-import 'package:secondhand_book_selling_platform/services/user_service.dart';
 import 'package:secondhand_book_selling_platform/services/produuct_service.dart';
 
 class AddNewBookPage extends StatefulWidget {
@@ -36,7 +33,7 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
     if (_images.isEmpty) {
       print('No images selected.');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please upload at least one image.')),
+        const SnackBar(content: Text('Please upload at least one image.')),
       );
       return;
     }
@@ -45,7 +42,7 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
         _bookPriceController.text.isEmpty ||
         _bookDetailController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please fill in all the fields.')),
+        const SnackBar(content: Text('Please fill in all the fields.')),
       );
       return;
     }
@@ -121,22 +118,22 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 'Upload book images',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Center(
                 // Centers the button
                 child: ElevatedButton(
                   onPressed: _pickImages,
-                  child: Text('Upload '),
+                  child: const Text('Upload '),
                 ),
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               _images.isNotEmpty
                   ? SizedBox(
                       height: 100,
@@ -147,18 +144,18 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
                             Image.file(_images[index]),
                       ),
                     )
-                  : Center(
+                  : const Center(
                       child: Text('No images selected'),
                     ),
-              SizedBox(height: 16),
-              Text(
+              const SizedBox(height: 16),
+              const Text(
                 'Book Name',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Container(
                 height: 63,
                 decoration: BoxDecoration(
@@ -169,7 +166,7 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: TextField(
                     controller: _bookNameController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: InputBorder.none,
                       hintText: 'Enter book name',
                       hintStyle: TextStyle(color: Colors.grey),
@@ -177,8 +174,8 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 16),
-              Text(
+              const SizedBox(height: 16),
+              const Text(
                 'Book Price',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
@@ -195,7 +192,7 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
                     keyboardType: TextInputType
                         .number, // Sets the keyboard type to number
 
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: InputBorder.none,
                       hintText: 'Enter book price',
                       hintStyle: TextStyle(color: Colors.grey),
@@ -203,15 +200,15 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 16),
-              Text(
+              const SizedBox(height: 16),
+              const Text(
                 'Book Detail',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Container(
                 height: 63,
                 decoration: BoxDecoration(
@@ -222,7 +219,7 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: TextField(
                     controller: _bookDetailController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: InputBorder.none,
                       hintText: 'Enter book detail',
                       hintStyle: TextStyle(color: Colors.grey),
@@ -230,15 +227,15 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 16),
-              Text(
+              const SizedBox(height: 16),
+              const Text(
                 'Course',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Container(
                 height: 63,
                 width: double.infinity, // Adjusts width to the available space
@@ -273,15 +270,15 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 16),
-              Text(
+              const SizedBox(height: 16),
+              const Text(
                 'Year',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Container(
                 height: 63,
                 width: double.infinity, // Adjusts width to the available space
@@ -311,17 +308,17 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 18),
+              const SizedBox(height: 18),
               Row(
                 children: [
                   Text(
                     'Quantity: $_quantity',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Spacer(), // Adds space between the text and the buttons
+                  const Spacer(), // Adds space between the text and the buttons
                   IconButton(
                     icon: const Icon(Icons.remove),
                     onPressed: () {
@@ -340,20 +337,20 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Center(
-                child: Container(
+                child: SizedBox(
                   width: 263,
                   height: 56,
                   child: ElevatedButton(
                     onPressed: _uploadBook,
                     style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      textStyle: TextStyle(fontSize: 18),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      textStyle: const TextStyle(fontSize: 18),
                       backgroundColor:
                           const Color(0xff4a56c1), // Change button color
                     ),
-                    child: Text(
+                    child: const Text(
                       'Submit',
                       style:
                           TextStyle(color: Colors.white), // Change text color

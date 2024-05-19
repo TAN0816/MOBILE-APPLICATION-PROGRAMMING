@@ -5,7 +5,7 @@ import 'package:secondhand_book_selling_platform/services/book_service.dart';
 
 class ProductDetailSeller extends StatefulWidget {
   final String bookId;
-  const ProductDetailSeller({Key? key, required this.bookId}) : super(key: key);
+  const ProductDetailSeller({super.key, required this.bookId});
 
   @override
   _ProductDetailSellerState createState() => _ProductDetailSellerState();
@@ -140,7 +140,7 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                                   ),
                                 ),
                                 _buildBulletPoint('Year ${_book!.year}'),
-                                _buildBulletPoint('${_book!.course}'),
+                                _buildBulletPoint(_book!.course),
                                 _buildBulletPoint('${_book!.quantity} left'),
                               ],
                             ),

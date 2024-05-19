@@ -29,16 +29,7 @@ class _MeScreenState extends State<MeScreen> {
   void initState() {
     super.initState();
     userId = UserService().getUserId;
-    // userState = Provider.of<UserState>(context, listen: false);
-    // userData = userState.getUserState;
-    // if (userData != null) {
-    //   userData = userData;
-    //   username = userData!.getUsername;
-    //   imageUrl = userData!.getImage;
-    //   role = userData!.getRole;
-    // } else {
       fetchUserData();
-    // }
   }
 
   void fetchUserData() async {

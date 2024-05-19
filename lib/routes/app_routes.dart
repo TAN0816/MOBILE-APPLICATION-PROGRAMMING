@@ -12,7 +12,6 @@ import 'package:secondhand_book_selling_platform/screens/me_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/edit_profile.dart';
 import 'package:secondhand_book_selling_platform/screens/search.dart';
 import 'package:secondhand_book_selling_platform/screens/signup_email_password_screen.dart';
-import 'package:secondhand_book_selling_platform/screens/edit_product.dart';
 
 import 'package:secondhand_book_selling_platform/screens/reset.dart';
 import 'package:secondhand_book_selling_platform/screens/product/productdetailbuyer.dart';

@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../model/book.dart';
 
 class ProductService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -27,7 +26,7 @@ class ProductService {
       });
     } catch (e) {
       print('Error uploading book: $e');
-      throw e; // Throw the error to handle it in the calling code
+      rethrow; // Throw the error to handle it in the calling code
     }
   }
 

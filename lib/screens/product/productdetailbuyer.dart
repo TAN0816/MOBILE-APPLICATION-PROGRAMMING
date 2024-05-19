@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:secondhand_book_selling_platform/model/book.dart';
@@ -209,10 +208,10 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
                                   radius: 25,
                                   backgroundImage: _seller?.image != null
                                       ? NetworkImage(_seller!.image)
-                                      : AssetImage('assets/images/profile.jpg')
+                                      : const AssetImage('assets/images/profile.jpg')
                                           as ImageProvider,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 10,
                                 ),
                                 Column(
@@ -220,13 +219,13 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
                                   children: [
                                     Text(
                                       _seller?.username ?? 'Unknown Seller',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Colors.black,
                                         fontSize: 17,
                                         fontWeight: FontWeight.w400,
                                       ),
                                     ),
-                                    Text(
+                                    const Text(
                                       '4.5/5',
                                       style: TextStyle(
                                         color: Color.fromARGB(255, 83, 83, 83),
@@ -283,7 +282,6 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
               ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Failed to add product to cart')));
             });
-            ;
           },
           child: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
