@@ -109,48 +109,109 @@ class BookService {
 //         );
 //     }).toList();
 // }
+  // Future<List<Book>> searchAndFilterBooks({
+  //   required String query,
+  //   double? minPrice,
+  //   double? maxPrice,
+  //   String? faculty,
+  //   List<String>? years,
+  // }) async {
+  //   Query<Map<String, dynamic>> queryRef = bookCollection;
+
+  //   if (minPrice != null) {
+  //     queryRef = queryRef.where('price', isGreaterThanOrEqualTo: minPrice);
+  //   }
+
+  //   if (maxPrice != null) {
+  //     queryRef = queryRef.where('price', isLessThanOrEqualTo: maxPrice);
+  //   }
+
+  //   if (faculty != null && faculty.isNotEmpty && faculty != 'All') {
+  //     queryRef = queryRef.where('faculty', isEqualTo: faculty);
+  //   }
+
+  //   if (years != null && years.isNotEmpty) {
+  //     queryRef = queryRef.where('year', whereIn: years);
+  //   }
+
+  //   QuerySnapshot<Map<String, dynamic>> querySnapshot = await queryRef.get();
+
+  //   return querySnapshot.docs.map((doc) {
+  //     var data = doc.data();
+  //     return Book(
+  //       id: doc.id,
+  //       sellerId: (data['sellerId'] as String?) ?? 'Unknown Seller',
+  //       name: (data['name'] as String?) ?? 'Unknown Title',
+  //       detail: data['detail'] ?? 'No detail available.',
+  //       price: (data['price'] as num?)?.toDouble() ?? 0.0,
+  //       quantity: (data['quantity'] as int?) ?? 0,
+  //       images: List<String>.from(data['images'] ?? []),
+  //       year: data['year'] ?? 'Unknown Year',
+  //       faculty: data['faculty'] ?? 'Unknown Course',
+  //     );
+  //   }).toList();
+  // }
   Future<List<Book>> searchAndFilterBooks({
-    required String query,
-    double? minPrice,
-    double? maxPrice,
-    String? faculty,
-    List<String>? years,
-  }) async {
-    Query<Map<String, dynamic>> queryRef = bookCollection;
+  required String query,
+  double? minPrice,
+  double? maxPrice,
+  String? faculty,
+  List<String>? years,
+}) async {
+  Query<Map<String, dynamic>> queryRef = bookCollection;
 
-    if (minPrice != null) {
-      queryRef = queryRef.where('price', isGreaterThanOrEqualTo: minPrice);
-    }
+  // Perform search based on the query
+  if (query.isNotEmpty) {
+    queryRef = queryRef
+        .where('name', isGreaterThanOrEqualTo: query)
+        .where('name', isLessThanOrEqualTo: '$query\uf8ff');
+  }
 
-    if (maxPrice != null) {
-      queryRef = queryRef.where('price', isLessThanOrEqualTo: maxPrice);
-    }
+  QuerySnapshot<Map<String, dynamic>> querySnapshot = await queryRef.get();
 
-    if (faculty != null && faculty.isNotEmpty && faculty != 'All') {
-      queryRef = queryRef.where('faculty', isEqualTo: faculty);
-    }
+  // Filter results to ensure case-insensitive search
+  List<Book> books = querySnapshot.docs.map((doc) {
+    var data = doc.data();
+    return Book(
+      id: doc.id,
+      sellerId: data['sellerId'] ?? 'Unknown Seller',
+      name: data['name'] ?? 'Unknown Title',
+      price: (data['price'] ?? 0.0).toDouble(),
+      quantity: data['quantity'] ?? 0,
+      detail: data['detail'] ?? 'No detail available.',
+      images: List<String>.from(data['images'] ?? []),
+      year: data['year'] ?? 'Unknown Year',
+      faculty: data['faculty'] ?? 'Unknown Faculty',
+    );
+  }).toList();
 
-    if (years != null && years.isNotEmpty) {
-      queryRef = queryRef.where('year', whereIn: years);
-    }
-
-    QuerySnapshot<Map<String, dynamic>> querySnapshot = await queryRef.get();
-
-    return querySnapshot.docs.map((doc) {
-      var data = doc.data();
-      return Book(
-        id: doc.id,
-        sellerId: (data['sellerId'] as String?) ?? 'Unknown Seller',
-        name: (data['name'] as String?) ?? 'Unknown Title',
-        detail: data['detail'] ?? 'No detail available.',
-        price: (data['price'] as num?)?.toDouble() ?? 0.0,
-        quantity: (data['quantity'] as int?) ?? 0,
-        images: List<String>.from(data['images'] ?? []),
-        year: data['year'] ?? 'Unknown Year',
-        faculty: data['faculty'] ?? 'Unknown Course',
-      );
+  // Further filter the results based on the query
+  if (query.isNotEmpty) {
+    books = books.where((book) {
+      return book.name.toLowerCase().contains(query.toLowerCase());
     }).toList();
   }
+
+  // Apply additional filters for price, faculty, and years
+  if (minPrice != null) {
+    books = books.where((book) => book.price >= minPrice).toList();
+  }
+
+  if (maxPrice != null) {
+    books = books.where((book) => book.price <= maxPrice).toList();
+  }
+
+  if (faculty != null && faculty.isNotEmpty && faculty != 'All') {
+    books = books.where((book) => book.faculty == faculty).toList();
+  }
+
+  if (years != null && years.isNotEmpty) {
+    books = books.where((book) => years.contains(book.year)).toList();
+  }
+
+  return books;
+}
+
 
   Future<Book?> getBookById(String id) async {
     DocumentSnapshot<Map<String, dynamic>> docSnapshot =
