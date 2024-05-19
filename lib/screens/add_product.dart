@@ -9,8 +9,15 @@ import 'package:secondhand_book_selling_platform/services/user_service.dart';
 import 'package:secondhand_book_selling_platform/services/produuct_service.dart';
 
 class AddNewBookPage extends StatefulWidget {
-  const AddNewBookPage({super.key});
+  // const AddNewBookPage({super.key});
 
+  final Function()? onBookAdded;
+  // final Function()? onBookDeleted; // Add this line
+
+  const AddNewBookPage({
+    Key? key,
+    this.onBookAdded,
+  }) : super(key: key);
   @override
   _AddNewBookPageState createState() => _AddNewBookPageState();
 }
@@ -29,6 +36,12 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
     final pickedFiles = await _picker.pickMultiImage();
     setState(() {
       _images = pickedFiles.map((file) => File(file.path)).toList();
+    });
+  }
+
+  void _removeImage(int index) {
+    setState(() {
+      _images.removeAt(index);
     });
   }
 
@@ -62,7 +75,7 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
         String downloadUrl = await taskSnapshot.ref.getDownloadURL();
         imageUrls.add(downloadUrl);
       }
-      
+
       String userId = UserService().getUserId;
 
       // // Save book details to Firestore
@@ -98,6 +111,12 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
         _selectedYear = 'Year 1';
         _quantity = 1;
       });
+
+      // Call onBookAdded function to notify HomeScreen to refresh the list of books
+      widget.onBookAdded?.call();
+
+      // // After successfully deleting the book
+      // widget.onBookDeleted?.call();
 
       // Provide user feedback
       ScaffoldMessenger.of(context).showSnackBar(
@@ -144,8 +163,19 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: _images.length,
-                        itemBuilder: (context, index) =>
+                        itemBuilder: (context, index) => Stack(
+                          children: [
                             Image.file(_images[index]),
+                            Positioned(
+                              top: 0,
+                              right: 0,
+                              child: IconButton(
+                                icon: Icon(Icons.close),
+                                onPressed: () => _removeImage(index),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     )
                   : Center(
@@ -233,7 +263,7 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
               ),
               SizedBox(height: 16),
               Text(
-                'Course',
+                'Faculty',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,

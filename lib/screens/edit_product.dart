@@ -204,8 +204,9 @@ import 'package:secondhand_book_selling_platform/services/produuct_service.dart'
 
 class EditProductPage extends StatefulWidget {
   final String bookId;
+  final Function()? onBookUpdate;
 
-  EditProductPage({required this.bookId});
+  EditProductPage({required this.bookId, this.onBookUpdate});
 
   @override
   _EditProductPageState createState() => _EditProductPageState();
@@ -303,6 +304,8 @@ class _EditProductPageState extends State<EditProductPage> {
         _quantity,
         imageUrls,
       );
+      // Invoke the callback function to notify the parent screen (ProductDetailSeller)
+      widget.onBookUpdate?.call();
 
       // Clear inputs after successful submission
       _bookNameController.clear();

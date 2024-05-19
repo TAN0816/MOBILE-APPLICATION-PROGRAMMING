@@ -36,6 +36,18 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  void onBookDeleted() {
+    // Fetch the updated list of books after deletion
+    fetchBooks();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Fetch books again when the dependencies change (e.g., when navigating back)
+    fetchBooks();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -223,8 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         return InkWell(
                           onTap: () {
-                            context.push(
-                                '/productdetailseller/4uHADDd1D8w8GHSMmZIl');
+                            context.push('/productdetailseller/${book.id}');
                           },
                           child: Card(
                             color: Colors.white, // Set card color to white
@@ -285,7 +296,14 @@ class _HomeScreenState extends State<HomeScreen> {
           // Navigate to the AddNewBookPage and wait for the result
           final result = await Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AddNewBookPage()),
+            MaterialPageRoute(
+              builder: (context) => AddNewBookPage(
+                onBookAdded: () {
+                  // Call setState to trigger a rebuild of the HomeScreen
+                  setState(() {});
+                },
+              ),
+            ),
           );
 
           // If result is true, fetch the updated list of books
