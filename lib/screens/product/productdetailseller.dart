@@ -121,7 +121,7 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                           ),
                         ),
                       ),
-                      const Padding(
+                       Padding(
                         padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -162,7 +162,7 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                                 SizedBox(
                                   width: 100,
                                   child: Text(
-                                    "Year 1",
+                                     _book!.year,
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 14,
@@ -231,7 +231,7 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                           ],
                         ),
                       ),
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -245,7 +245,7 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                               ),
                             ),
                             Text(
-                              'The C++ Programming Language is a computer programming book first published in October 1985. It was the first book to describe the C++ programming language, written by the languages creator, Bjarne Stroustrup. In the absence of an official standard, the book served for several years as the de facto documentation for the evolving C++ language, until the release of the ISO/IEC 14882:1998: Programming Language C++ standard on 1 September 1998',
+                               _book!.detail ?? 'No description available.',
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 14,
