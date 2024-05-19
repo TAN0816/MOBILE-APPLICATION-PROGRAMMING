@@ -391,9 +391,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
               icon: const Icon(Icons.filter_alt_outlined,
                   color: Color.fromARGB(255, 3, 71, 122)),
               iconSize: 30,
-              onPressed: 
-                _showFilterOptions,
-              
+              onPressed: _showFilterOptions,
             ),
           ],
         ),
@@ -477,9 +475,11 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                           var imageUrl = book.images.isNotEmpty
                               ? book.images[0]
                               : 'assets/image5.png';
+                          var bookId = book.id.toString();
+
                           return InkWell(
                             onTap: () {
-                              context.push('/productdetailbuyer/${book.id}');
+                              context.push('/productdetailbuyer/$bookId');
                             },
                             child: Card(
                               color: Colors.white,
@@ -520,21 +520,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                                               Icons.add_shopping_cart_outlined,
                                               size: 18,
                                               color: Color(0xFF4A56C1)),
-                                          onPressed: () {
-                                            CartService()
-                                                .addtoCart(book.id)
-                                                .then((_) {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(const SnackBar(
-                                                      content: Text(
-                                                          'Product added to cart successfully')));
-                                            }).catchError((error) {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(const SnackBar(
-                                                      content: Text(
-                                                          'Failed to add product to cart')));
-                                            });
-                                          },
+                                          onPressed: () {},
                                         ),
                                       ],
                                     ),
