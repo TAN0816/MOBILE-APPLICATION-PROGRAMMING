@@ -21,6 +21,7 @@ class EditProductPage extends StatefulWidget {
 
 class _EditProductPageState extends State<EditProductPage> {
   List<File> _images = [];
+
   List<String> _existingImages = [];
   final _picker = ImagePicker();
   final TextEditingController _bookNameController = TextEditingController();
@@ -63,9 +64,17 @@ class _EditProductPageState extends State<EditProductPage> {
 
   Future<void> _pickImages() async {
     final pickedFiles = await _picker.pickMultiImage();
-    setState(() {
-      _images = pickedFiles.map((file) => File(file.path)).toList();
-    });
+    if (pickedFiles != null) {
+      setState(() {
+        for (var pickedFile in pickedFiles) {
+          File file = File(pickedFile.path);
+          if (!_images.contains(file)) {
+            _images.add(file);
+          }
+        }
+        // _images = pickedFiles.map((file) => File(file.path)).toList();
+      });
+    }
   }
 
   Future<void> _updateBook() async {
@@ -136,6 +145,18 @@ class _EditProductPageState extends State<EditProductPage> {
     }
   }
 
+  void _removeExistingImage(int index) {
+    setState(() {
+      _existingImages.removeAt(index);
+    });
+  }
+
+  void _removeNewImage(int index) {
+    setState(() {
+      _images.removeAt(index);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -165,32 +186,58 @@ class _EditProductPageState extends State<EditProductPage> {
                       ),
                     ),
                     SizedBox(height: 12),
-                    _existingImages.isNotEmpty
-                        ? SizedBox(
-                            height: 100,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: _existingImages.length,
-                              itemBuilder: (context, index) => Image.network(
-                                _existingImages[index],
-                                fit: BoxFit.cover,
+                    Wrap(
+                      spacing: 10.0,
+                      runSpacing: 10.0,
+                      children: [
+                        ..._existingImages.map((url) {
+                          int index = _existingImages.indexOf(url);
+                          return Stack(
+                            children: [
+                              Container(
+                                width: 100,
+                                height: 100,
+                                child: Image.network(
+                                  url,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
-                            ),
-                          )
-                        : SizedBox(),
-                    _images.isNotEmpty
-                        ? SizedBox(
-                            height: 100,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: _images.length,
-                              itemBuilder: (context, index) =>
-                                  Image.file(_images[index]),
-                            ),
-                          )
-                        : Center(
-                            child: Text('No new images selected'),
-                          ),
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child: IconButton(
+                                  icon: Icon(Icons.close),
+                                  onPressed: () => _removeExistingImage(index),
+                                ),
+                              ),
+                            ],
+                          );
+                        }).toList(),
+                        ..._images.map((file) {
+                          int index = _images.indexOf(file);
+                          return Stack(
+                            children: [
+                              Container(
+                                width: 100,
+                                height: 100,
+                                child: Image.file(
+                                  file,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child: IconButton(
+                                  icon: Icon(Icons.close),
+                                  onPressed: () => _removeNewImage(index),
+                                ),
+                              ),
+                            ],
+                          );
+                        }).toList(),
+                      ],
+                    ),
                     SizedBox(height: 16),
                     Text(
                       'Book Name',
