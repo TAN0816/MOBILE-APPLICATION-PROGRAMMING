@@ -206,7 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         return InkWell(
                           onTap: () {
-                           context.push('/productdetailseller/4uHADDd1D8w8GHSMmZIl');
+                           context.push('/productdetailbuyer/4uHADDd1D8w8GHSMmZIl');
                           },
                           child: Card(
                             color: Colors.white, // Set card color to white
@@ -229,7 +229,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: Text(bookName, style: TextStyle(fontSize: 16)),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.only(left: 22.0, right: 5.0),
+                                  padding: EdgeInsets.only(left: 22.0, right: 5.0,bottom:5.0),
                                   child: Row(
                                     children: [
                                       Text(
@@ -237,12 +237,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         style: TextStyle(fontSize: 16, color: Color(0xFF4A56C1)),
                                       ),
                                       Spacer(),
-                                      IconButton(
-                                        icon: Icon(Icons.add_shopping_cart_outlined, size: 18, color: Color(0xFF4A56C1)),
-                                        onPressed: () {
-                                          context.push('/productdetailseller/4uHADDd1D8w8GHSMmZIl');
-                                        },
-                                      ),
+                                     
                                     ],
                                   ),
                                 ),

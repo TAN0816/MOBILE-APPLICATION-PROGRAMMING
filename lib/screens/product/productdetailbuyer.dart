@@ -121,43 +121,43 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
                           ),
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Delivery Method',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              'Delivery',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w300,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      // const Padding(
+                      //   padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                      //   child: Column(
+                      //     crossAxisAlignment: CrossAxisAlignment.start,
+                      //     children: [
+                      //       Text(
+                      //         'Delivery Method',
+                      //         style: TextStyle(
+                      //           color: Colors.black,
+                      //           fontSize: 18,
+                      //           fontWeight: FontWeight.bold,
+                      //         ),
+                      //       ),
+                      //       Text(
+                      //         'Delivery',
+                      //         style: TextStyle(
+                      //           color: Colors.black,
+                      //           fontSize: 14,
+                      //           fontWeight: FontWeight.w300,
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              'Description of Product',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            // const Text(
+                            //   'Description of Product',
+                            //   style: TextStyle(
+                            //     color: Colors.black,
+                            //     fontSize: 18,
+                            //     fontWeight: FontWeight.bold,
+                            //   ),
+                            // ),
                             Text(
                               _book!.detail ?? 'No description available.',
                               style: const TextStyle(
@@ -251,7 +251,7 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
             fixedSize: MaterialStateProperty.all(const Size(300, 50)),
           ),
           onPressed: () {
-            // Add your onPressed logic here
+           
           },
           child: const Text(
             'Add to Cart',
