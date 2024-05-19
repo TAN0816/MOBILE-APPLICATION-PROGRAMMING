@@ -1,4 +1,4 @@
-import 'package:secondhand_book_selling_platform/model/book_model.dart';
+import 'package:secondhand_book_selling_platform/model/book.dart';
 
 class CartItem {
   late Book book;

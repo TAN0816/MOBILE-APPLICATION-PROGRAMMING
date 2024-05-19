@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:secondhand_book_selling_platform/model/cart_model.dart';
-import 'package:secondhand_book_selling_platform/model/book_model.dart';
+import 'package:secondhand_book_selling_platform/model/book.dart';
 import 'package:secondhand_book_selling_platform/model/user.dart';
 
 class CartService {
@@ -121,7 +121,8 @@ class CartService {
               sellerId: bookData['sellerId'],
               name: bookData['name'],
               price: bookData['price'],
-              quantity: bookData['quantity']);
+              quantity: bookData['quantity'],
+              images: List<String>.from(bookData['images']));
 
           CartItem cartItem = CartItem(
             book: book,

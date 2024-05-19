@@ -302,11 +302,13 @@ class _CartScreenState extends State<CartScreen> {
                                                               1);
                                                     }
                                                     CartService().updateQuantity(
-                                                      groupedItems[sellerId]![i]
-                                                          .getBook
-                                                          .getId,
-                                                      groupedItems[sellerId]![i]
-                                                          .getQuantity);
+                                                        groupedItems[sellerId]![
+                                                                i]
+                                                            .getBook
+                                                            .getId,
+                                                        groupedItems[sellerId]![
+                                                                i]
+                                                            .getQuantity);
                                                     calculateTotalPrice();
                                                   });
                                                 },
@@ -431,10 +433,8 @@ class _CartScreenState extends State<CartScreen> {
                 setState(() {
                   CartItem removeItem = groupedItems[sellerId]![index];
                   cartItems!.remove(removeItem);
-                  _itemSelections
-                      .remove(removeItem.getBook.getId);
-                  groupedItems[sellerId]!
-                      .remove(removeItem);
+                  _itemSelections.remove(removeItem.getBook.getId);
+                  groupedItems[sellerId]!.remove(removeItem);
                   CartService().deleteFormCart(removeItem.book.getId);
                   calculateTotalPrice();
                   updateSellerSelection(sellerId);
