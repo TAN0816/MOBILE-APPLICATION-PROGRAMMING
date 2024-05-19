@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:secondhand_book_selling_platform/model/cart_model.dart';
+import 'package:secondhand_book_selling_platform/model/user.dart';
 import 'package:secondhand_book_selling_platform/services/cart_service.dart';
+import 'package:secondhand_book_selling_platform/services/user_service.dart';
 import 'package:secondhand_book_selling_platform/widgets/appbar_with_back.dart';
 
 class CartScreen extends StatefulWidget {
@@ -13,6 +15,7 @@ class _CartScreenState extends State<CartScreen> {
   bool selectAll = false;
   double totalPrice = 0.0;
   Map<String, List<CartItem>> groupedItems = {};
+  Map<String, UserModel> sellers = {};
   Map<String, bool> _itemSelections = {};
   Map<String, bool> _sellerSelections = {};
   List<CartItem>? cartItems;
@@ -26,13 +29,17 @@ class _CartScreenState extends State<CartScreen> {
 
   void fetchCartItems() async {
     List<CartItem> cart = await CartService().getCartList();
+    groupItemsBySeller(cart);
+    Set<String> sellerIds = groupedItems.keys.toSet();
+    Map<String, UserModel> sellerDetails =
+        await CartService().fetchSellers(sellerIds);
     setState(() {
       cartItems = cart;
       _itemSelections = {
         for (var item in cartItems!.map((item) => item.getBook.id)) item: false
       };
-
-      groupItemsBySeller(cartItems!);
+      sellers = sellerDetails;
+      print(cartItems);
     });
   }
 
@@ -96,8 +103,9 @@ class _CartScreenState extends State<CartScreen> {
         group[item.getBook.sellerId] = [item];
       }
     }
-
-    groupedItems = group;
+    setState(() {
+      groupedItems = group;
+    });
   }
 
   void updateSellerSelection(String sellerId) {
@@ -183,13 +191,17 @@ class _CartScreenState extends State<CartScreen> {
                                 }),
                             CircleAvatar(
                               radius: 16,
-                              backgroundImage:
-                                  AssetImage('assets/images/profile.jpg'),
+                              backgroundImage: sellers[sellerId]?.getImage !=
+                                      null
+                                  ? NetworkImage(sellers[sellerId]!.getImage)
+                                      as ImageProvider
+                                  : const AssetImage(
+                                      'assets/images/profile.jpg'),
                             ),
                             const SizedBox(width: 10),
                             Text(
-                              "Seller Name",
-                              style: TextStyle(
+                              sellers[sellerId]?.getUsername ?? "Seller",
+                              style: const TextStyle(
                                 fontSize: 16,
                               ),
                             ),
@@ -198,7 +210,7 @@ class _CartScreenState extends State<CartScreen> {
                         for (int i = 0; i < groupedItems[sellerId]!.length; i++)
                           Container(
                             height: 83,
-                            margin: EdgeInsets.only(top: 10),
+                            margin: const EdgeInsets.only(top: 10),
                             child: Row(children: [
                               Checkbox(
                                   value: _itemSelections[
@@ -216,10 +228,18 @@ class _CartScreenState extends State<CartScreen> {
                                     });
                                   }),
                               //book img
-                              const Image(
+                              Image(
                                 height: 80,
                                 width: 80,
-                                image: AssetImage('assets/images/book.jpg'),
+                                image: groupedItems[sellerId]![i]
+                                        .getBook
+                                        .getImages
+                                        .isNotEmpty
+                                    ? NetworkImage(groupedItems[sellerId]![i]
+                                        .getBook
+                                        .images[0]) as ImageProvider
+                                    : const AssetImage(
+                                        'assets/images/book.jpg'),
                               ),
                               const SizedBox(
                                 width: 10,

@@ -8,7 +8,7 @@ class CartService {
   List<CartItem> cartList = [];
   String userId = FirebaseAuth.instance.currentUser!.uid;
 
-  CartService() {}
+  CartService();
 
   // List<CartItem> get getCartList => cartList;
 
@@ -48,6 +48,15 @@ class CartService {
           ])
         });
       }
+    } else {
+      await FirebaseFirestore.instance.collection('cart').doc(userId).set({
+        'cartList': [
+          {
+            'bookId': pid,
+            'quantity': 1,
+          },
+        ]
+      });
     }
   }
 
@@ -103,7 +112,6 @@ class CartService {
         await FirebaseFirestore.instance.collection('cart').doc(userId).get();
 
     List<CartItem> cartItemList = [];
-
     if (docSnapshot.exists) {
       Map<String, dynamic> cartData = docSnapshot.data()!;
       var cartList = cartData['cartList'];
@@ -113,16 +121,19 @@ class CartService {
                 .collection('books')
                 .doc(cartItemData['bookId'])
                 .get();
-
         if (bookSnapshot.exists) {
           Map<String, dynamic> bookData = bookSnapshot.data()!;
           Book book = Book(
-              id: bookSnapshot.id,
-              sellerId: bookData['sellerId'],
-              name: bookData['name'],
-              price: bookData['price'],
-              quantity: bookData['quantity'],
-              images: List<String>.from(bookData['images']));
+            id: bookSnapshot.id,
+            sellerId: bookData['sellerId'],
+            name: bookData['name'],
+            price: (bookData['price'] as num).toDouble(),
+            quantity: bookData['quantity'],
+            images: List<String>.from(bookData['images']),
+            year: bookData['year'],
+            course: bookData['course'],
+            detail: bookData['detail'],
+          );
 
           CartItem cartItem = CartItem(
             book: book,
@@ -151,5 +162,25 @@ class CartService {
     );
 
     return seller;
+  }
+
+  Future<Map<String, UserModel>> fetchSellers(Set<String> sellerIds) async {
+    Map<String, UserModel> sellers = {};
+    for (var sellerId in sellerIds) {
+      DocumentSnapshot sellerData = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(sellerId)
+          .get();
+      UserModel seller = UserModel(
+        username: sellerData['username'],
+        email: sellerData['email'],
+        phone: sellerData['phone'],
+        address: sellerData['address'] ?? "",
+        role: sellerData['role'],
+        image: sellerData['image'] ?? "",
+      );
+      sellers[sellerId] = seller;
+    }
+    return sellers;
   }
 }

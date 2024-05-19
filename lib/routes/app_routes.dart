@@ -17,6 +17,8 @@ import 'package:secondhand_book_selling_platform/screens/reset.dart';
 import 'package:secondhand_book_selling_platform/screens/product/productdetailbuyer.dart';
 import 'package:secondhand_book_selling_platform/screens/product/productdetailseller.dart';
 
+import '../screens/add_product.dart';
+
 GoRouter router() {
   return GoRouter(
     initialLocation: '/',
@@ -80,6 +82,10 @@ GoRouter router() {
         },
       ),
       GoRoute(
+        path: '/add_product',
+        builder: (context, state) => AddNewBookPage(),
+      ),
+      GoRoute(
         path: '/forgot_password',
         builder: (context, state) => const ForgotPassword(),
       ),
@@ -94,13 +100,20 @@ GoRouter router() {
       ),
 
        GoRoute(
-        path: '/productdetailbuyer',
-        builder: (context, state) => const ProductDetailBuyer(),
+        path: '/productdetailbuyer/:bookId',
+        builder: (context, state) {
+          final String? bookId = state.pathParameters['bookId'];
+          return ProductDetailBuyer(bookId: bookId!);
+        },
+        
       ),
       GoRoute(
-        path: '/productdetailseller',
-        builder: (context, state) => const ProductDetailSeller(),
-      )
+        path: '/productdetailseller/:bookId',
+       builder: (context, state) {
+          final String? bookId = state.pathParameters['bookId'];
+          return ProductDetailSeller(bookId: bookId!);
+        },
+      ),
     ],
   );
 }
