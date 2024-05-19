@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:secondhand_book_selling_platform/model/book.dart';
 import 'package:secondhand_book_selling_platform/services/book_service.dart';
 
 class ProductDetailSeller extends StatefulWidget {
   final String bookId;
-  const ProductDetailSeller({super.key, required this.bookId});
+  const ProductDetailSeller({Key? key, required this.bookId}) : super(key: key);
 
   @override
   _ProductDetailSellerState createState() => _ProductDetailSellerState();
@@ -83,9 +84,7 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                               ),
                               child: Column(
                                 children: [
-                                  const SizedBox(
-                                      height:
-                                          10), // Adjust the height as needed
+                                  const SizedBox(height: 10),
                                   _buildPageIndicator(),
                                 ],
                               ),
@@ -94,7 +93,7 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                         ],
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 10, 20, 5),
+                        padding: const EdgeInsets.fromLTRB(30, 10, 30, 5),
                         child: Container(
                           alignment: Alignment.centerLeft,
                           child: Row(
@@ -111,10 +110,12 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                               ),
                               Text(
                                 'RM${_book!.price.toStringAsFixed(2)}',
-                                style: const TextStyle(
-                                  color: Color(0xff4a56c1),
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w400,
+                                style: GoogleFonts.alegreya(
+                                  textStyle: const TextStyle(
+                                    color: Color(0xff4a56c1),
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
                             ],
@@ -122,115 +123,33 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                        child: Row(
+                        padding: const EdgeInsets.fromLTRB(30, 5, 30, 5),
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Delivery Method',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                Text(
-                                  'Delivery',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w300,
-                                  ),
-                                ),
-                              ],
-                            ),
+                            const SizedBox(height: 10),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Text(
-                                  'Year',
+                                  'Product Detail',
                                   style: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 18,
+                                    fontSize: 20,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                SizedBox(
-                                  width: 100,
-                                  child: Text(
-                                    _book!.year,
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w300,
-                                    ),
-                                  ),
-                                ),
+                                _buildBulletPoint('Year ${_book!.year}'),
+                                _buildBulletPoint('${_book!.course}'),
+                                _buildBulletPoint('${_book!.quantity} left'),
                               ],
                             ),
+                            const SizedBox(height: 10),
                           ],
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Course',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                Text(
-                                  _book!.course,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w300,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Quantity',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 100,
-                                  child: Text(
-                                    '${_book!.quantity} left',
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w300,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                        padding: const EdgeInsets.fromLTRB(30, 5, 30, 5),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -238,7 +157,7 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                               'Description of Product',
                               style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 18,
+                                fontSize: 20,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -246,8 +165,8 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                               _book!.detail ?? 'No description available.',
                               style: const TextStyle(
                                 color: Colors.black,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w300,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
                               ),
                               textAlign: TextAlign.justify,
                             ),
@@ -302,6 +221,34 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildBulletPoint(String text) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const SizedBox(
+          width: 8, // Adjust the width as needed
+          child: Icon(
+            Icons.circle,
+            size: 8, // Adjust the size of the bullet point
+            color: Colors.black,
+          ),
+        ),
+        const SizedBox(
+            width: 8), // Adjust the spacing between bullet point and text
+        Expanded(
+          child: Text(
+            text,
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ),
+      ],
     );
   }
 
