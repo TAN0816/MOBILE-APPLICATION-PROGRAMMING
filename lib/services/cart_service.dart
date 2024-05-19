@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:secondhand_book_selling_platform/model/cart_model.dart';
-import 'package:secondhand_book_selling_platform/model/book_model.dart';
+import 'package:secondhand_book_selling_platform/model/book.dart';
 import 'package:secondhand_book_selling_platform/model/user.dart';
 
 class CartService {
@@ -11,46 +11,44 @@ class CartService {
   CartService();
 
   // List<CartItem> get getCartList => cartList;
-Future<void> addtoCart(String pid) async {
-  DocumentSnapshot<Map<String, dynamic>> docSnapshot =
-      await FirebaseFirestore.instance.collection('cart').doc(userId).get();
+  Future<void> addtoCart(String pid) async {
+    DocumentSnapshot<Map<String, dynamic>> docSnapshot =
+        await FirebaseFirestore.instance.collection('cart').doc(userId).get();
 
-  if (docSnapshot.exists) {
-    Map<String, dynamic> cartData = docSnapshot.data()!;
-    var cartList = cartData['cartList'] as List<dynamic>;
+    if (docSnapshot.exists) {
+      Map<String, dynamic> cartData = docSnapshot.data()!;
+      var cartList = cartData['cartList'] as List<dynamic>;
 
-    bool itemExists = false;
-    for (var item in cartList) {
-      if (item['bookId'] == pid) {
-
-   
-        itemExists = true;
-        break;
+      bool itemExists = false;
+      for (var item in cartList) {
+        if (item['bookId'] == pid) {
+          // item['quantity'] += 1;
+          itemExists = true;
+          break;
+        }
       }
-    }
 
-    if (!itemExists) {
-
-      cartList.add({
-        'bookId': pid,
-        'quantity': 1,
-      });
-    }
-
-    await FirebaseFirestore.instance.collection('cart').doc(userId).update({
-      'cartList': cartList,
-    });
-  } else {
-    await FirebaseFirestore.instance.collection('cart').doc(userId).set({
-      'cartList': [
-        {
+      if (!itemExists) {
+        cartList.add({
           'bookId': pid,
           'quantity': 1,
-        },
-      ]
-    });
+        });
+      }
+
+      await FirebaseFirestore.instance.collection('cart').doc(userId).update({
+        'cartList': cartList,
+      });
+    } else {
+      await FirebaseFirestore.instance.collection('cart').doc(userId).set({
+        'cartList': [
+          {
+            'bookId': pid,
+            'quantity': 1,
+          },
+        ]
+      });
+    }
   }
-}
 
   Future<void> updateQuantity(String pid, int newQuantity) async {
     DocumentSnapshot<Map<String, dynamic>> docSnapshot =
@@ -104,7 +102,6 @@ Future<void> addtoCart(String pid) async {
         await FirebaseFirestore.instance.collection('cart').doc(userId).get();
 
     List<CartItem> cartItemList = [];
-
     if (docSnapshot.exists) {
       Map<String, dynamic> cartData = docSnapshot.data()!;
       var cartList = cartData['cartList'];
@@ -114,15 +111,19 @@ Future<void> addtoCart(String pid) async {
                 .collection('books')
                 .doc(cartItemData['bookId'])
                 .get();
-
         if (bookSnapshot.exists) {
           Map<String, dynamic> bookData = bookSnapshot.data()!;
           Book book = Book(
-              id: bookSnapshot.id,
-              sellerId: bookData['sellerId'],
-              name: bookData['name'],
-              price: bookData['price'],
-              quantity: bookData['quantity']);
+            id: bookSnapshot.id,
+            sellerId: bookData['sellerId'],
+            name: bookData['name'],
+            price: (bookData['price'] as num).toDouble(),
+            quantity: bookData['quantity'],
+            images: List<String>.from(bookData['images']),
+            year: bookData['year'],
+            course: bookData['course'],
+            detail: bookData['detail'],
+          );
 
           CartItem cartItem = CartItem(
             book: book,
@@ -138,7 +139,7 @@ Future<void> addtoCart(String pid) async {
 
   Future<UserModel> getSellerData(String sellerId) async {
     DocumentSnapshot<Map<String, dynamic>> docSnapshot =
-        await FirebaseFirestore.instance.collection('cart').doc(sellerId).get();
+        await FirebaseFirestore.instance.collection('user').doc(sellerId).get();
 
     Map<String, dynamic> userData = docSnapshot.data()!;
     UserModel seller = UserModel(
@@ -151,5 +152,25 @@ Future<void> addtoCart(String pid) async {
     );
 
     return seller;
+  }
+
+  Future<Map<String, UserModel>> fetchSellers(Set<String> sellerIds) async {
+    Map<String, UserModel> sellers = {};
+    for (var sellerId in sellerIds) {
+      DocumentSnapshot sellerData = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(sellerId)
+          .get();
+      UserModel seller = UserModel(
+        username: sellerData['username'],
+        email: sellerData['email'],
+        phone: sellerData['phone'],
+        address: sellerData['address'] ?? "",
+        role: sellerData['role'],
+        image: sellerData['image'] ?? "",
+      );
+      sellers[sellerId] = seller;
+    }
+    return sellers;
   }
 }

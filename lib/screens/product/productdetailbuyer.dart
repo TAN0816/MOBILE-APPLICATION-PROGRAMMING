@@ -276,13 +276,14 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
             fixedSize: MaterialStateProperty.all(const Size(300, 50)),
           ),
           onPressed: () {
-            _cartService.addtoCart(_book!.id);
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Item added to cart'),
-                duration: Duration(seconds: 2), // Adjust duration as needed
-              ),
-            );
+            _cartService.addtoCart(_book!.id).then((_) {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('Product added to cart successfully')));
+            }).catchError((error) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Failed to add product to cart')));
+            });
+            ;
           },
           child: const Row(
             mainAxisAlignment: MainAxisAlignment.center,

@@ -120,7 +120,7 @@ GoRouter router() {
           final String? bookId = state.pathParameters['bookId'];
           return ProductDetailSeller(bookId: bookId!);
         },
-      )
+      ),
     ],
   );
 }

@@ -11,8 +11,11 @@ class SearchHistoryService {
     User? user = _auth.currentUser;
     if (user == null) return [];
 
-    DocumentSnapshot<Map<String, dynamic>> doc = await _firestore.collection('users').doc(user.uid).get();
-    List<String>? history = (doc.data()?['searchHistory'] as List<dynamic>?)?.map((item) => item as String).toList();
+    DocumentSnapshot<Map<String, dynamic>> doc =
+        await _firestore.collection('users').doc(user.uid).get();
+    List<String>? history = (doc.data()?['searchHistory'] as List<dynamic>?)
+        ?.map((item) => item as String)
+        .toList();
     return history ?? [];
   }
 
@@ -20,9 +23,13 @@ class SearchHistoryService {
     User? user = _auth.currentUser;
     if (user == null) return;
 
-    DocumentReference<Map<String, dynamic>> docRef = _firestore.collection('users').doc(user.uid);
+    DocumentReference<Map<String, dynamic>> docRef =
+        _firestore.collection('users').doc(user.uid);
     DocumentSnapshot<Map<String, dynamic>> doc = await docRef.get();
-    List<String> history = (doc.data()?['searchHistory'] as List<dynamic>?)?.map((item) => item as String).toList() ?? [];
+    List<String> history = (doc.data()?['searchHistory'] as List<dynamic>?)
+            ?.map((item) => item as String)
+            .toList() ??
+        [];
 
     history.remove(query); // Remove existing query to avoid duplicates
     history.insert(0, query); // Add query to the beginning

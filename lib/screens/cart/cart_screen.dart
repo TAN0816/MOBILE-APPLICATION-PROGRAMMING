@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:secondhand_book_selling_platform/model/cart_model.dart';
+import 'package:secondhand_book_selling_platform/model/user.dart';
 import 'package:secondhand_book_selling_platform/services/cart_service.dart';
+import 'package:secondhand_book_selling_platform/services/user_service.dart';
 import 'package:secondhand_book_selling_platform/widgets/appbar_with_back.dart';
 
 class CartScreen extends StatefulWidget {
@@ -15,6 +17,7 @@ class _CartScreenState extends State<CartScreen> {
   bool selectAll = false;
   double totalPrice = 0.0;
   Map<String, List<CartItem>> groupedItems = {};
+  Map<String, UserModel> sellers = {};
   Map<String, bool> _itemSelections = {};
   final Map<String, bool> _sellerSelections = {};
   List<CartItem>? cartItems;
@@ -28,13 +31,17 @@ class _CartScreenState extends State<CartScreen> {
 
   void fetchCartItems() async {
     List<CartItem> cart = await CartService().getCartList();
+    groupItemsBySeller(cart);
+    Set<String> sellerIds = groupedItems.keys.toSet();
+    Map<String, UserModel> sellerDetails =
+        await CartService().fetchSellers(sellerIds);
     setState(() {
       cartItems = cart;
       _itemSelections = {
         for (var item in cartItems!.map((item) => item.getBook.id)) item: false
       };
-
-      groupItemsBySeller(cartItems!);
+      sellers = sellerDetails;
+      print(cartItems);
     });
   }
 
@@ -96,8 +103,9 @@ class _CartScreenState extends State<CartScreen> {
         group[item.getBook.sellerId] = [item];
       }
     }
-
-    groupedItems = group;
+    setState(() {
+      groupedItems = group;
+    });
   }
 
   void updateSellerSelection(String sellerId) {
@@ -181,15 +189,19 @@ class _CartScreenState extends State<CartScreen> {
                                     updateSellerSelection(sellerId);
                                   });
                                 }),
-                            const CircleAvatar(
+                            CircleAvatar(
                               radius: 16,
-                              backgroundImage:
-                                  AssetImage('assets/images/profile.jpg'),
+                              backgroundImage: sellers[sellerId]?.getImage !=
+                                      null
+                                  ? NetworkImage(sellers[sellerId]!.getImage)
+                                      as ImageProvider
+                                  : const AssetImage(
+                                      'assets/images/profile.jpg'),
                             ),
                             const SizedBox(width: 10),
-                            const Text(
-                              "Seller Name",
-                              style: TextStyle(
+                            Text(
+                              sellers[sellerId]?.getUsername ?? "Seller",
+                              style: const TextStyle(
                                 fontSize: 16,
                               ),
                             ),
@@ -216,10 +228,18 @@ class _CartScreenState extends State<CartScreen> {
                                     });
                                   }),
                               //book img
-                              const Image(
+                              Image(
                                 height: 80,
                                 width: 80,
-                                image: AssetImage('assets/images/book.jpg'),
+                                image: groupedItems[sellerId]![i]
+                                        .getBook
+                                        .getImages
+                                        .isNotEmpty
+                                    ? NetworkImage(groupedItems[sellerId]![i]
+                                        .getBook
+                                        .images[0]) as ImageProvider
+                                    : const AssetImage(
+                                        'assets/images/book.jpg'),
                               ),
                               const SizedBox(
                                 width: 10,
@@ -302,11 +322,13 @@ class _CartScreenState extends State<CartScreen> {
                                                               1);
                                                     }
                                                     CartService().updateQuantity(
-                                                      groupedItems[sellerId]![i]
-                                                          .getBook
-                                                          .getId,
-                                                      groupedItems[sellerId]![i]
-                                                          .getQuantity);
+                                                        groupedItems[sellerId]![
+                                                                i]
+                                                            .getBook
+                                                            .getId,
+                                                        groupedItems[sellerId]![
+                                                                i]
+                                                            .getQuantity);
                                                     calculateTotalPrice();
                                                   });
                                                 },
@@ -431,10 +453,8 @@ class _CartScreenState extends State<CartScreen> {
                 setState(() {
                   CartItem removeItem = groupedItems[sellerId]![index];
                   cartItems!.remove(removeItem);
-                  _itemSelections
-                      .remove(removeItem.getBook.getId);
-                  groupedItems[sellerId]!
-                      .remove(removeItem);
+                  _itemSelections.remove(removeItem.getBook.getId);
+                  groupedItems[sellerId]!.remove(removeItem);
                   CartService().deleteFormCart(removeItem.book.getId);
                   calculateTotalPrice();
                   updateSellerSelection(sellerId);

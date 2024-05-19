@@ -228,7 +228,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                           child: Card(
                             color: Colors.white, // Set card color to white
-                            margin: const EdgeInsets.all(
+                            margin: EdgeInsets.all(
                                 8.0), // Reduce the margin to make space between cards smaller
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -247,14 +247,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.fromLTRB(
+                                  padding: EdgeInsets.fromLTRB(
                                       22.0, 15.0, 15.0, 6.0),
                                   child: Text(bookName,
-                                      style: const TextStyle(fontSize: 16)),
+                                      style: TextStyle(fontSize: 16)),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 22.0, right: 5.0, bottom: 5.0),
+                                  padding:
+                                      EdgeInsets.only(left: 22.0, right: 5.0),
                                   child: Row(
                                     children: [
                                       Text(
@@ -279,23 +279,6 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           );
         },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          // Navigate to the AddNewBookPage and wait for the result
-          final result = await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => AddNewBookPage()),
-          );
-
-          // If result is true, fetch the updated list of books
-          if (result == true) {
-            fetchBooks();
-          }
-        },
-        child: Icon(Icons.add, color: Colors.white),
-        backgroundColor: Color(0xff4a56c1),
-        elevation: 4,
       ),
     );
   }
