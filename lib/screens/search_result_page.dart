@@ -38,10 +38,12 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
   @override
   void initState() {
     super.initState();
-    _searchAndFilterBooks(widget.query, widget.minPrice, widget.maxPrice, widget.faculty, widget.years);
+    _searchAndFilterBooks(widget.query, widget.minPrice, widget.maxPrice,
+        widget.faculty, widget.years);
   }
 
-  void _searchAndFilterBooks(String query, double? minPrice, double? maxPrice, String? faculty, List<String>? years) async {
+  void _searchAndFilterBooks(String query, double? minPrice, double? maxPrice,
+      String? faculty, List<String>? years) async {
     setState(() {
       _isLoading = true;
       _errorMessage = '';
@@ -105,7 +107,8 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
   }
 
   void _onSearchSubmitted(String query) {
-    _searchAndFilterBooks(query, widget.minPrice, widget.maxPrice, widget.faculty, widget.years);
+    _searchAndFilterBooks(
+        query, widget.minPrice, widget.maxPrice, widget.faculty, widget.years);
   }
 
 // void _showFilterOptions() {
@@ -134,7 +137,8 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
         return FractionallySizedBox(
           heightFactor: 0.85,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -142,7 +146,9 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Filter', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    Text('Filter',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold)),
                     IconButton(
                       icon: Icon(Icons.close),
                       onPressed: () {
@@ -194,7 +200,8 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                 Wrap(
                   spacing: 8.0,
                   runSpacing: 4.0,
-                  children: ['Year 1', 'Year 2', 'Year 3', 'Year 4'].map((year) {
+                  children:
+                      ['Year 1', 'Year 2', 'Year 3', 'Year 4'].map((year) {
                     return FilterChip(
                       label: Text(year),
                       selected: selectedYears.contains(year),
@@ -233,11 +240,14 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        double? minPrice = double.tryParse(_minPriceController.text);
-                        double? maxPrice = double.tryParse(_maxPriceController.text);
+                        double? minPrice =
+                            double.tryParse(_minPriceController.text);
+                        double? maxPrice =
+                            double.tryParse(_maxPriceController.text);
 
                         Navigator.pop(context);
-                        _searchAndFilterBooks(widget.query, minPrice, maxPrice, selectedFaculty, selectedYears.toList());
+                        _searchAndFilterBooks(widget.query, minPrice, maxPrice,
+                            selectedFaculty, selectedYears.toList());
                       },
                       child: Text('Apply'),
                     ),
@@ -259,7 +269,8 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
         return FractionallySizedBox(
           heightFactor: 0.85,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -267,7 +278,9 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Faculty', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    Text('Faculty',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold)),
                     IconButton(
                       icon: Icon(Icons.close),
                       onPressed: () {
@@ -353,7 +366,8 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                   filled: true,
                   fillColor: Colors.grey[200],
                   hintText: 'Search Book Name',
-                  hintStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                  hintStyle: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w400),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide.none,
@@ -373,14 +387,13 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
               ),
             ),
             IconButton(
-              icon: const Icon(Icons.filter_alt_outlined, color: Color.fromARGB(255, 3, 71, 122)),
+              icon: const Icon(Icons.filter_alt_outlined,
+                  color: Color.fromARGB(255, 3, 71, 122)),
               iconSize: 30,
-              onPressed: 
-                _showFilterOptions,
-              
+              onPressed: _showFilterOptions,
             ),
           ],
-        ),    
+        ),
         automaticallyImplyLeading: false,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1.0),
@@ -403,10 +416,14 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                         child: Center(
                           child: TextButton.icon(
                             onPressed: _toggleSortOrder,
-                            icon: Icon(Icons.sort, color: Color.fromARGB(255, 87, 86, 86)),
+                            icon: Icon(Icons.sort,
+                                color: Color.fromARGB(255, 87, 86, 86)),
                             label: Text(
-                              _isAscending ? 'Price: lowest to highest' : 'Price: highest to lowest',
-                              style: TextStyle(color: Color.fromARGB(255, 87, 86, 86)),
+                              _isAscending
+                                  ? 'Price: lowest to highest'
+                                  : 'Price: highest to lowest',
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 87, 86, 86)),
                             ),
                           ),
                         ),
@@ -454,42 +471,61 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
                           var book = _searchResults[index];
-                          var imageUrl = book.images.isNotEmpty ? book.images[0] : 'assets/image5.png';
-                          return Card(
-                            color: Colors.white,
-                            margin: EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: AspectRatio(
-                                    aspectRatio: 2,
-                                    child: imageUrl.startsWith('http')
-                                        ? Image.network(imageUrl, fit: BoxFit.cover)
-                                        : Image.asset(imageUrl, fit: BoxFit.cover),
+                          var imageUrl = book.images.isNotEmpty
+                              ? book.images[0]
+                              : 'assets/image5.png';
+                          var bookId = book.id.toString();
+
+                          return InkWell(
+                            onTap: () {
+                              context.push('/productdetailbuyer/$bookId');
+                            },
+                            child: Card(
+                              color: Colors.white,
+                              margin: EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: AspectRatio(
+                                      aspectRatio: 2,
+                                      child: imageUrl.startsWith('http')
+                                          ? Image.network(imageUrl,
+                                              fit: BoxFit.cover)
+                                          : Image.asset(imageUrl,
+                                              fit: BoxFit.cover),
+                                    ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(22.0, 15.0, 15.0, 6.0),
-                                  child: Text(book.name, style: const TextStyle(fontSize: 16)),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 22.0, right: 5.0),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        'RM${double.parse(book.price.toString()).toStringAsFixed(2)}',
-                                        style: const TextStyle(fontSize: 16, color: Color(0xFF4A56C1)),
-                                      ),
-                                      const Spacer(),
-                                      IconButton(
-                                        icon: const Icon(Icons.add_shopping_cart_outlined, size: 18, color: Color(0xFF4A56C1)),
-                                        onPressed: () {},
-                                      ),
-                                    ],
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        22.0, 15.0, 15.0, 6.0),
+                                    child: Text(book.name,
+                                        style: const TextStyle(fontSize: 16)),
                                   ),
-                                ),
-                              ],
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 22.0, right: 5.0),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          'RM${double.parse(book.price.toString()).toStringAsFixed(2)}',
+                                          style: const TextStyle(
+                                              fontSize: 16,
+                                              color: Color(0xFF4A56C1)),
+                                        ),
+                                        const Spacer(),
+                                        IconButton(
+                                          icon: const Icon(
+                                              Icons.add_shopping_cart_outlined,
+                                              size: 18,
+                                              color: Color(0xFF4A56C1)),
+                                          onPressed: () {},
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           );
                         },
