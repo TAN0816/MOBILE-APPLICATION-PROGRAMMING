@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:secondhand_book_selling_platform/model/book.dart';
 import 'package:secondhand_book_selling_platform/services/book_service.dart';
-
+import 'package:secondhand_book_selling_platform/services/cart_service.dart';
 class ProductDetailBuyer extends StatefulWidget {
   final String bookId;
   const ProductDetailBuyer({super.key, required this.bookId});
@@ -15,6 +15,7 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
   final BookService _bookService = BookService();
+  final CartService _cartService= CartService();
   Book? _book;
   bool _isLoading = true;
 
@@ -250,7 +251,7 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
             fixedSize: MaterialStateProperty.all(const Size(300, 50)),
           ),
           onPressed: () {
-           
+           _cartService.addtoCart(_book!.id);
           },
           child: const Text(
             'Add to Cart',

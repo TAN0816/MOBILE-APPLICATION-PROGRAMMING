@@ -220,7 +220,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         return InkWell(
                           onTap: () {
-                           context.push('/productdetailseller/4uHADDd1D8w8GHSMmZIl');
+                           context.push('/productdetailbuyer/4uHADDd1D8w8GHSMmZIl');
                           },
                           child: Card(
                             color: Colors.white, // Set card color to white
