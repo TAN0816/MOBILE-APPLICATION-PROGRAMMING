@@ -20,6 +20,7 @@ class _CartScreenState extends State<CartScreen> {
   Map<String, bool> _itemSelections = {};
   final Map<String, bool> _sellerSelections = {};
   List<CartItem>? cartItems;
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -40,7 +41,7 @@ class _CartScreenState extends State<CartScreen> {
         for (var item in cartItems!.map((item) => item.getBook.id)) item: false
       };
       sellers = sellerDetails;
-      print(cartItems);
+      _isLoading = false;
     });
   }
 
@@ -73,9 +74,9 @@ class _CartScreenState extends State<CartScreen> {
         if (value == true) {
           CartItem? selectedCartItem =
               cartItems!.firstWhere((item) => item.getBook.id == key);
-          totalPrice += selectedCartItem.getBook.getPrice *
-              selectedCartItem.getQuantity;
-                }
+          totalPrice +=
+              selectedCartItem.getBook.getPrice * selectedCartItem.getQuantity;
+        }
       });
     });
   }
@@ -165,188 +166,226 @@ class _CartScreenState extends State<CartScreen> {
               decoration: const BoxDecoration(
                 color: Color.fromARGB(255, 245, 245, 245),
               ),
-              child: ListView.builder(
-                itemCount: groupedItems.length,
-                itemBuilder: (context, index) {
-                  String sellerId = groupedItems.keys.elementAt(index);
-                  return Container(
-                    padding: const EdgeInsets.all(10),
-                    margin: const EdgeInsets.fromLTRB(16, 16, 16, 5),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: const Color.fromARGB(255, 255, 255, 255),
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Checkbox(
-                                value: _sellerSelections[sellerId] ?? false,
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectSellerItems(sellerId, value!);
-                                    updateSellerSelection(sellerId);
-                                  });
-                                }),
-                            CircleAvatar(
-                              radius: 16,
-                              backgroundImage: sellers[sellerId]?.getImage !=
-                                      null
-                                  ? NetworkImage(sellers[sellerId]!.getImage)
-                                      as ImageProvider
-                                  : const AssetImage(
-                                      'assets/images/profile.jpg'),
-                            ),
-                            const SizedBox(width: 10),
-                            Text(
-                              sellers[sellerId]?.getUsername ?? "Seller",
-                              style: const TextStyle(
-                                fontSize: 16,
+              child: _isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : groupedItems.isEmpty
+                      ? const Center(
+                          child: Text(
+                            'No items in cart',
+                            style: TextStyle(fontSize: 18, color: Colors.grey),
+                          ),
+                        )
+                      : ListView.builder(
+                          itemCount: groupedItems.length,
+                          itemBuilder: (context, index) {
+                            String sellerId =
+                                groupedItems.keys.elementAt(index);
+                            return Container(
+                              padding: const EdgeInsets.all(10),
+                              margin: const EdgeInsets.fromLTRB(16, 16, 16, 5),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: const Color.fromARGB(255, 255, 255, 255),
                               ),
-                            ),
-                          ],
-                        ),
-                        for (int i = 0; i < groupedItems[sellerId]!.length; i++)
-                          Container(
-                            height: 83,
-                            margin: const EdgeInsets.only(top: 10),
-                            child: Row(children: [
-                              Checkbox(
-                                  value: _itemSelections[
-                                          groupedItems[sellerId]![i]
-                                              .getBook
-                                              .getId] ??
-                                      false,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _itemSelections[groupedItems[sellerId]![i]
-                                          .getBook
-                                          .getId] = value!;
-                                      calculateTotalPrice();
-                                      updateSellerSelection(sellerId);
-                                    });
-                                  }),
-                              //book img
-                              Image(
-                                height: 80,
-                                width: 80,
-                                image: groupedItems[sellerId]![i]
-                                        .getBook
-                                        .getImages
-                                        .isNotEmpty
-                                    ? NetworkImage(groupedItems[sellerId]![i]
-                                        .getBook
-                                        .images[0]) as ImageProvider
-                                    : const AssetImage(
-                                        'assets/images/book.jpg'),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          0, 0, 0, 10),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            child: Text(
-                                              groupedItems[sellerId]![i]
-                                                  .getBook
-                                                  .getName,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          )
-                                        ],
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Checkbox(
+                                          value: _sellerSelections[sellerId] ??
+                                              false,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              selectSellerItems(
+                                                  sellerId, value!);
+                                              updateSellerSelection(sellerId);
+                                            });
+                                          }),
+                                      CircleAvatar(
+                                        radius: 16,
+                                        backgroundImage: sellers[sellerId]
+                                                    ?.getImage !=
+                                                null
+                                            ? NetworkImage(
+                                                    sellers[sellerId]!.getImage)
+                                                as ImageProvider
+                                            : const AssetImage(
+                                                'assets/images/profile.jpg'),
                                       ),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                            "RM${groupedItems[sellerId]![i].getBook.getPrice.toStringAsFixed(2)}"),
-                                        Row(
-                                          children: [
-                                            IconButton(
-                                              onPressed: () {
-                                                setState(() {
-                                                  if (groupedItems[sellerId]![i]
-                                                          .getQuantity <=
-                                                      1) {
-                                                    showDeleteConfirmationDialog(
-                                                        context, sellerId, i);
-                                                  } else {
+                                      const SizedBox(width: 10),
+                                      Text(
+                                        sellers[sellerId]?.getUsername ??
+                                            "Seller",
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  for (int i = 0;
+                                      i < groupedItems[sellerId]!.length;
+                                      i++)
+                                    Container(
+                                      height: 83,
+                                      margin: const EdgeInsets.only(top: 10),
+                                      child: Row(children: [
+                                        Checkbox(
+                                            value: _itemSelections[
                                                     groupedItems[sellerId]![i]
-                                                        .setQuantity(groupedItems[
-                                                                    sellerId]![i]
-                                                                .getQuantity -
-                                                            1);
-                                                  }
-                                                  CartService().updateQuantity(
+                                                        .getBook
+                                                        .getId] ??
+                                                false,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                _itemSelections[
+                                                    groupedItems[sellerId]![i]
+                                                        .getBook
+                                                        .getId] = value!;
+                                                calculateTotalPrice();
+                                                updateSellerSelection(sellerId);
+                                              });
+                                            }),
+                                        //book img
+                                        Image(
+                                          height: 80,
+                                          width: 80,
+                                          image: groupedItems[sellerId]![i]
+                                                  .getBook
+                                                  .getImages
+                                                  .isNotEmpty
+                                              ? NetworkImage(
                                                       groupedItems[sellerId]![i]
                                                           .getBook
-                                                          .getId,
-                                                      groupedItems[sellerId]![i]
-                                                          .getQuantity);
-                                                  calculateTotalPrice();
-                                                });
-                                              },
-                                              icon: const Icon(
-                                                  Icons.remove_circle_outline),
-                                            ),
-                                            Text(
-                                                "${groupedItems[sellerId]![i].getQuantity}"),
-                                            IconButton(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    if (groupedItems[sellerId]![
-                                                                i]
-                                                            .getQuantity >=
+                                                          .images[0])
+                                                  as ImageProvider
+                                              : const AssetImage(
+                                                  'assets/images/book.jpg'),
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        0, 0, 0, 10),
+                                                child: Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Text(
                                                         groupedItems[sellerId]![
                                                                 i]
                                                             .getBook
-                                                            .getQuantity) {
-                                                      return;
-                                                    } else {
-                                                      groupedItems[sellerId]![i]
-                                                          .setQuantity(groupedItems[
-                                                                      sellerId]![i]
-                                                                  .getQuantity +
-                                                              1);
-                                                    }
-                                                    CartService().updateQuantity(
-                                                        groupedItems[sellerId]![
-                                                                i]
-                                                            .getBook
-                                                            .getId,
-                                                        groupedItems[sellerId]![
-                                                                i]
-                                                            .getQuantity);
-                                                    calculateTotalPrice();
-                                                  });
-                                                },
-                                                icon: const Icon(
-                                                    Icons.add_circle_outline)),
-                                          ],
+                                                            .getName,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                      "RM${groupedItems[sellerId]![i].getBook.getPrice.toStringAsFixed(2)}"),
+                                                  Row(
+                                                    children: [
+                                                      IconButton(
+                                                        onPressed: () {
+                                                          setState(() {
+                                                            if (groupedItems[
+                                                                        sellerId]![i]
+                                                                    .getQuantity <=
+                                                                1) {
+                                                              showDeleteConfirmationDialog(
+                                                                  context,
+                                                                  sellerId,
+                                                                  i);
+                                                            } else {
+                                                              groupedItems[
+                                                                          sellerId]![
+                                                                      i]
+                                                                  .setQuantity(
+                                                                      groupedItems[sellerId]![i]
+                                                                              .getQuantity -
+                                                                          1);
+                                                            }
+                                                            CartService().updateQuantity(
+                                                                groupedItems[
+                                                                            sellerId]![
+                                                                        i]
+                                                                    .getBook
+                                                                    .getId,
+                                                                groupedItems[
+                                                                        sellerId]![i]
+                                                                    .getQuantity);
+                                                            calculateTotalPrice();
+                                                          });
+                                                        },
+                                                        icon: const Icon(Icons
+                                                            .remove_circle_outline),
+                                                      ),
+                                                      Text(
+                                                          "${groupedItems[sellerId]![i].getQuantity}"),
+                                                      IconButton(
+                                                          onPressed: () {
+                                                            setState(() {
+                                                              if (groupedItems[
+                                                                              sellerId]![
+                                                                          i]
+                                                                      .getQuantity >=
+                                                                  groupedItems[
+                                                                          sellerId]![i]
+                                                                      .getBook
+                                                                      .getQuantity) {
+                                                                return;
+                                                              } else {
+                                                                groupedItems[
+                                                                            sellerId]![
+                                                                        i]
+                                                                    .setQuantity(
+                                                                        groupedItems[sellerId]![i].getQuantity +
+                                                                            1);
+                                                              }
+                                                              CartService().updateQuantity(
+                                                                  groupedItems[
+                                                                              sellerId]![
+                                                                          i]
+                                                                      .getBook
+                                                                      .getId,
+                                                                  groupedItems[
+                                                                          sellerId]![i]
+                                                                      .getQuantity);
+                                                              calculateTotalPrice();
+                                                            });
+                                                          },
+                                                          icon: const Icon(Icons
+                                                              .add_circle_outline)),
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         )
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ]),
-                          )
-                      ],
-                    ),
-                  );
-                },
-              ),
+                                      ]),
+                                    )
+                                ],
+                              ),
+                            );
+                          },
+                        ),
             ),
           ),
           Positioned(

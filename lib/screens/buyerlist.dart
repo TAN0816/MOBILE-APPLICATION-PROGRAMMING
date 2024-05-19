@@ -81,7 +81,8 @@ class _BuyerList extends State<BuyerList> {
                                 borderRadius: BorderRadius.circular(20),
                                 borderSide: BorderSide.none,
                               ),
-                              contentPadding: const EdgeInsets.fromLTRB(16, 10, 0, 8),
+                              contentPadding:
+                                  const EdgeInsets.fromLTRB(16, 10, 0, 8),
                               suffixIcon: IconButton(
                                 icon: const Icon(Icons.search),
                                 onPressed: () {
@@ -99,7 +100,9 @@ class _BuyerList extends State<BuyerList> {
                       ),
                       IconButton(
                         icon: const Icon(Icons.shopping_cart),
-                        onPressed: () {},
+                        onPressed: () {
+                          context.push('/cart');
+                        },
                       ),
                     ],
                   ),
@@ -125,7 +128,8 @@ class _BuyerList extends State<BuyerList> {
           }
           if (snapshot.hasError) {
             print('Error in FutureBuilder: ${snapshot.error}');
-            return Center(child: Text('Something went wrong: ${snapshot.error}'));
+            return Center(
+                child: Text('Something went wrong: ${snapshot.error}'));
           }
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(child: Text('No books found'));
@@ -141,9 +145,12 @@ class _BuyerList extends State<BuyerList> {
               }
               if (streamSnapshot.hasError) {
                 print('Error in StreamBuilder: ${streamSnapshot.error}');
-                return Center(child: Text('Something went wrong: ${streamSnapshot.error}'));
+                return Center(
+                    child:
+                        Text('Something went wrong: ${streamSnapshot.error}'));
               }
-              if (!streamSnapshot.hasData || streamSnapshot.data!.docs.isEmpty) {
+              if (!streamSnapshot.hasData ||
+                  streamSnapshot.data!.docs.isEmpty) {
                 return const Center(child: Text('No books found'));
               }
 
@@ -151,7 +158,8 @@ class _BuyerList extends State<BuyerList> {
                 child: Column(
                   children: [
                     Container(
-                      color: Colors.white, // Set filter row background color to white
+                      color: Colors
+                          .white, // Set filter row background color to white
                       padding: const EdgeInsets.symmetric(vertical: 3.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -160,16 +168,22 @@ class _BuyerList extends State<BuyerList> {
                             onPressed: () {
                               // Handle filter button press
                             },
-                            icon: const Icon(Icons.filter_list, color: Color.fromARGB(255, 87, 86, 86)),
-                            label: const Text('Filters', style: TextStyle(color: Color.fromARGB(255, 87, 86, 86))),
+                            icon: const Icon(Icons.filter_list,
+                                color: Color.fromARGB(255, 87, 86, 86)),
+                            label: const Text('Filters',
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 87, 86, 86))),
                           ),
                           const SizedBox(width: 16),
                           TextButton.icon(
                             onPressed: () {
                               // Handle sorting button press
                             },
-                            icon: const Icon(Icons.sort, color: Color.fromARGB(255, 87, 86, 86)),
-                            label: const Text('Price: lowest to high', style: TextStyle(color: Color.fromARGB(255, 87, 86, 86))),
+                            icon: const Icon(Icons.sort,
+                                color: Color.fromARGB(255, 87, 86, 86)),
+                            label: const Text('Price: lowest to high',
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 87, 86, 86))),
                           ),
                         ],
                       ),
@@ -193,24 +207,28 @@ class _BuyerList extends State<BuyerList> {
                     GridView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         childAspectRatio: 0.67,
                       ),
                       itemCount: books.length,
                       itemBuilder: (context, index) {
                         var book = books[index];
-                        var imageUrl = book.images.isNotEmpty ? book.images[0] : '';
+                        var imageUrl =
+                            book.images.isNotEmpty ? book.images[0] : '';
                         var bookName = book.name;
                         var bookPrice = book.price.toString();
+                        var bookId = book.id.toString();
 
                         return InkWell(
                           onTap: () {
-                            GoRouter.of(context).go('/productdetailbuyer', extra: book);
+                            context.push('/productdetailbuyer/$bookId');
                           },
                           child: Card(
                             color: Colors.white, // Set card color to white
-                            margin: const EdgeInsets.all(8.0), // Reduce the margin to make space between cards smaller
+                            margin: EdgeInsets.all(
+                                8.0), // Reduce the margin to make space between cards smaller
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -219,28 +237,32 @@ class _BuyerList extends State<BuyerList> {
                                     aspectRatio: 2,
                                     child: imageUrl.isNotEmpty
                                         ? (imageUrl.startsWith('http')
-                                            ? Image.network(imageUrl, fit: BoxFit.cover)
-                                            : Image.asset(imageUrl, fit: BoxFit.cover))
-                                        : Image.asset('assets/image5.png', fit: BoxFit.cover),
+                                            ? Image.network(imageUrl,
+                                                fit: BoxFit.cover)
+                                            : Image.asset(imageUrl,
+                                                fit: BoxFit.cover))
+                                        : Image.asset('assets/image5.png',
+                                            fit: BoxFit.cover),
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.fromLTRB(22.0, 15.0, 15.0, 6.0),
-                                  child: Text(bookName, style: const TextStyle(fontSize: 16)),
+                                  padding: EdgeInsets.fromLTRB(
+                                      22.0, 15.0, 15.0, 6.0),
+                                  child: Text(bookName,
+                                      style: TextStyle(fontSize: 16)),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(left: 22.0, right: 5.0),
+                                  padding:
+                                      EdgeInsets.only(left: 22.0, right: 5.0),
                                   child: Row(
                                     children: [
                                       Text(
                                         'RM${double.parse(bookPrice).toStringAsFixed(2)}',
-                                        style: const TextStyle(fontSize: 16, color: Color(0xFF4A56C1)),
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            color: Color(0xFF4A56C1)),
                                       ),
                                       const Spacer(),
-                                      IconButton(
-                                        icon: const Icon(Icons.add_shopping_cart_outlined, size: 18, color: Color(0xFF4A56C1)),
-                                        onPressed: () {},
-                                      ),
                                     ],
                                   ),
                                 ),

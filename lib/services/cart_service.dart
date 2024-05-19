@@ -115,14 +115,14 @@ class CartService {
           Map<String, dynamic> bookData = bookSnapshot.data()!;
           Book book = Book(
             id: bookSnapshot.id,
-            sellerId: bookData['sellerId'],
-            name: bookData['name'],
-            price: (bookData['price'] as num).toDouble(),
-            quantity: bookData['quantity'],
-            images: List<String>.from(bookData['images']),
-            year: bookData['year'],
-            course: bookData['course'],
-            detail: bookData['detail'],
+            sellerId: bookData['sellerId'] ?? '',
+            name: bookData['name'] ?? 'Unknown Title',
+            price: (bookData['price'] as num?)?.toDouble() ?? 0.0,
+            quantity: bookData['quantity'] ?? 0,
+            images: List<String>.from(bookData['images'] ?? []),
+            year: bookData['year'] ?? 'Unknown Year',
+            course: bookData['course'] ?? 'Unknown Course',
+            detail: bookData['detail'] ?? 'No details available',
           );
 
           CartItem cartItem = CartItem(
@@ -138,8 +138,11 @@ class CartService {
   }
 
   Future<UserModel> getSellerData(String sellerId) async {
-    DocumentSnapshot<Map<String, dynamic>> docSnapshot =
-        await FirebaseFirestore.instance.collection('user').doc(sellerId).get();
+    DocumentSnapshot<Map<String, dynamic>> docSnapshot = await FirebaseFirestore
+        .instance
+        .collection('users')
+        .doc(sellerId)
+        .get();
 
     Map<String, dynamic> userData = docSnapshot.data()!;
     UserModel seller = UserModel(
@@ -157,10 +160,12 @@ class CartService {
   Future<Map<String, UserModel>> fetchSellers(Set<String> sellerIds) async {
     Map<String, UserModel> sellers = {};
     for (var sellerId in sellerIds) {
-      DocumentSnapshot sellerData = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(sellerId)
-          .get();
+      DocumentSnapshot<Map<String, dynamic>> docSnapshot =
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(sellerId)
+              .get();
+      Map<String, dynamic> sellerData = docSnapshot.data()!;
       UserModel seller = UserModel(
         username: sellerData['username'],
         email: sellerData['email'],
