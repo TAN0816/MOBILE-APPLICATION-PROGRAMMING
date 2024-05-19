@@ -192,7 +192,7 @@ class CartService {
           email: sellerData['email'],
           phone: sellerData['phone'],
           address: sellerData['address'] ?? "",
-          role: sellerData['role'],
+          role: sellerData['role'] ?? "Seller",
           image: sellerData['image'] ?? "",
         );
         sellers[sellerId] = seller;

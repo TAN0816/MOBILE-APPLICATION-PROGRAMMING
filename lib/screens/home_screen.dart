@@ -31,7 +31,8 @@ class _HomeScreen extends State<HomeScreen> {
       role = user.getRole;
     });
   }
-@override
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: role == 'Seller' ? const SellerList() : const BuyerList(),

@@ -205,9 +205,11 @@ class _CartScreenState extends State<CartScreen> {
                                           }),
                                       CircleAvatar(
                                         radius: 16,
-                                        backgroundImage: sellers[sellerId]
-                                                    ?.getImage !=
-                                                null
+                                        backgroundImage: (sellers[sellerId]
+                                                        ?.getImage !=
+                                                    null &&
+                                                sellers[sellerId]?.getImage !=
+                                                    "")
                                             ? NetworkImage(
                                                     sellers[sellerId]!.getImage)
                                                 as ImageProvider
@@ -220,6 +222,7 @@ class _CartScreenState extends State<CartScreen> {
                                             "Seller",
                                         style: const TextStyle(
                                           fontSize: 16,
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                     ],
