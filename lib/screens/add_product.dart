@@ -3,6 +3,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:secondhand_book_selling_platform/model/user.dart';
 import 'dart:io';
 
 import 'package:secondhand_book_selling_platform/services/user_service.dart';
@@ -31,6 +32,9 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
   String _selectedCourse = "Software Engineering";
   String _selectedYear = "Year 1";
   int _quantity = 1;
+  // UserService userService = UserService();
+  // userId = UserService().getUserId;
+  //   UserModel user = await userService.getUserData(userId);
 
   Future<void> _pickImages() async {
     final pickedFiles = await _picker.pickMultiImage();
@@ -92,14 +96,14 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
 
       // Call ProductService to upload book details to Firestore
       await ProductService().uploadBook(
-        _bookNameController.text,
-        double.parse(_bookPriceController.text),
-        _bookDetailController.text,
-        _selectedCourse,
-        _selectedYear,
-        _quantity,
-        imageUrls,
-      );
+          _bookNameController.text,
+          double.parse(_bookPriceController.text),
+          _bookDetailController.text,
+          _selectedCourse,
+          _selectedYear,
+          _quantity,
+          imageUrls,
+          userId);
 
       // Clear inputs after successful submission
       _bookNameController.clear();

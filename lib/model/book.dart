@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Book {
   late final String id;
-  // final String sellerId;
+  final String sellerId;
   final String name;
   final double price;
   final int quantity;
@@ -13,7 +13,7 @@ class Book {
 
   Book({
     required this.id,
-    // required this.sellerId,
+    required this.sellerId,
     required this.name,
     required this.price,
     required this.quantity,
@@ -24,7 +24,7 @@ class Book {
   });
 
   String get getId => id;
-  // String get getSellerId => sellerId;
+  String get getSellerId => sellerId;
   double get getPrice => price;
   String get getName => name;
   String get getDetail => detail;

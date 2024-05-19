@@ -14,6 +14,7 @@ class ProductService {
     String year,
     int quantity,
     List<String> imageUrls,
+    String sellerId,
   ) async {
     try {
       await _firestore.collection('books').add({
@@ -24,6 +25,7 @@ class ProductService {
         'year': year,
         'quantity': quantity,
         'images': imageUrls,
+        'sellerId':sellerId,
       });
     } catch (e) {
       print('Error uploading book: $e');
@@ -38,8 +40,7 @@ class ProductService {
     Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
     return Book(
       id: snapshot.id,
-      // sellerId: data[
-      //     'sellerId'], // Ensure your Firestore document has a sellerId field
+      sellerId: data['sellerId'], // Ensure your Firestore document has a sellerId field
       name: data['name'],
       price: data['price'],
       quantity: data['quantity'],

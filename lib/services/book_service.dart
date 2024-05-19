@@ -12,7 +12,7 @@ class BookService {
       var data = doc.data();
       return Book(
         id: doc.id,
-        // sellerId: data['sellerId'] ?? 'Unknown Seller',
+        sellerId: data['sellerId'] ?? 'Unknown Seller',
         name: data['name'] ?? 'Unknown Title',
         price: (data['price'] ?? 0.0).toDouble(),
         quantity: data['quantity'] ?? 0,
@@ -39,7 +39,7 @@ class BookService {
       var data = doc.data();
       return Book(
         id: doc.id,
-        //  sellerId: data['sellerId'] ?? 'Unknown Seller',
+         sellerId: data['sellerId'] ?? 'Unknown Seller',
         name: data['name'] ?? 'Unknown Title',
         price: (data['price'] ?? 0.0).toDouble(),
         quantity: data['quantity'] ?? 0,
@@ -59,7 +59,7 @@ class BookService {
       var data = docSnapshot.data()!;
       return Book(
         id: docSnapshot.id,
-        //  sellerId: data['sellerId'] ?? 'Unknown Seller',
+        sellerId: data['sellerId'] ?? 'Unknown Seller',
         name: data['name'] ?? 'Unknown Title',
         price: (data['price'] ?? 0.0).toDouble(),
         quantity: data['quantity'] ?? 0,
