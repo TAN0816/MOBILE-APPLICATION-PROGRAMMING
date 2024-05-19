@@ -259,6 +259,16 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         },
       ),
+
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Add your onPressed logic here
+
+        },
+        child: Icon(Icons.add, color: Colors.white),
+        backgroundColor: Color(0xff4a56c1),
+        elevation: 4,
+      ),
     );
   }
 }
