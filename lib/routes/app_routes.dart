@@ -1,25 +1,28 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:secondhand_book_selling_platform/screens/cart/cart_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/forgot_password.dart';
-import 'package:secondhand_book_selling_platform/screens/home_page.dart';
-import 'package:secondhand_book_selling_platform/screens/login_email_password_screen.dart';
+import 'package:secondhand_book_selling_platform/screens/nav.dart';
 import 'package:secondhand_book_selling_platform/screens/login_screen.dart';
+import 'package:secondhand_book_selling_platform/screens/landing_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/notification_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/message_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/me_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/edit_profile.dart';
+import 'package:secondhand_book_selling_platform/screens/search.dart';
 import 'package:secondhand_book_selling_platform/screens/signup_email_password_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/edit_product.dart';
 
 import 'package:secondhand_book_selling_platform/screens/reset.dart';
+import 'package:secondhand_book_selling_platform/screens/product/productdetailbuyer.dart';
+import 'package:secondhand_book_selling_platform/screens/product/productdetailseller.dart';
 
 import '../screens/add_product.dart';
 
 GoRouter router() {
   return GoRouter(
-    initialLocation: '/add_product',
-    // initialLocation: '/edit_product',
+    initialLocation: '/',
     routes: [
       GoRoute(
         path: '/',
@@ -49,7 +52,7 @@ GoRouter router() {
           // builder: (context, state) => const Homepage(),
           builder: (context, state) {
             String? tab = state.pathParameters['tab'];
-            print(tab);
+ 
             int index = 0;
             if (tab != null) {
               index = int.tryParse(tab) ?? 0;
@@ -81,7 +84,7 @@ GoRouter router() {
       ),
       GoRoute(
         path: '/add_product',
-        builder: (context, state) => AddNewBookPage(),
+        builder: (context, state) => const AddNewBookPage(),
       ),
       GoRoute(
         path: '/edit_product/:bookId',
@@ -93,6 +96,31 @@ GoRouter router() {
       GoRoute(
         path: '/forgot_password',
         builder: (context, state) => const ForgotPassword(),
+      ),
+      GoRoute(
+        path: '/cart',
+        builder: (context, state) => const CartScreen(),
+      ),
+
+      GoRoute(
+        path: '/search',
+        builder: (context, state) => const SearchPage(),
+      ),
+
+       GoRoute(
+        path: '/productdetailbuyer/:bookId',
+        builder: (context, state) {
+          final String? bookId = state.pathParameters['bookId'];
+          return ProductDetailBuyer(bookId: bookId!);
+        },
+        
+      ),
+      GoRoute(
+        path: '/productdetailseller/:bookId',
+       builder: (context, state) {
+          final String? bookId = state.pathParameters['bookId'];
+          return ProductDetailSeller(bookId: bookId!);
+        },
       )
     ],
   );

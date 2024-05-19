@@ -9,6 +9,8 @@ import 'package:secondhand_book_selling_platform/services/user_service.dart';
 import 'package:secondhand_book_selling_platform/services/produuct_service.dart';
 
 class AddNewBookPage extends StatefulWidget {
+  const AddNewBookPage({super.key});
+
   @override
   _AddNewBookPageState createState() => _AddNewBookPageState();
 }
@@ -25,12 +27,10 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
 
   Future<void> _pickImages() async {
     final pickedFiles = await _picker.pickMultiImage();
-    if (pickedFiles != null) {
-      setState(() {
-        _images = pickedFiles.map((file) => File(file.path)).toList();
-      });
+    setState(() {
+      _images = pickedFiles.map((file) => File(file.path)).toList();
+    });
     }
-  }
 
   Future<void> _uploadBook() async {
     if (_images.isEmpty) {
@@ -100,11 +100,11 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
 
       // Provide user feedback
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Book added successfully!')));
+          .showSnackBar(const SnackBar(content: Text('Book added successfully!')));
     } catch (e) {
       print('Error uploading book: $e');
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Failed to add book.')));
+          .showSnackBar(const SnackBar(content: Text('Failed to add book.')));
     }
   }
 
@@ -112,7 +112,7 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add New Book'),
+        title: const Text('Add New Book'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(22.0),
@@ -322,7 +322,7 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
                   ),
                   Spacer(), // Adds space between the text and the buttons
                   IconButton(
-                    icon: Icon(Icons.remove),
+                    icon: const Icon(Icons.remove),
                     onPressed: () {
                       setState(() {
                         if (_quantity > 1) _quantity--;
@@ -330,7 +330,7 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
                     },
                   ),
                   IconButton(
-                    icon: Icon(Icons.add),
+                    icon: const Icon(Icons.add),
                     onPressed: () {
                       setState(() {
                         _quantity++;
