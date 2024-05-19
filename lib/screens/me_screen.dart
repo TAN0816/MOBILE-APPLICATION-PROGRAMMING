@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:secondhand_book_selling_platform/services/firebase_auth_methods.dart';
 import 'package:secondhand_book_selling_platform/services/user_service.dart';
 import 'package:secondhand_book_selling_platform/model/user.dart';
-import 'package:secondhand_book_selling_platform/state/user_state.dart';
+// import 'package:secondhand_book_selling_platform/state/user_state.dart';
 
 class MeScreen extends StatefulWidget {
   const MeScreen({super.key});

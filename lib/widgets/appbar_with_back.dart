@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class AppBarWithBackBtn extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  const AppBarWithBackBtn({super.key, required this.title});
+  final List<Widget>? actions;
+  const AppBarWithBackBtn({super.key, required this.title, this.actions});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +12,7 @@ class AppBarWithBackBtn extends StatelessWidget implements PreferredSizeWidget {
         padding: const EdgeInsets.only(left: 16.0),
         child: CircleAvatar(
           radius: 30,
-          backgroundColor: const Color.fromARGB(244, 244, 244, 244),
+          backgroundColor: Color.fromARGB(244, 255, 255, 255),
           child: IconButton(
             icon: const Icon(
               Icons.arrow_back_ios_new_rounded,
@@ -28,6 +29,7 @@ class AppBarWithBackBtn extends StatelessWidget implements PreferredSizeWidget {
           fontWeight: FontWeight.w500, // Set the font weight to bold
         ),
       ),
+      actions: actions,
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1.0),
         child: Container(
