@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:secondhand_book_selling_platform/model/book.dart';
 import 'package:secondhand_book_selling_platform/services/book_service.dart';
+import 'package:secondhand_book_selling_platform/services/cart_service.dart';
 
 class ProductDetailBuyer extends StatefulWidget {
   final String bookId;
@@ -15,7 +15,8 @@ class ProductDetailBuyer extends StatefulWidget {
 class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
-  BookService _bookService = BookService();
+  final BookService _bookService = BookService();
+  final CartService _cartService = CartService();
   Book? _book;
   bool _isLoading = true;
 
@@ -85,7 +86,9 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
                               ),
                               child: Column(
                                 children: [
-                                  const SizedBox(height: 10), // Adjust the height as needed
+                                  const SizedBox(
+                                      height:
+                                          10), // Adjust the height as needed
                                   _buildPageIndicator(),
                                 ],
                               ),
@@ -121,43 +124,43 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
                           ),
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Delivery Method',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              'Delivery',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w300,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      // const Padding(
+                      //   padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                      //   child: Column(
+                      //     crossAxisAlignment: CrossAxisAlignment.start,
+                      //     children: [
+                      //       Text(
+                      //         'Delivery Method',
+                      //         style: TextStyle(
+                      //           color: Colors.black,
+                      //           fontSize: 18,
+                      //           fontWeight: FontWeight.bold,
+                      //         ),
+                      //       ),
+                      //       Text(
+                      //         'Delivery',
+                      //         style: TextStyle(
+                      //           color: Colors.black,
+                      //           fontSize: 14,
+                      //           fontWeight: FontWeight.w300,
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              'Description of Product',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            // const Text(
+                            //   'Description of Product',
+                            //   style: TextStyle(
+                            //     color: Colors.black,
+                            //     fontSize: 18,
+                            //     fontWeight: FontWeight.bold,
+                            //   ),
+                            // ),
                             Text(
                               _book!.detail ?? 'No description available.',
                               style: const TextStyle(
@@ -188,7 +191,8 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
                               children: [
                                 CircleAvatar(
                                   radius: 25,
-                                  backgroundImage: AssetImage('assets/images/profile.jpg'),
+                                  backgroundImage:
+                                      AssetImage('assets/images/profile.jpg'),
                                 ),
                                 SizedBox(
                                   width: 10,
@@ -220,13 +224,16 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
                               style: TextButton.styleFrom(
                                 padding: EdgeInsets.zero,
                                 shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
                                 ),
                                 side: const BorderSide(
-                                    color: Color.fromARGB(255, 72, 72, 72), width: 1),
+                                    color: Color.fromARGB(255, 72, 72, 72),
+                                    width: 1),
                               ),
                               onPressed: () {
-                                Navigator.pushNamed(context, '/productdetailbuyer');
+                                Navigator.pushNamed(
+                                    context, '/productdetailbuyer');
                               },
                               child: const Text('Chat'),
                             ),
@@ -251,7 +258,14 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
             fixedSize: MaterialStateProperty.all(const Size(300, 50)),
           ),
           onPressed: () {
-            // Add your onPressed logic here
+            _cartService.addtoCart(_book!.id).then((_) {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('Product added to cart successfully')));
+            }).catchError((error) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Failed to add product to cart')));
+            });
+            ;
           },
           child: const Text(
             'Add to Cart',

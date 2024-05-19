@@ -31,7 +31,7 @@ class BookService {
     QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
         .collection('books')
         .where('name', isGreaterThanOrEqualTo: name)
-        .where('name', isLessThanOrEqualTo: name + '\uf8ff')
+        .where('name', isLessThanOrEqualTo: '$name\uf8ff')
         .get();
 
     return querySnapshot.docs.map((doc) {

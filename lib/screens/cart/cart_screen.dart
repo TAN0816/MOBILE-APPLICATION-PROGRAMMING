@@ -7,6 +7,8 @@ import 'package:secondhand_book_selling_platform/services/user_service.dart';
 import 'package:secondhand_book_selling_platform/widgets/appbar_with_back.dart';
 
 class CartScreen extends StatefulWidget {
+  const CartScreen({super.key});
+
   @override
   State<CartScreen> createState() => _CartScreenState();
 }
@@ -17,7 +19,7 @@ class _CartScreenState extends State<CartScreen> {
   Map<String, List<CartItem>> groupedItems = {};
   Map<String, UserModel> sellers = {};
   Map<String, bool> _itemSelections = {};
-  Map<String, bool> _sellerSelections = {};
+  final Map<String, bool> _sellerSelections = {};
   List<CartItem>? cartItems;
 
   @override
@@ -72,11 +74,9 @@ class _CartScreenState extends State<CartScreen> {
         if (value == true) {
           CartItem? selectedCartItem =
               cartItems!.firstWhere((item) => item.getBook.id == key);
-          if (selectedCartItem != null) {
-            totalPrice += selectedCartItem.getBook.getPrice *
-                selectedCartItem.getQuantity;
-          }
-        }
+          totalPrice += selectedCartItem.getBook.getPrice *
+              selectedCartItem.getQuantity;
+                }
       });
     });
   }

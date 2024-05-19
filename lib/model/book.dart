@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Book {
   late final String id;
   final String sellerId;
@@ -30,4 +32,6 @@ class Book {
   List<String> get getImages => images;
   String get getYear => year;
   String get getCourse => course;
+
+  // static Future<Book> fromSnapshot(DocumentSnapshot<Object?> snapshot) {}
 }

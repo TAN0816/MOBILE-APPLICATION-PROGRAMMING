@@ -12,7 +12,7 @@ class AppBarWithBackBtn extends StatelessWidget implements PreferredSizeWidget {
         padding: const EdgeInsets.only(left: 16.0),
         child: CircleAvatar(
           radius: 30,
-          backgroundColor: Color.fromARGB(244, 255, 255, 255),
+          backgroundColor: const Color.fromARGB(244, 255, 255, 255),
           child: IconButton(
             icon: const Icon(
               Icons.arrow_back_ios_new_rounded,

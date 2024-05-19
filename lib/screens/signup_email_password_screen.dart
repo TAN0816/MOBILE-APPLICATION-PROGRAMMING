@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:secondhand_book_selling_platform/services/firebase_auth_methods.dart';
-import 'package:secondhand_book_selling_platform/widgets/custom_textfield.dart';
 
 class EmailPasswordSignup extends StatefulWidget {
   const EmailPasswordSignup({super.key});
@@ -18,12 +17,12 @@ class CustomTextField extends StatelessWidget {
   final String? errorMessage; // Add error message parameter
 
   const CustomTextField({
-    Key? key,
+    super.key,
     required this.controller,
     required this.hintText,
     this.obscureText = false,
     this.errorMessage, // Add error message parameter
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -398,21 +397,23 @@ class _EmailPasswordSignupState extends State<EmailPasswordSignup> {
                 ],
               ),
               const SizedBox(height: 40),
-              ElevatedButton(
-                onPressed: signUpUser,
-                style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all(const Color(0xff4a56c1)),
-                  textStyle: MaterialStateProperty.all(
-                    const TextStyle(color: Colors.white),
+              Center(
+                child: ElevatedButton(
+                  onPressed: signUpUser,
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(const Color(0xff4a56c1)),
+                    textStyle: MaterialStateProperty.all(
+                      const TextStyle(color: Colors.white),
+                    ),
+                    minimumSize: MaterialStateProperty.all(
+                      Size(MediaQuery.of(context).size.width / 2.5, 50),
+                    ),
                   ),
-                  minimumSize: MaterialStateProperty.all(
-                    Size(MediaQuery.of(context).size.width / 2.5, 50),
+                  child: const Text(
+                    "Submit",
+                    style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
-                ),
-                child: const Text(
-                  "Register",
-                  style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
               ),
             ],

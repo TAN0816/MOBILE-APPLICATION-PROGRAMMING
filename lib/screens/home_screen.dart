@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:go_router/go_router.dart';
 import 'package:secondhand_book_selling_platform/model/book.dart';
+import 'package:secondhand_book_selling_platform/screens/add_product.dart';
 import 'package:secondhand_book_selling_platform/services/book_service.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -46,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
+              SizedBox(
                 height: 60,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -63,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       Expanded(
                         child: Container(
-                          margin: EdgeInsets.symmetric(horizontal: 8.0),
+                          margin: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: TextField(
                             onTap: () {
                               // Navigate to the search page
@@ -73,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               filled: true,
                               fillColor: Colors.grey[200],
                               hintText: 'Search Book Name',
-                              hintStyle: TextStyle(
+                              hintStyle: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w400,
                               ),
@@ -81,15 +82,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                 borderRadius: BorderRadius.circular(20),
                                 borderSide: BorderSide.none,
                               ),
-                              contentPadding: EdgeInsets.fromLTRB(16, 10, 0, 8),
+                              contentPadding:
+                                  const EdgeInsets.fromLTRB(16, 10, 0, 8),
                               suffixIcon: IconButton(
-                                icon: Icon(Icons.search),
+                                icon: const Icon(Icons.search),
                                 onPressed: () {
                                   // Handle search button press
                                   print('Search button pressed');
                                 },
                               ),
-                              suffixIconConstraints: BoxConstraints(
+                              suffixIconConstraints: const BoxConstraints(
                                 minWidth: 40,
                                 minHeight: 40,
                               ),
@@ -98,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       IconButton(
-                        icon: Icon(Icons.shopping_cart),
+                        icon: const Icon(Icons.shopping_cart),
                         onPressed: () {
                           context.push('/cart');
                         },
@@ -107,11 +109,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Container(
                 height: 1,
-                margin: EdgeInsets.symmetric(horizontal: 10),
-                decoration: BoxDecoration(
+                margin: const EdgeInsets.symmetric(horizontal: 10),
+                decoration: const BoxDecoration(
                   color: Color.fromARGB(255, 203, 202, 202),
                 ),
               ),
@@ -123,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
         future: bookService.getAllBooks(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasError) {
             print('Error in FutureBuilder: ${snapshot.error}');
@@ -131,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Text('Something went wrong: ${snapshot.error}'));
           }
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No books found'));
+            return const Center(child: Text('No books found'));
           }
 
           books = snapshot.data!;
@@ -140,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
             stream: bookService.getBooksStream(),
             builder: (context, streamSnapshot) {
               if (streamSnapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               }
               if (streamSnapshot.hasError) {
                 print('Error in StreamBuilder: ${streamSnapshot.error}');
@@ -150,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
               }
               if (!streamSnapshot.hasData ||
                   streamSnapshot.data!.docs.isEmpty) {
-                return Center(child: Text('No books found'));
+                return const Center(child: Text('No books found'));
               }
 
               return SingleChildScrollView(
@@ -159,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Container(
                       color: Colors
                           .white, // Set filter row background color to white
-                      padding: EdgeInsets.symmetric(vertical: 3.0),
+                      padding: const EdgeInsets.symmetric(vertical: 3.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -167,20 +169,20 @@ class _HomeScreenState extends State<HomeScreen> {
                             onPressed: () {
                               // Handle filter button press
                             },
-                            icon: Icon(Icons.filter_list,
+                            icon: const Icon(Icons.filter_list,
                                 color: Color.fromARGB(255, 87, 86, 86)),
-                            label: Text('Filters',
+                            label: const Text('Filters',
                                 style: TextStyle(
                                     color: Color.fromARGB(255, 87, 86, 86))),
                           ),
-                          SizedBox(width: 16),
+                          const SizedBox(width: 16),
                           TextButton.icon(
                             onPressed: () {
                               // Handle sorting button press
                             },
-                            icon: Icon(Icons.sort,
+                            icon: const Icon(Icons.sort,
                                 color: Color.fromARGB(255, 87, 86, 86)),
-                            label: Text('Price: lowest to high',
+                            label: const Text('Price: lowest to high',
                                 style: TextStyle(
                                     color: Color.fromARGB(255, 87, 86, 86))),
                           ),
@@ -189,24 +191,25 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     Container(
                       height: 1,
-                      margin: EdgeInsets.symmetric(horizontal: 10),
+                      margin: const EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 203, 202, 202),
+                        color: const Color.fromARGB(255, 203, 202, 202),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.2),
                             spreadRadius: 1,
                             blurRadius: 2,
-                            offset: Offset(0, 1),
+                            offset: const Offset(0, 1),
                           ),
                         ],
                       ),
                     ),
-                    SizedBox(height: 12),
+                    const SizedBox(height: 12),
                     GridView.builder(
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         childAspectRatio: 0.67,
                       ),
@@ -220,11 +223,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         return InkWell(
                           onTap: () {
-                           context.push('/productdetailseller/4uHADDd1D8w8GHSMmZIl');
+                            context.push(
+                                '/productdetailbuyer/${book.id.toString()}');
                           },
                           child: Card(
                             color: Colors.white, // Set card color to white
-                            margin: EdgeInsets.all(8.0), // Reduce the margin to make space between cards smaller
+                            margin: EdgeInsets.all(
+                                8.0), // Reduce the margin to make space between cards smaller
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -233,30 +238,32 @@ class _HomeScreenState extends State<HomeScreen> {
                                     aspectRatio: 2,
                                     child: imageUrl.isNotEmpty
                                         ? (imageUrl.startsWith('http')
-                                            ? Image.network(imageUrl, fit: BoxFit.cover)
-                                            : Image.asset(imageUrl, fit: BoxFit.cover))
-                                        : Image.asset('assets/image5.png', fit: BoxFit.cover),
+                                            ? Image.network(imageUrl,
+                                                fit: BoxFit.cover)
+                                            : Image.asset(imageUrl,
+                                                fit: BoxFit.cover))
+                                        : Image.asset('assets/image5.png',
+                                            fit: BoxFit.cover),
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.fromLTRB(22.0, 15.0, 15.0, 6.0),
-                                  child: Text(bookName, style: TextStyle(fontSize: 16)),
+                                  padding: EdgeInsets.fromLTRB(
+                                      22.0, 15.0, 15.0, 6.0),
+                                  child: Text(bookName,
+                                      style: TextStyle(fontSize: 16)),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.only(left: 22.0, right: 5.0),
+                                  padding:
+                                      EdgeInsets.only(left: 22.0, right: 5.0),
                                   child: Row(
                                     children: [
                                       Text(
                                         'RM${double.parse(bookPrice).toStringAsFixed(2)}',
-                                        style: TextStyle(fontSize: 16, color: Color(0xFF4A56C1)),
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            color: Color(0xFF4A56C1)),
                                       ),
-                                      Spacer(),
-                                      IconButton(
-                                        icon: Icon(Icons.add_shopping_cart_outlined, size: 18, color: Color(0xFF4A56C1)),
-                                        onPressed: () {
-                                          context.push('/productdetailseller/4uHADDd1D8w8GHSMmZIl');
-                                        },
-                                      ),
+                                      const Spacer(),
                                     ],
                                   ),
                                 ),

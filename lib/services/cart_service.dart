@@ -11,43 +11,33 @@ class CartService {
   CartService();
 
   // List<CartItem> get getCartList => cartList;
-
   Future<void> addtoCart(String pid) async {
-    bool isExist = false;
     DocumentSnapshot<Map<String, dynamic>> docSnapshot =
         await FirebaseFirestore.instance.collection('cart').doc(userId).get();
 
     if (docSnapshot.exists) {
       Map<String, dynamic> cartData = docSnapshot.data()!;
-      var cartList = cartData['cartList'];
+      var cartList = cartData['cartList'] as List<dynamic>;
 
+      bool itemExists = false;
       for (var item in cartList) {
         if (item['bookId'] == pid) {
-          // Update the quantity
-          item['quantity'] += 1;
-
-          await FirebaseFirestore.instance
-              .collection('cart')
-              .doc(userId)
-              .update({
-            'cartList': cartList,
-          });
-
-          isExist = true;
+          // item['quantity'] += 1;
+          itemExists = true;
           break;
         }
       }
 
-      if (!isExist) {
-        await FirebaseFirestore.instance.collection('cart').doc(userId).update({
-          'cartList': FieldValue.arrayUnion([
-            {
-              'bookId': pid,
-              'quantity': 1,
-            },
-          ])
+      if (!itemExists) {
+        cartList.add({
+          'bookId': pid,
+          'quantity': 1,
         });
       }
+
+      await FirebaseFirestore.instance.collection('cart').doc(userId).update({
+        'cartList': cartList,
+      });
     } else {
       await FirebaseFirestore.instance.collection('cart').doc(userId).set({
         'cartList': [
@@ -149,7 +139,7 @@ class CartService {
 
   Future<UserModel> getSellerData(String sellerId) async {
     DocumentSnapshot<Map<String, dynamic>> docSnapshot =
-        await FirebaseFirestore.instance.collection('cart').doc(sellerId).get();
+        await FirebaseFirestore.instance.collection('user').doc(sellerId).get();
 
     Map<String, dynamic> userData = docSnapshot.data()!;
     UserModel seller = UserModel(
