@@ -9,8 +9,9 @@ class UserState extends ChangeNotifier {
 
   UserModel? userState;
   UserService userService = UserService();
-
+  List<String> _searchHistory = [];
   UserModel? get getUserState => userState;
+  List<String> get searchHistory => _searchHistory;
 
   Future<void> updateProfile(String userId, String username, String email,
       String phone, String address, String imageUrl) async {
@@ -23,6 +24,15 @@ class UserState extends ChangeNotifier {
 
   Future<void> getUserData(String userId) async {
     userState = await userService.getUserData(userId);
+    notifyListeners();
+  }
+  void addSearchQuery(String query) {
+    _searchHistory.insert(0, query);
+    notifyListeners();
+  }
+
+  void clearSearchHistory() {
+    _searchHistory.clear();
     notifyListeners();
   }
 }

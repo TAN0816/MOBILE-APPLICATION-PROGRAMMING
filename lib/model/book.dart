@@ -1,6 +1,6 @@
 
 class Book {
-  late final String id;
+  final String id;
   final String sellerId;
   final String name;
   final double price;
@@ -34,3 +34,4 @@ class Book {
 
   // static Future<Book> fromSnapshot(DocumentSnapshot<Object?> snapshot) {}
 }
+

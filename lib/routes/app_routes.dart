@@ -11,6 +11,7 @@ import 'package:secondhand_book_selling_platform/screens/message_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/me_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/edit_profile.dart';
 import 'package:secondhand_book_selling_platform/screens/search.dart';
+import 'package:secondhand_book_selling_platform/screens/search_result_page.dart';
 import 'package:secondhand_book_selling_platform/screens/signup_email_password_screen.dart';
 
 import 'package:secondhand_book_selling_platform/screens/reset.dart';
@@ -51,6 +52,7 @@ GoRouter router() {
           // builder: (context, state) => const Homepage(),
           builder: (context, state) {
             String? tab = state.pathParameters['tab'];
+
 
             int index = 0;
             if (tab != null) {
@@ -120,6 +122,27 @@ GoRouter router() {
           return ProductDetailSeller(bookId: bookId!);
         },
       ),
+      GoRoute(
+  path: '/search_results',
+  builder: (context, state) {
+    final params = state.extra as Map<String, dynamic>?;
+    
+    final query = params?['query'] as String? ?? ''; // Default to empty string if null
+    final minPrice = params?['minPrice'] != null ? double.tryParse(params!['minPrice'].toString()) : null;
+    final maxPrice = params?['maxPrice'] != null ? double.tryParse(params!['maxPrice'].toString()) : null;
+    final faculty = params?['faculty'] as String?;
+    final years = (params?['years'] as List<dynamic>?)?.cast<String>() ?? [];
+
+    return SearchResultsPage(
+      query: query,
+      minPrice: minPrice,
+      maxPrice: maxPrice,
+      faculty: faculty,
+      years: years,
+    );
+  },
+),
+
     ],
   );
 }

@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:secondhand_book_selling_platform/model/user.dart';
 import 'package:secondhand_book_selling_platform/screens/sellerlist.dart';
-import 'package:secondhand_book_selling_platform/screens/buyerlist.dart';
+import 'package:secondhand_book_selling_platform/screens/buyerproductlist.dart';
 import 'package:secondhand_book_selling_platform/services/user_service.dart';
 
 class HomeScreen extends StatefulWidget {
