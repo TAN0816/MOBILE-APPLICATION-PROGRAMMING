@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:secondhand_book_selling_platform/model/book.dart';
 import 'package:secondhand_book_selling_platform/model/cart_model.dart';
 import 'package:secondhand_book_selling_platform/model/user.dart';
+import 'package:secondhand_book_selling_platform/screens/checkout.dart';
 import 'package:secondhand_book_selling_platform/services/cart_service.dart';
 import 'package:secondhand_book_selling_platform/widgets/appbar_with_back.dart';
 
@@ -143,6 +145,24 @@ class _CartScreenState extends State<CartScreen> {
       }
       _sellerSelections[sellerId] = selected;
     });
+  }
+
+  List<String> getSelectedBookIds() {
+    List<String> selectedBookIds = [];
+    _itemSelections.entries.where((id) => id.value).forEach((id) {
+      selectedBookIds.add(id.key);
+    });
+
+    return selectedBookIds;
+  }
+
+  List<CartItem> getSelectedBooks() {
+    List<CartItem> selectedBooks = [];
+    _itemSelections.entries.where((id) => id.value).forEach((id) {
+      selectedBooks.add(cartItems!.firstWhere((item) => item.book.id == id));
+    });
+
+    return selectedBooks;
   }
 
   @override
@@ -461,7 +481,15 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                       TextButton(
                         onPressed: () {
-                          // Add your checkout functionality here
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CheckoutPage(
+                                selectedBookIds: getSelectedBookIds(),
+                                selectedBooks: getSelectedBooks(),
+                              ),
+                            ),
+                          );
                         },
                         style: TextButton.styleFrom(
                             backgroundColor: const Color(0xff4a56c1),

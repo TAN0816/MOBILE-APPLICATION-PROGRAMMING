@@ -110,14 +110,18 @@ class BookService {
 //     }).toList();
 // }
   Future<List<Book>> searchAndFilterBooks({
-    required String query,
+    String? query,
     double? minPrice,
     double? maxPrice,
     String? faculty,
     List<String>? years,
   }) async {
     Query<Map<String, dynamic>> queryRef = bookCollection;
-
+    if (query != null) {
+      queryRef = queryRef
+          .where('name', isGreaterThanOrEqualTo: query)
+          .where('name', isLessThanOrEqualTo: '$query\uf8ff');
+    }
     if (minPrice != null) {
       queryRef = queryRef.where('price', isGreaterThanOrEqualTo: minPrice);
     }
