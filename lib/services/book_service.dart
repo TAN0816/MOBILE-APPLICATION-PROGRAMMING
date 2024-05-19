@@ -19,7 +19,7 @@ class BookService {
         detail: data['detail'] ?? 'No detail available.',
         images: List<String>.from(data['images'] ?? []),
         year: data['year'] ?? 'Unknown Year',
-        course: data['course'] ?? 'Unknown Course',
+        faculty: data['faculty'] ?? 'Unknown Course',
       );
     }).toList();
   }
@@ -46,7 +46,7 @@ class BookService {
         detail: data['detail'] ?? 'No detail available.',
         images: List<String>.from(data['images'] ?? []),
         year: data['year'] ?? 'Unknown Year',
-        course: data['course'] ?? 'Unknown Course',
+        faculty: data['faculty'] ?? 'Unknown Course',
       );
     }).toList();
   }
@@ -66,7 +66,7 @@ class BookService {
         detail: data['detail'] ?? 'No detail available.',
         images: List<String>.from(data['images'] ?? []),
         year: data['year'] ?? 'Unknown Year',
-        course: data['course'] ?? 'Unknown Course',
+        faculty: data['faculty'] ?? 'Unknown Course',
       );
     } else {
       return null; // Book not found

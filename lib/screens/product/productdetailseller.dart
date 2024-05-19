@@ -194,7 +194,7 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Text(
-                                  'Course',
+                                  'Faculty',
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 18,
@@ -202,7 +202,7 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                                   ),
                                 ),
                                 Text(
-                                  _book!.course,
+                                  _book!.faculty,
                                   style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 14,

@@ -9,7 +9,7 @@ class Book {
   final String detail;
   final List<String> images;
   final String year;
-  final String course;
+  final String faculty;
 
   Book({
     required this.id,
@@ -20,7 +20,7 @@ class Book {
     required this.detail,
     required this.images,
     required this.year,
-    required this.course,
+    required this.faculty,
   });
 
   String get getId => id;
@@ -31,7 +31,7 @@ class Book {
   int get getQuantity => quantity;
   List<String> get getImages => images;
   String get getYear => year;
-  String get getCourse => course;
+  String get getFaculty => faculty;
 
   // static Future<Book> fromSnapshot(DocumentSnapshot<Object?> snapshot) {}
 }
