@@ -220,11 +220,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             book.images.isNotEmpty ? book.images[0] : '';
                         var bookName = book.name;
                         var bookPrice = book.price.toString();
+                        var bookId=book.id.toString();
 
                         return InkWell(
                           onTap: () {
-                            context.push(
-                                '/productdetailbuyer/${book.id.toString()}');
+                           context.push('/productdetailbuyer/$bookId');
                           },
                           child: Card(
                             color: Colors.white, // Set card color to white

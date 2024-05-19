@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:secondhand_book_selling_platform/model/book.dart';
+import 'package:secondhand_book_selling_platform/model/user.dart';
 import 'package:secondhand_book_selling_platform/services/book_service.dart';
 import 'package:secondhand_book_selling_platform/services/cart_service.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ProductDetailBuyer extends StatefulWidget {
   final String bookId;
@@ -17,7 +20,9 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
   int _currentPage = 0;
   final BookService _bookService = BookService();
   final CartService _cartService = CartService();
+
   Book? _book;
+  UserModel? _seller;
   bool _isLoading = true;
 
   @override
@@ -37,6 +42,15 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
       _book = book;
       _isLoading = false;
     });
+
+    if (_book != null) {
+      UserModel? seller = await _bookService.getSellerData(_book!.sellerId);
+      setState(() {
+        _seller = seller;
+      });
+    } else {
+      print('error');
+    }
   }
 
   @override
@@ -97,27 +111,29 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
                         ],
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
+                        padding: const EdgeInsets.fromLTRB(30, 10, 30, 5),
                         child: Container(
                           alignment: Alignment.centerLeft,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                _book!.name,
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
+                              Text(_book!.name,
+                                  style: GoogleFonts.roboto(
+                                    textStyle: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 26,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  )),
                               Text(
                                 'RM${_book!.price.toStringAsFixed(2)}',
-                                style: const TextStyle(
-                                  color: Color(0xff4a56c1),
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w400,
+                                style: GoogleFonts.alegreya(
+                                  textStyle: const TextStyle(
+                                    color: Color(0xff4a56c1),
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
                             ],
@@ -149,7 +165,7 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
                       //   ),
                       // ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                        padding: const EdgeInsets.fromLTRB(30, 5, 30, 10),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -166,7 +182,7 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 14,
-                                fontWeight: FontWeight.w300,
+                                fontWeight: FontWeight.w400,
                               ),
                               textAlign: TextAlign.justify,
                             ),
@@ -186,13 +202,15 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Row(
+                            Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 CircleAvatar(
                                   radius: 25,
-                                  backgroundImage:
-                                      AssetImage('assets/images/profile.jpg'),
+                                  backgroundImage: _seller?.image != null
+                                      ? NetworkImage(_seller!.image)
+                                      : AssetImage('assets/images/profile.jpg')
+                                          as ImageProvider,
                                 ),
                                 SizedBox(
                                   width: 10,
@@ -201,11 +219,11 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Evelyn Lim',
+                                      _seller?.username ?? 'Unknown Seller',
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 17,
-                                        fontWeight: FontWeight.w500,
+                                        fontWeight: FontWeight.w400,
                                       ),
                                     ),
                                     Text(
@@ -213,7 +231,7 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
                                       style: TextStyle(
                                         color: Color.fromARGB(255, 83, 83, 83),
                                         fontSize: 15,
-                                        fontWeight: FontWeight.w600,
+                                        fontWeight: FontWeight.w500,
                                       ),
                                     ),
                                   ],
@@ -251,7 +269,7 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
                   ),
                 ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
         child: TextButton(
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(const Color(0xff4a56c1)),
@@ -267,12 +285,19 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
             });
             ;
           },
-          child: const Text(
-            'Add to Cart',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-            ),
+          child: const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.shopping_cart, color: Colors.white),
+              SizedBox(width: 8), // Add spacing between icon and text
+              Text(
+                'Add to Cart',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                ),
+              ),
+            ],
           ),
         ),
       ),
