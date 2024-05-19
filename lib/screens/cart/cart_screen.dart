@@ -5,6 +5,8 @@ import 'package:secondhand_book_selling_platform/services/cart_service.dart';
 import 'package:secondhand_book_selling_platform/widgets/appbar_with_back.dart';
 
 class CartScreen extends StatefulWidget {
+  const CartScreen({super.key});
+
   @override
   State<CartScreen> createState() => _CartScreenState();
 }
@@ -14,7 +16,7 @@ class _CartScreenState extends State<CartScreen> {
   double totalPrice = 0.0;
   Map<String, List<CartItem>> groupedItems = {};
   Map<String, bool> _itemSelections = {};
-  Map<String, bool> _sellerSelections = {};
+  final Map<String, bool> _sellerSelections = {};
   List<CartItem>? cartItems;
 
   @override
@@ -65,11 +67,9 @@ class _CartScreenState extends State<CartScreen> {
         if (value == true) {
           CartItem? selectedCartItem =
               cartItems!.firstWhere((item) => item.getBook.id == key);
-          if (selectedCartItem != null) {
-            totalPrice += selectedCartItem.getBook.getPrice *
-                selectedCartItem.getQuantity;
-          }
-        }
+          totalPrice += selectedCartItem.getBook.getPrice *
+              selectedCartItem.getQuantity;
+                }
       });
     });
   }
@@ -181,13 +181,13 @@ class _CartScreenState extends State<CartScreen> {
                                     updateSellerSelection(sellerId);
                                   });
                                 }),
-                            CircleAvatar(
+                            const CircleAvatar(
                               radius: 16,
                               backgroundImage:
                                   AssetImage('assets/images/profile.jpg'),
                             ),
                             const SizedBox(width: 10),
-                            Text(
+                            const Text(
                               "Seller Name",
                               style: TextStyle(
                                 fontSize: 16,
@@ -198,7 +198,7 @@ class _CartScreenState extends State<CartScreen> {
                         for (int i = 0; i < groupedItems[sellerId]!.length; i++)
                           Container(
                             height: 83,
-                            margin: EdgeInsets.only(top: 10),
+                            margin: const EdgeInsets.only(top: 10),
                             child: Row(children: [
                               Checkbox(
                                   value: _itemSelections[

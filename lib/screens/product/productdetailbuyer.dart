@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:secondhand_book_selling_platform/model/book.dart';
 import 'package:secondhand_book_selling_platform/services/book_service.dart';
@@ -15,7 +14,7 @@ class ProductDetailBuyer extends StatefulWidget {
 class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
-  BookService _bookService = BookService();
+  final BookService _bookService = BookService();
   Book? _book;
   bool _isLoading = true;
 

@@ -13,7 +13,7 @@ class ProductDetailSeller extends StatefulWidget {
 class _ProductDetailSellerState extends State<ProductDetailSeller> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
-  BookService _bookService = BookService();
+  final BookService _bookService = BookService();
   Book? _book;
   bool _isLoading = true;
 
@@ -122,12 +122,12 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                         ),
                       ),
                        Padding(
-                        padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+                        padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Column(
+                            const Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
@@ -151,7 +151,7 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
+                                const Text(
                                   'Year',
                                   style: TextStyle(
                                     color: Colors.black,
@@ -163,7 +163,7 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                                   width: 100,
                                   child: Text(
                                      _book!.year,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       color: Colors.black,
                                       fontSize: 14,
                                       fontWeight: FontWeight.w300,
@@ -232,11 +232,11 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+                        padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               'Description of Product',
                               style: TextStyle(
                                 color: Colors.black,
@@ -246,7 +246,7 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                             ),
                             Text(
                                _book!.detail ?? 'No description available.',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w300,

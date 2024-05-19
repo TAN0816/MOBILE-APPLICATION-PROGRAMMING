@@ -3,11 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:secondhand_book_selling_platform/screens/search_result_page.dart';
-import 'package:secondhand_book_selling_platform/screens/search_result_page.dart';
 import 'package:secondhand_book_selling_platform/services/search_history_service.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({Key? key}) : super(key: key);
+  const SearchPage({super.key});
 
   @override
   _SearchPageState createState() => _SearchPageState();
@@ -75,12 +74,12 @@ class _SearchPageState extends State<SearchPage> {
             child: Container(
               width: 40,
               height: 40,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 color: Color(0xFFF4F4F4),
               ),
               child: IconButton(
-                icon: Icon(Icons.arrow_back_ios_new_rounded),
+                icon: const Icon(Icons.arrow_back_ios_new_rounded),
                 onPressed: () {
                   GoRouter.of(context).go('/');
                 },
@@ -89,12 +88,12 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ),
         automaticallyImplyLeading: true,
-        title: Text('Search', textAlign: TextAlign.center),
+        title: const Text('Search', textAlign: TextAlign.center),
         centerTitle: true,
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1.0),
+          preferredSize: const Size.fromHeight(1.0),
           child: Container(
-            color: Color.fromARGB(255, 227, 225, 225),
+            color: const Color.fromARGB(255, 227, 225, 225),
             height: 1.0,
           ),
         ),
@@ -114,13 +113,13 @@ class _SearchPageState extends State<SearchPage> {
                       filled: true,
                       fillColor: Colors.grey[200],
                       hintText: 'Search Book Name',
-                      hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                      hintStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
                         borderSide: BorderSide.none,
                       ),
                       suffixIcon: IconButton(
-                        icon: Icon(Icons.search),
+                        icon: const Icon(Icons.search),
                         onPressed: _onSearchButtonPressed, // Trigger search on button click
                       ),
                     ),
@@ -128,18 +127,18 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               ],
             ),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 16),
+            const Text(
               'Recently Searched',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Expanded(
               child: _isLoading
-                  ? Center(child: CircularProgressIndicator())
+                  ? const Center(child: CircularProgressIndicator())
                   : ListView(
                       children: _searchHistory.map((query) => ListTile(
-                            leading: Icon(Icons.history, color: Colors.grey),
+                            leading: const Icon(Icons.history, color: Colors.grey),
                             title: Text(query),
                             onTap: () => _onHistoryItemPressed(query),
                           )).toList(),
