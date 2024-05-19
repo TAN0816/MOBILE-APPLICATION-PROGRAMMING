@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 import 'package:secondhand_book_selling_platform/model/user.dart';
 import 'package:secondhand_book_selling_platform/services/user_service.dart';
-import 'package:secondhand_book_selling_platform/state/user_state.dart';
+// import 'package:secondhand_book_selling_platform/state/user_state.dart';
 import '../widgets/profile_edit_option.dart';
 import '../widgets/appbar_with_back.dart';
 

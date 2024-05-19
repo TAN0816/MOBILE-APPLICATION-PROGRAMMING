@@ -1,10 +1,8 @@
-// search_page.dart
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:secondhand_book_selling_platform/state/user_state.dart';
 import 'package:secondhand_book_selling_platform/screens/search_result_page.dart';
-import 'package:secondhand_book_selling_platform/screens/search_result_page.dart';
-import 'package:secondhand_book_selling_platform/services/search_history_service.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -14,43 +12,23 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  final SearchHistoryService searchHistoryService = SearchHistoryService();
   final TextEditingController _searchController = TextEditingController();
-  List<String> _searchHistory = [];
-  bool _isLoading = false;
 
-  @override
-  void initState() {
-    super.initState();
-    _loadSearchHistory();
-  }
-
-  void _loadSearchHistory() async {
-    setState(() {
-      _isLoading = true;
-    });
-    List<String> history = await searchHistoryService.getSearchHistory();
-    setState(() {
-      _searchHistory = history.reversed.toList(); // Display the most recent first
-      _isLoading = false;
-    });
-  }
-
-  void _onSearchButtonPressed() {
+  void _onSearchButtonPressed(BuildContext context) {
     String query = _searchController.text.trim();
     if (query.isNotEmpty) {
-      _navigateToSearchResults(query);
-      _saveSearchQuery(query);
+      _navigateToSearchResults(context, query);
+      _saveSearchQuery(context, query);
     }
   }
 
-  void _onHistoryItemPressed(String query) {
+  void _onHistoryItemPressed(BuildContext context, String query) {
     _searchController.text = query;
-    _navigateToSearchResults(query);
-    _saveSearchQuery(query);
+    _navigateToSearchResults(context, query);
+    _saveSearchQuery(context, query);
   }
 
-  void _navigateToSearchResults(String query) {
+  void _navigateToSearchResults(BuildContext context, String query) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -59,13 +37,18 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  void _saveSearchQuery(String query) async {
-    await searchHistoryService.addSearchQuery(query);
-    _loadSearchHistory(); // Reload search history to update the list
+  void _saveSearchQuery(BuildContext context, String query) {
+    Provider.of<UserState>(context, listen: false).addSearchQuery(query);
+  }
+
+  void _clearSearchHistory(BuildContext context) {
+    Provider.of<UserState>(context, listen: false).clearSearchHistory();
   }
 
   @override
   Widget build(BuildContext context) {
+    final userState = Provider.of<UserState>(context);
+
     return Scaffold(
       appBar: AppBar(
         leading: Padding(
@@ -109,7 +92,7 @@ class _SearchPageState extends State<SearchPage> {
                 Expanded(
                   child: TextField(
                     controller: _searchController,
-                    onSubmitted: (_) => _onSearchButtonPressed(), // Trigger search on "Enter" key
+                    onSubmitted: (_) => _onSearchButtonPressed(context), // Trigger search on "Enter" key
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.grey[200],
@@ -121,7 +104,7 @@ class _SearchPageState extends State<SearchPage> {
                       ),
                       suffixIcon: IconButton(
                         icon: Icon(Icons.search),
-                        onPressed: _onSearchButtonPressed, // Trigger search on button click
+                        onPressed: () => _onSearchButtonPressed(context), // Trigger search on button click
                       ),
                     ),
                   ),
@@ -129,21 +112,30 @@ class _SearchPageState extends State<SearchPage> {
               ],
             ),
             SizedBox(height: 16),
-            Text(
-              'Recently Searched',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Recently Searched',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                TextButton(
+                  onPressed: () => _clearSearchHistory(context),
+                  child: Text('Clear History'),
+                ),
+              ],
             ),
             SizedBox(height: 8),
             Expanded(
-              child: _isLoading
-                  ? Center(child: CircularProgressIndicator())
-                  : ListView(
-                      children: _searchHistory.map((query) => ListTile(
-                            leading: Icon(Icons.history, color: Colors.grey),
-                            title: Text(query),
-                            onTap: () => _onHistoryItemPressed(query),
-                          )).toList(),
-                    ),
+              child: ListView(
+                children: userState.searchHistory
+                    .map((query) => ListTile(
+                          leading: Icon(Icons.history, color: Colors.grey),
+                          title: Text(query),
+                          onTap: () => _onHistoryItemPressed(context, query),
+                        ))
+                    .toList(),
+              ),
             ),
           ],
         ),

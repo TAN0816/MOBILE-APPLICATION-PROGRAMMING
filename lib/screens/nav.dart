@@ -1,4 +1,4 @@
-import 'package:secondhand_book_selling_platform/screens/home_screen.dart';
+import 'package:secondhand_book_selling_platform/screens/buyerproductlist.dart';
 import 'package:secondhand_book_selling_platform/screens/notification_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/message_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/me_screen.dart';
