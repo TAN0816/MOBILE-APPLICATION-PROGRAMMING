@@ -23,7 +23,7 @@ Future<void> addtoCart(String pid) async {
     for (var item in cartList) {
       if (item['bookId'] == pid) {
 
-        item['quantity'] += 1;
+   
         itemExists = true;
         break;
       }
