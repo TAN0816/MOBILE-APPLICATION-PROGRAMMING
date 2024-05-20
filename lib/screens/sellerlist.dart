@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:secondhand_book_selling_platform/screens/add_product.dart';
 import 'package:secondhand_book_selling_platform/model/book.dart';
 import 'package:secondhand_book_selling_platform/services/book_service.dart';
 import 'package:secondhand_book_selling_platform/services/user_service.dart';
@@ -174,7 +175,7 @@ class _SellerList extends State<SellerList> {
 
                     return InkWell(
                       onTap: () {
-                        context.push('/productdetailbuyer/$bookId');
+                        context.push('/productdetailseller/$bookId');
                       },
                       child: Card(
                         color: Colors.white,
@@ -231,6 +232,31 @@ class _SellerList extends State<SellerList> {
           );
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          // Navigate to the AddNewBookPage and wait for the result
+          final result = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddNewBookPage(
+                onBookAdded: () {
+                  // Call setState to trigger a rebuild of the HomeScreen
+                  setState(() {});
+                },
+              ),
+            ),
+          );
+
+          // If result is true, fetch the updated list of books
+          if (result == true) {
+            fetchBooks();
+          }
+        },
+        child: Icon(Icons.add, color: Colors.white),
+        backgroundColor: Color(0xff4a56c1),
+        elevation: 4,
+      ),
+    
     );
   }
 }
