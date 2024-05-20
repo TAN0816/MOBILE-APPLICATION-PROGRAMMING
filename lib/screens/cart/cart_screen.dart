@@ -490,11 +490,16 @@ class _CartScreenState extends State<CartScreen> {
                         width: 20,
                       ),
                       TextButton(
-                        onPressed: () {
-                          context.push('/checkout', extra: getSelectedItems());
-                        },
+                        onPressed: _itemSelections.containsValue(true)
+                            ? () {
+                                context.push('/checkout',
+                                    extra: getSelectedItems());
+                              }
+                            : null,
                         style: TextButton.styleFrom(
-                            backgroundColor: const Color(0xff4a56c1),
+                            backgroundColor: _itemSelections.containsValue(true)
+                                ? const Color(0xff4a56c1)
+                                : Colors.grey,
                             padding: const EdgeInsets.all(14),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
