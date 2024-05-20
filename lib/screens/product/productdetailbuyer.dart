@@ -247,7 +247,7 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
                                           _seller?.image != ""
                                       ? NetworkImage(_seller!.image)
                                       : const AssetImage(
-                                              'assets/images/profile.jpg')
+                                              'assets/images/profileicon.jpg')
                                           as ImageProvider,
                                 ),
                                 const SizedBox(

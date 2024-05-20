@@ -73,7 +73,7 @@ class _MeScreenState extends State<MeScreen> {
                   ? FileImage(_imageFile!)
                   : imageUrl != ""
                       ? NetworkImage(imageUrl) as ImageProvider
-                      : const AssetImage('assets/images/profile.jpg'),
+                      : const AssetImage('assets/images/profileicon.jpg'),
             ),
           ),
           Text(
