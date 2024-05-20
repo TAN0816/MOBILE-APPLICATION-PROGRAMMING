@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:secondhand_book_selling_platform/model/cart_model.dart';
 import 'package:secondhand_book_selling_platform/screens/cart/cart_screen.dart';
+import 'package:secondhand_book_selling_platform/screens/checkout.dart';
 import 'package:secondhand_book_selling_platform/screens/forgot_password.dart';
 import 'package:secondhand_book_selling_platform/screens/nav.dart';
 import 'package:secondhand_book_selling_platform/screens/login_screen.dart';
@@ -52,7 +55,6 @@ GoRouter router() {
           // builder: (context, state) => const Homepage(),
           builder: (context, state) {
             String? tab = state.pathParameters['tab'];
-
 
             int index = 0;
             if (tab != null) {
@@ -123,26 +125,54 @@ GoRouter router() {
         },
       ),
       GoRoute(
-  path: '/search_results',
-  builder: (context, state) {
-    final params = state.extra as Map<String, dynamic>?;
-    
-    final query = params?['query'] as String? ?? ''; // Default to empty string if null
-    final minPrice = params?['minPrice'] != null ? double.tryParse(params!['minPrice'].toString()) : null;
-    final maxPrice = params?['maxPrice'] != null ? double.tryParse(params!['maxPrice'].toString()) : null;
-    final faculty = params?['faculty'] as String?;
-    final years = (params?['years'] as List<dynamic>?)?.cast<String>() ?? [];
+        path: '/search_results',
+        builder: (context, state) {
+          final params = state.extra as Map<String, dynamic>?;
 
-    return SearchResultsPage(
-      query: query,
-      minPrice: minPrice,
-      maxPrice: maxPrice,
-      faculty: faculty,
-      years: years,
-    );
-  },
-),
+          final query = params?['query'] as String? ??
+              ''; // Default to empty string if null
+          final minPrice = params?['minPrice'] != null
+              ? double.tryParse(params!['minPrice'].toString())
+              : null;
+          final maxPrice = params?['maxPrice'] != null
+              ? double.tryParse(params!['maxPrice'].toString())
+              : null;
+          final faculty = params?['faculty'] as String?;
+          final years =
+              (params?['years'] as List<dynamic>?)?.cast<String>() ?? [];
 
+          return SearchResultsPage(
+            query: query,
+            minPrice: minPrice,
+            maxPrice: maxPrice,
+            faculty: faculty,
+            years: years,
+          );
+        },
+      ),
+      GoRoute(
+        path: '/checkout',
+        name: 'checkout',
+        builder: (context, state) {
+          Map<String, dynamic>? parameters =
+              state.extra as Map<String, dynamic>?;
+          print(parameters);
+          if (parameters == null ||
+              parameters['selectedBookIds'] == null ||
+              parameters['selectedBookIds']!.isEmpty) {
+            // Handle the error gracefully, e.g., show a message or navigate to a different page
+            return const Scaffold(
+              body: Center(
+                child: Text('No selected books to checkout'),
+              ),
+            );
+          }
+          return CheckoutPage(
+            selectedBookIds: parameters['selectedBookIds'] as List<String>,
+            selectedBooks: parameters['selectedBooks'] as List<CartItem>,
+          );
+        },
+      ),
     ],
   );
 }

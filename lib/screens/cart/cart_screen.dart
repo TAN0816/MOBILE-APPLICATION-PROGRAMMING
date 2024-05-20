@@ -148,21 +148,27 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   List<String> getSelectedBookIds() {
-    List<String> selectedBookIds = [];
-    _itemSelections.entries.where((id) => id.value).forEach((id) {
-      selectedBookIds.add(id.key);
-    });
-
-    return selectedBookIds;
+    return _itemSelections.entries
+        .where((entry) => entry.value)
+        .map((entry) => entry.key)
+        .toList();
   }
 
   List<CartItem> getSelectedBooks() {
-    List<CartItem> selectedBooks = [];
-    _itemSelections.entries.where((id) => id.value).forEach((id) {
-      selectedBooks.add(cartItems!.firstWhere((item) => item.book.id == id));
-    });
+    if (cartItems == null) {
+      return [];
+    }
 
-    return selectedBooks;
+    return _itemSelections.entries.where((entry) => entry.value).map((entry) {
+      return cartItems!.firstWhere((item) => item.book.id == entry.key);
+    }).toList();
+  }
+
+  Map<String, List> getSelectedItems() {
+    Map<String, List> items = {};
+    items['selectedBookIds'] = getSelectedBookIds();
+    items['selectedBooks'] = getSelectedBooks();
+    return items;
   }
 
   @override
@@ -254,6 +260,10 @@ class _CartScreenState extends State<CartScreen> {
                                       onLongPress: () {
                                         showDeleteConfirmationDialog(
                                             context, sellerId, i);
+                                      },
+                                      onTap: () {
+                                        context.push(
+                                            '/productdetailbuyer/${groupedItems[sellerId]![i].getBook.getId}');
                                       },
                                       child: Container(
                                         height: 100,
@@ -481,15 +491,7 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CheckoutPage(
-                                selectedBookIds: getSelectedBookIds(),
-                                selectedBooks: getSelectedBooks(),
-                              ),
-                            ),
-                          );
+                          context.push('/checkout', extra: getSelectedItems());
                         },
                         style: TextButton.styleFrom(
                             backgroundColor: const Color(0xff4a56c1),
