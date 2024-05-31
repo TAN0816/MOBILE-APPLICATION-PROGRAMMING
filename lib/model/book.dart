@@ -1,4 +1,3 @@
-
 class Book {
   final String id;
   final String sellerId;
@@ -33,5 +32,18 @@ class Book {
   String get getFaculty => faculty;
 
   // static Future<Book> fromSnapshot(DocumentSnapshot<Object?> snapshot) {}
-}
 
+  factory Book.fromMap(Map<String, dynamic> data, String documentId) {
+    return Book(
+      id: documentId,
+      sellerId: data['sellerId'],
+      name: data['name'],
+      price: data['price'].toDouble(),
+      quantity: data['quantity'],
+      detail: data['detail'],
+      images: List<String>.from(data['images']),
+      year: data['year'],
+      faculty: data['faculty'],
+    );
+  }
+}

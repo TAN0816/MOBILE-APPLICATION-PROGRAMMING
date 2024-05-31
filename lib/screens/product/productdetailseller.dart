@@ -46,6 +46,51 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
     _fetchBookDetails();
   }
 
+  void _onUnavailableButtonPressed() async {
+    if (_book != null) {
+      try {
+        await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text("Unavailable"),
+              content: const Text(
+                  "Are you sure you want to mark this product as unavailable?"),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("Cancel"),
+                ),
+                TextButton(
+                  onPressed: () async {
+                    try {
+                      await _bookService.updateBookAvailability(
+                          _book!.id, false); // Set availability to false
+
+                      // Refresh book details
+                      _fetchBookDetails();
+
+                      Navigator.of(context).popUntil((route) => route.isFirst);
+                    } catch (e) {
+                      print("Error marking product as unavailable: $e");
+                    }
+                  },
+                  child: const Text("Mark as Unavailable"),
+                ),
+              ],
+            );
+          },
+        );
+      } catch (e) {
+        print("Error showing mark as unavailable confirmation dialog: $e");
+      }
+    } else {
+      print("_book is null");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -225,56 +270,12 @@ class _ProductDetailSellerState extends State<ProductDetailSeller> {
                 fixedSize: MaterialStateProperty.all(
                     const Size(140, 50)), // Adjust button size as needed
               ),
-              onPressed: () async {
-                if (_book != null) {
-                  try {
-                    await showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text("Delete Product"),
-                          content: const Text(
-                              "Are you sure you want to delete this product?"),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text("Cancel"),
-                            ),
-                            TextButton(
-                              onPressed: () async {
-                                try {
-                                  await _bookService.deleteBook(_book!.id);
-
-                                  // // After successfully deleting the book
-                                  widget.onBookDeleted?.call();
-                                  Navigator.of(context).pop();
-                                  // Navigate back to the home page
-                                  Navigator.of(context)
-                                      .popUntil((route) => route.isFirst);
-                                } catch (e) {
-                                  print("Error deleting product: $e");
-                                }
-                              },
-                              child: const Text("Delete"),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  } catch (e) {
-                    print("Error showing delete confirmation dialog: $e");
-                  }
-                } else {
-                  print("_book is null");
-                }
-              },
+              onPressed: _onUnavailableButtonPressed,
               child: const Text(
-                'Delete',
+                'Unavailable',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 17,
                 ),
               ),
             ),

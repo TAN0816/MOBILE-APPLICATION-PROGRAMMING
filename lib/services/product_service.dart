@@ -1,6 +1,7 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:secondhand_book_selling_platform/model/book.dart';
-
 
 class ProductService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -25,7 +26,8 @@ class ProductService {
         'year': year,
         'quantity': quantity,
         'images': imageUrls,
-        'sellerId':sellerId,
+        'sellerId': sellerId,
+        'status': 'available',
       });
     } catch (e) {
       print('Error uploading book: $e');
@@ -34,21 +36,29 @@ class ProductService {
   }
 
 // Method to retrieve a book from Firestore by its ID
+//   Future<Book> getBookById(String bookId) async {
+//     DocumentSnapshot snapshot =
+//         await _firestore.collection('books').doc(bookId).get();
+//     Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+//     return Book(
+//       id: snapshot.id,
+//       sellerId: data[
+//           'sellerId'], // Ensure your Firestore document has a sellerId field
+//       name: data['name'],
+//       price: data['price'],
+//       quantity: data['quantity'],
+//       detail: data['detail'],
+//       images: List<String>.from(data['images']),
+//       year: data['year'],
+//       faculty: data['faculty'],
+//     );
+//   }
+
   Future<Book> getBookById(String bookId) async {
     DocumentSnapshot snapshot =
         await _firestore.collection('books').doc(bookId).get();
     Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
-    return Book(
-      id: snapshot.id,
-      sellerId: data['sellerId'], // Ensure your Firestore document has a sellerId field
-      name: data['name'],
-      price: data['price'],
-      quantity: data['quantity'],
-      detail: data['detail'],
-      images: List<String>.from(data['images']),
-      year: data['year'],
-      faculty: data['faculty'],
-    );
+    return Book.fromMap(data, snapshot.id);
   }
 
   // Method to update a book in Firestore
@@ -82,4 +92,11 @@ class ProductService {
   //     throw e;
   //   }
   // }
+
+// Method to update the availability status of a book
+  Future<void> updateBookAvailability(String bookId, bool availability) async {
+    await _firestore.collection('books').doc(bookId).update({
+      'status': availability, // Update field
+    });
+  }
 }
