@@ -90,7 +90,7 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                                   Text(
                                     'Order No: ${order.id}',
                                     style: const TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 16,
                                       fontWeight: FontWeight.w500,
                                       color: Colors.black,
                                     ),
