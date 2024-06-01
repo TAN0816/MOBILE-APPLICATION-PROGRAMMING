@@ -80,7 +80,7 @@ class OrderService {
       'paymentMethod': paymentMethod,
       'totalAmount': totalAmount,
       'timestamp': FieldValue.serverTimestamp(),
-      'status': "pending",
+      'status': "Pending",
     };
 
     await orderRef.set(orderData);
@@ -149,7 +149,7 @@ class OrderService {
       QuerySnapshot orderSnapshots = await _firestore
           .collection('orders')
           .where('userId', isEqualTo: userId)
-          .where('status', isEqualTo: 'pending')
+          .where('status', isEqualTo: 'Pending')
           .get();
 
       if (orderSnapshots.docs.isEmpty) {
@@ -187,7 +187,8 @@ class OrderService {
           deliveryMethod: orderData['deliveryMethod'],
           paymentMethod: orderData['paymentMethod'],
           totalAmount: orderData['totalAmount'],
-          timestamp: orderData['timestamp'], status: '',
+          timestamp: orderData['timestamp'], 
+          status: orderData['status'],
         );
 
         orders.add(order);
