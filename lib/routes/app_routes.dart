@@ -15,6 +15,7 @@ import 'package:secondhand_book_selling_platform/screens/me_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/edit_profile.dart';
 import 'package:secondhand_book_selling_platform/screens/search.dart';
 import 'package:secondhand_book_selling_platform/screens/search_result_page.dart';
+import 'package:secondhand_book_selling_platform/screens/sellerOrderList.dart';
 import 'package:secondhand_book_selling_platform/screens/signup_email_password_screen.dart';
 
 import 'package:secondhand_book_selling_platform/screens/reset.dart';
@@ -25,7 +26,7 @@ import '../screens/add_product.dart';
 
 GoRouter router() {
   return GoRouter(
-    initialLocation: '/',
+    initialLocation: '/sellerOrder',
     routes: [
       GoRoute(
         path: '/',
@@ -173,6 +174,10 @@ GoRouter router() {
           );
         },
       ),
+      GoRoute(
+          path: '/sellerOrder',
+          name: 'sellerOrder',
+          builder: (context, state) => const SellerOrderList()),
     ],
   );
 }

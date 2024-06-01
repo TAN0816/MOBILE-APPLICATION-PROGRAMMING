@@ -33,9 +33,7 @@ class OrderService {
         'timestamp': FieldValue.serverTimestamp(),
       };
 
-
       await orderRef.set(orderData);
-
 
       await _updateCartAndBookQuantities(books, quantities, userId);
 
@@ -66,7 +64,8 @@ class OrderService {
     for (int i = 0; i < books.length; i++) {
       cartList.removeWhere((item) => item['bookId'] == books[i].id);
       // Reduce quantity of books in inventory
-      DocumentReference bookRef = _firestore.collection('books').doc(books[i].id);
+      DocumentReference bookRef =
+          _firestore.collection('books').doc(books[i].id);
       batch.update(bookRef, {'quantity': FieldValue.increment(-quantities[i])});
     }
 
@@ -80,5 +79,24 @@ class OrderService {
       print('Error committing batch: $e');
       throw e;
     }
+  }
+
+  Future<void> orderBySellerId(sellerId) async {
+    // DocumentSnapshot<Map<String, dynamic>> docSnapshot =
+    //     await FirebaseFirestore.instance.collection('orders').doc().get();
+
+    FirebaseFirestore.instance
+        .collection('orders')
+        .where('sellerId', isEqualTo: sellerId)
+        .where('status', isEqualTo: 'pending')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        // Handle each document here
+        print(doc.data()); // Example: Printing document data
+      });
+    }).catchError((error) {
+      print("Failed to get orders: $error");
+    });
   }
 }
