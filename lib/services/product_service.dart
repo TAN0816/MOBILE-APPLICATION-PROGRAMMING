@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:secondhand_book_selling_platform/model/book.dart';
 

@@ -6,43 +6,24 @@ class Order {
   String id;
   String userId;
   String sellerId;
-  List<OrderItem> orderItems; 
+  List<OrderItem> orderItems;
   String deliveryMethod;
   String paymentMethod;
   double totalAmount;
   Timestamp timestamp;
+  String status;
 
   Order({
     required this.id,
     required this.userId,
     required this.sellerId,
-    required this.orderItems, 
+    required this.orderItems,
     required this.deliveryMethod,
     required this.paymentMethod,
     required this.totalAmount,
     required this.timestamp,
+    required this.status,
   });
-
-  // factory Order.fromDocument(DocumentSnapshot doc) {
-  //   List<OrderItem> orderItemsList = List.from(doc['orderItems']).map((orderItemData) {
-  //     return OrderItem(
-  //       bookid: orderItemData['orderId'],
-  //       name: orderItemData['name'],
-  //       quantity: orderItemData['quantity'],
-  //     );
-  //   }).toList();
-
-  //   return Order(
-  //     id: doc.id,
-  //     userId: doc['userId'],
-  //     sellerId: doc['sellerId'],
-  //     orderItems: orderItemsList,
-  //     deliveryMethod: doc['deliveryMethod'],
-  //     paymentMethod: doc['paymentMethod'],
-  //     totalAmount: doc['totalAmount'],
-  //     timestamp: doc['timestamp'],
-  //   );
-  // }
 
   String get orderId => id;
 
@@ -60,5 +41,5 @@ class Order {
 
   Timestamp get timestampValue => timestamp;
 
-
+  String get getOrderStatus => status;
 }
