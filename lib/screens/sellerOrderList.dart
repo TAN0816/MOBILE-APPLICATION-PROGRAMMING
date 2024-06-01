@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:secondhand_book_selling_platform/services/order_service.dart';
+import 'package:secondhand_book_selling_platform/model/order.dart' as Orderitem;
+import 'package:secondhand_book_selling_platform/services/user_service.dart';
 
 class SellerOrderList extends StatefulWidget {
   const SellerOrderList({super.key});
@@ -21,11 +23,39 @@ class _SellerOrderListState extends State<SellerOrderList>
     super.initState();
   }
 
-  void fetchSellerOrder () async {
-    
+  final sellerId = UserService().getUserId;
+  Future<List<Orderitem.Order>> fetchCurrentOrders(String sellerId) async {
+    try {
+      final orders = await OrderService()
+          .getSellerCurrentOrder(sellerId, ['pending', 'ongoing']);
+      return orders;
+    } catch (error) {
+      print('Error fetching orders: $error');
+      throw error;
+    }
   }
 
+  Future<List<Orderitem.Order>> fetchCompletedOrders(String sellerId) async {
+    try {
+      final orders =
+          await OrderService().getSellerCurrentOrder(sellerId, ['completed']);
+      return orders;
+    } catch (error) {
+      print('Error fetching orders: $error');
+      throw error;
+    }
+  }
 
+  Future<List<Orderitem.Order>> fetchCancelledOrders(String sellerId) async {
+    try {
+      final orders =
+          await OrderService().getSellerCurrentOrder(sellerId, ['cancelled']);
+      return orders;
+    } catch (error) {
+      print('Error fetching orders: $error');
+      throw error;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +64,7 @@ class _SellerOrderListState extends State<SellerOrderList>
         title: Text('My Sales'),
         bottom: TabBar(
           controller: tabController,
-          tabs: [
+          tabs: const [
             Tab(text: 'Current Order'),
             Tab(text: 'Completed'),
             Tab(text: 'Cancelled'),
@@ -46,97 +76,127 @@ class _SellerOrderListState extends State<SellerOrderList>
         children: [
           Container(
             color: Colors.white,
-            child: currentOrderList(),
+            child: orderList(() => fetchCurrentOrders(sellerId)),
           ),
           Container(
-            color: Colors.amber[50],
-            child: Center(child: Text("Completed")),
+            color: Colors.white,
+            child: orderList(() => fetchCompletedOrders(sellerId)),
           ),
           Container(
-            color: Colors.blue[100],
-            child: Center(child: Text("Cancelled")),
+            color: Colors.white,
+            child: orderList(() => fetchCancelledOrders(sellerId)),
           )
         ],
       ),
     );
   }
 
-  Widget currentOrderList() {
-    return ListView.builder(
-        itemCount: 5,
-        itemBuilder: (context, index) {
-          return Container(
-            margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-            padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: index < 4
-                  ? const Border(
-                      bottom: BorderSide(
-                        color: Color.fromARGB(255, 223, 223, 223),
-                        width: 1,
-                      ),
-                    )
-                  : null,
-            ),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget orderList(Function() queryFunction) {
+    return FutureBuilder<List<Orderitem.Order>>(
+      future: queryFunction(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (snapshot.hasData && snapshot.data!.isEmpty) {
+          return const Center(child: Text('No orders yet'));
+        } else {
+          final orders = snapshot.data!;
+          return ListView.builder(
+            itemCount: orders.length,
+            itemBuilder: (context, index) {
+              final order = orders[index];
+              return Container(
+                margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: index < orders.length - 1
+                      ? const Border(
+                          bottom: BorderSide(
+                            color: Color.fromARGB(255, 223, 223, 223),
+                            width: 1,
+                          ),
+                        )
+                      : null,
+                ),
+                child: Column(
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Icon(Icons.description_outlined),
-                        Text(
-                          'Order No: ',
-                          style: TextStyle(
-                            fontWeight: FontWeight
-                                .bold, // or use FontWeight.w700 for a specific weight
-                          ),
+                        Row(
+                          children: [
+                            const Icon(Icons.description_outlined),
+                            const Text(
+                              'Order No: ', // Display order ID
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(order.id)
+                          ],
                         ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "Order Status",
-                          style: TextStyle(
-                              color: Color.fromARGB(255, 68, 208, 32)),
+                        Row(
+                          children: [
+                            Text(
+                              order.status, // Display order status
+                              style: TextStyle(
+                                color: order.status == 'cancelled'
+                                    ? const Color.fromARGB(255, 193, 15, 15)
+                                    : const Color.fromARGB(255, 68, 208,
+                                        32), // Adjust color based on status
+                              ),
+                            )
+                          ],
                         )
                       ],
+                    ),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      child: Row(
+                        children: [
+                          Image.network(
+                            order.orderItemsList[0].images[0],
+                            width: 60,
+                            height: 80,
+                            fit: BoxFit.cover,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: Container(
+                              height: 80,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                      "Title: ${order.orderItemsList[0].name}"),
+                                  Text(
+                                      "Qty: ${order.orderItemsList[0].quantity}")
+                                ],
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {},
+                            icon: Icon(Icons.arrow_forward_ios_rounded),
+                          ),
+                        ],
+                      ),
                     )
                   ],
                 ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  child: Row(
-                    children: [
-                      Image(
-                        height: 80,
-                        width: 80,
-                        image: AssetImage('assets/images/hci.jpg'),
-                      ),
-                      Expanded(
-                        child: Container(
-                          height: 80,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [Text("Title"), Text("Qty: 1")],
-                          ),
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.arrow_forward_ios_rounded),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
+              );
+            },
           );
-        });
+        }
+      },
+    );
   }
 
   @override

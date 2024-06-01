@@ -157,6 +157,7 @@ class OrderService {
           paymentMethod: orderData['paymentMethod'],
           totalAmount: orderData['totalAmount'],
           timestamp: orderData['timestamp'],
+          status: orderData['status'],
         );
 
         orders.add(order);
@@ -170,23 +171,60 @@ class OrderService {
       throw error;
     }
   }
-}
 
-  Future<void> orderBySellerId(sellerId) async {
-    // DocumentSnapshot<Map<String, dynamic>> docSnapshot =
-    //     await FirebaseFirestore.instance.collection('orders').doc().get();
+  Future<List<OrderList.Order>> getSellerCurrentOrder(
+      String sellerId, List<String> statuses) async {
+    try {
+      Query orderQuery = _firestore
+          .collection('orders')
+          .where('sellerId', isEqualTo: sellerId);
 
-    FirebaseFirestore.instance
-        .collection('orders')
-        .where('sellerId', isEqualTo: sellerId)
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        // Handle each document here
-        print(doc.data()); // Example: Printing document data
-      });
-    }).catchError((error) {
-      print("Failed to get orders: $error");
-    });
+      if (statuses.length == 1) {
+        orderQuery = orderQuery.where('status', isEqualTo: statuses[0]);
+      } else if (statuses.length > 1) {
+        orderQuery = orderQuery.where('status', whereIn: statuses);
+      }
+
+      QuerySnapshot orderSnapshots = await orderQuery.get();
+
+      List<OrderList.Order> orders = [];
+
+      for (QueryDocumentSnapshot orderSnapshot in orderSnapshots.docs) {
+        Map<String, dynamic> orderData =
+            orderSnapshot.data()! as Map<String, dynamic>;
+
+        List<dynamic> booksData = orderData['books'] as List<dynamic>;
+
+        List<OrderItem> orderItems = booksData.map((bookData) {
+          return OrderItem(
+            bookid: bookData['bookId'],
+            name: bookData['name'],
+            images: (bookData['images'] as List<dynamic>).cast<String>(),
+            quantity: bookData['quantity'],
+          );
+        }).toList();
+
+        OrderList.Order order = OrderList.Order(
+          id: orderSnapshot.id,
+          userId: orderData['userId'],
+          sellerId: orderData['sellerId'],
+          orderItems: orderItems,
+          deliveryMethod: orderData['deliveryMethod'],
+          paymentMethod: orderData['paymentMethod'],
+          totalAmount: orderData['totalAmount'],
+          timestamp: orderData['timestamp'],
+          status: orderData['status'],
+        );
+
+        orders.add(order);
+        print(orders);
+      }
+
+      return orders;
+    } catch (error) {
+      print('Error retrieving orders: $error');
+
+      throw error;
+    }
   }
 }

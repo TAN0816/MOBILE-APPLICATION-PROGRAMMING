@@ -11,6 +11,7 @@ class Order {
   String paymentMethod;
   double totalAmount;
   Timestamp timestamp;
+  String status;
 
   Order({
     required this.id,
@@ -21,6 +22,7 @@ class Order {
     required this.paymentMethod,
     required this.totalAmount,
     required this.timestamp,
+    required this.status,
   });
 
   // factory Order.fromDocument(DocumentSnapshot doc) {
@@ -60,5 +62,5 @@ class Order {
 
   Timestamp get timestampValue => timestamp;
 
-
+  String get getOrderStatus => status;
 }
