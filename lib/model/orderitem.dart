@@ -1,34 +1,22 @@
 class OrderItem {
   String bookid;
   String name;
+  List<String> images;
   int quantity;
 
   OrderItem({
     required this.bookid,
     required this.name,
+    required this.images,
     required this.quantity,
   });
 
-  factory OrderItem.fromJson(Map<String, dynamic> json) {
-    return OrderItem(
-      bookid: json['bookid'],
-      name: json['name'],
-      quantity: json['quantity'],
-    );
-  }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'bookid': bookid,
-      'name': name,
-      'quantity': quantity,
-    };
-  }
 
-  // Getters for each field
   String get getBookId => bookid;
 
   String get getName => name;
+    List<String> get getImage => images;
 
   int get getQuantity => quantity;
 }

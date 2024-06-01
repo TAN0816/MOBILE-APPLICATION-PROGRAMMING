@@ -15,6 +15,7 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
   late Future<List<Orderitem.Order>> _ordersFuture;
   UserService userService = UserService();
   String userId = '';
+  String bookimage = '';
 
   @override
   void initState() {
@@ -57,8 +58,12 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                 itemCount: orders.length,
                 itemBuilder: (context, index) {
                   final order = orders[index];
-                  final formattedTimestamp = DateFormat('MM/dd/yyyy').format(order.timestamp.toDate()); // Format the timestamp
-                  return Card(
+                  final formattedTimestamp = DateFormat('MM/dd/yyyy')
+                      .format(order.timestamp.toDate()); // Format the timestamp
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                                      0, 15.0, 0, 6.0),
+                    child:Card(
                     color: Colors.white,
                     elevation: 4,
                     shape: RoundedRectangleBorder(
@@ -89,8 +94,8 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                           const SizedBox(height: 15),
                           Row(
                             children: [
-                              Image.asset(
-                                'assets/images/hci.jpg', // Replace with actual image path from order data
+                              Image.network(
+                                order.orderItemsList[0].images[0],
                                 width: 100,
                                 height: 120,
                                 fit: BoxFit.cover,
@@ -101,7 +106,7 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                       'Name: ${order.orderItemsList.isNotEmpty ? order.orderItemsList[0]?.name ?? "Unknown" : "Unknown"}',
+                                      order.orderItemsList[0].name,
                                       style: const TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.w500,
@@ -109,7 +114,7 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                                     ),
                                     const SizedBox(height: 8),
                                     Text(
-                                      'Quantity: ${order.orderItemsList.isNotEmpty ? order.orderItemsList[0]?.quantity ?? 0 : 0}',
+                                      'Quantity: ${order.orderItemsList[0].quantity}',
                                       style: const TextStyle(
                                         fontSize: 13,
                                         fontWeight: FontWeight.w400,
@@ -118,7 +123,7 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                                     ),
                                     const SizedBox(height: 8),
                                     Text(
-                                      'Date: $formattedTimestamp', // Display formatted timestamp
+                                      'Date: $formattedTimestamp',
                                       style: const TextStyle(
                                         fontSize: 13,
                                         fontWeight: FontWeight.w400,
@@ -127,14 +132,16 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                                     ),
                                     const SizedBox(height: 8),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         const Text(
                                           'Total Amount: ',
                                           style: TextStyle(
                                             fontSize: 13,
                                             fontWeight: FontWeight.w400,
-                                            color: Color.fromARGB(255, 48, 48, 48),
+                                            color:
+                                                Color.fromARGB(255, 48, 48, 48),
                                           ),
                                         ),
                                         Text(
@@ -142,7 +149,8 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                                           style: const TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w500,
-                                            color: Color.fromARGB(255, 48, 48, 48),
+                                            color:
+                                                Color.fromARGB(255, 48, 48, 48),
                                           ),
                                         ),
                                       ],
@@ -155,6 +163,8 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                         ],
                       ),
                     ),
+
+                  ), 
                   );
                 },
               );
@@ -165,4 +175,3 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
     );
   }
 }
-
