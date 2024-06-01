@@ -1,9 +1,7 @@
 import 'package:intl/intl.dart';
-
 import 'package:flutter/material.dart';
 import 'package:secondhand_book_selling_platform/services/order_history_service.dart';
 import 'package:secondhand_book_selling_platform/model/order.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import '../widgets/appbar_with_back.dart';
 
@@ -47,11 +45,7 @@ class _OrderHistoryState extends State<OrderHistory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('Order History'),
-      // ),
       appBar: const AppBarWithBackBtn(title: 'Order History'),
-
       body: _loading
           ? Center(child: CircularProgressIndicator())
           : _errorMessage != null
@@ -62,75 +56,118 @@ class _OrderHistoryState extends State<OrderHistory> {
                       itemCount: _orders.length,
                       itemBuilder: (context, index) {
                         Order order = _orders[index];
+                        final formattedTimestamp =
+                            DateFormat('MM/dd/yyyy').format(order.timestamp);
 
                         return Padding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 10.0, // Adjust vertical padding
-                            horizontal: 10.0, // Adjust horizontal padding
-                          ),
+                          padding: const EdgeInsets.fromLTRB(0, 15.0, 0, 6.0),
                           child: Card(
-                            elevation: 3, // Add elevation for a shadow effect
+                            color: Colors.white,
+                            elevation: 4,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
                             child: Padding(
-                              padding: EdgeInsets.all(
-                                  10.0), // Add padding inside the Card
+                              padding: const EdgeInsets.all(15),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
                                     children: [
-                                      Icon(
-                                        IconData(0xf02cb,
-                                            fontFamily: 'MaterialIcons'),
-                                        color: Colors.grey,
+                                      const Icon(
+                                        Icons.article_rounded,
+                                        color: Colors.black,
                                       ),
-                                      SizedBox(width: 3),
+                                      const SizedBox(width: 8),
                                       Text(
                                         'Order No: ${order.id}',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Spacer(),
-                                      Text(
-                                        DateFormat('dd-MM-yyyy')
-                                            .format(order.timestamp),
-                                        style: TextStyle(color: Colors.grey),
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.black,
+                                        ),
                                       ),
                                     ],
                                   ),
-
-                                  // Text(
-                                  //   'Order No: ${order.id}',
-                                  //   style: TextStyle(fontWeight: FontWeight.bold),
-                                  // ),
-                                  // SizedBox(height: 5),
-                                  // Text(
-                                  //     'Delivery Method: ${order.deliveryMethod ?? 'Unknown'}'), // Use null-aware operator and provide default value
-                                  // Text(
-                                  //     'Payment Method: ${order.paymentMethod ?? 'Unknown'}'), // Use null-aware operator and provide default value
-                                  SizedBox(
-                                      height:
-                                          20), // Add spacing between elements
-                                  ...order.order.map((orderItem) {
-                                    return ListTile(
-                                      leading: orderItem.book.images.isNotEmpty
+                                  const SizedBox(height: 15),
+                                  Row(
+                                    children: [
+                                      order.order[0].book.images.isNotEmpty
                                           ? Image.network(
-                                              orderItem.book.images[0],
+                                              order.order[0].book.images[0],
+                                              width: 100,
+                                              height: 120,
                                               fit: BoxFit.cover,
-                                              width: 50,
-                                              height: 80,
                                             )
                                           : Container(
-                                              width: 50,
-                                              height: 50,
+                                              width: 100,
+                                              height: 120,
                                               color: Colors.grey,
                                             ),
-                                      title: Text(orderItem.book.name),
-                                      subtitle: Text(
-                                          'Quantity: ${orderItem.quantity}'),
-                                      trailing: Text(
-                                          'RM${orderItem.book.price * orderItem.quantity}'),
-                                    );
-                                  }).toList(),
+                                      const SizedBox(width: 15),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              order.order[0].book.name,
+                                              style: const TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              'Quantity: ${order.order[0].quantity}',
+                                              style: const TextStyle(
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.w400,
+                                                color: Color.fromARGB(
+                                                    255, 48, 48, 48),
+                                              ),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              'Date: $formattedTimestamp',
+                                              style: const TextStyle(
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.w400,
+                                                color: Color.fromARGB(
+                                                    255, 48, 48, 48),
+                                              ),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                const Text(
+                                                  'Total Amount: ',
+                                                  style: TextStyle(
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Color.fromARGB(
+                                                        255, 48, 48, 48),
+                                                  ),
+                                                ),
+                                                Text(
+                                                  'RM${order.totalAmountValue}',
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Color.fromARGB(
+                                                        255, 48, 48, 48),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ],
                               ),
                             ),
