@@ -46,4 +46,6 @@ class Book {
       faculty: data['faculty'],
     );
   }
+
+
 }

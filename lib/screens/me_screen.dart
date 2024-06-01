@@ -420,9 +420,9 @@ class _MeScreenState extends State<MeScreen> {
                 borderRadius: BorderRadius.zero,
               ),
             ),
-            onPressed: () {
-              context.push('/edit_profile/1');
-            },
+      onPressed: () {
+  context.push('/myorders');
+},
             child: Container(
               margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               padding: const EdgeInsets.fromLTRB(20.0, 20, 20.0, 20.0),
