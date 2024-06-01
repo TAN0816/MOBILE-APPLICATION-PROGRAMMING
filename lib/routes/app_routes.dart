@@ -13,11 +13,12 @@ import 'package:secondhand_book_selling_platform/screens/notification_screen.dar
 import 'package:secondhand_book_selling_platform/screens/message_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/me_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/edit_profile.dart';
+import 'package:secondhand_book_selling_platform/screens/order/myorder.dart';
 import 'package:secondhand_book_selling_platform/screens/search.dart';
 import 'package:secondhand_book_selling_platform/screens/search_result_page.dart';
+import 'package:secondhand_book_selling_platform/screens/sellerOrderList.dart';
 import 'package:secondhand_book_selling_platform/screens/signup_email_password_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/order_history.dart';
-
 import 'package:secondhand_book_selling_platform/screens/reset.dart';
 import 'package:secondhand_book_selling_platform/screens/product/productdetailbuyer.dart';
 import 'package:secondhand_book_selling_platform/screens/product/productdetailseller.dart';
@@ -79,7 +80,7 @@ GoRouter router() {
         path: '/orderhistory/:userId',
         builder: (context, state) {
           final userId = state.pathParameters['userId']!;
-          return MyOrderScreen(userId: userId!);
+          return OrderHistoryScreen(userId: userId!);
         },
       ),
       GoRoute(
@@ -92,6 +93,10 @@ GoRouter router() {
           final String? userId = state.pathParameters['userId'];
           return EditProfile(userId: userId!);
         },
+      ),
+      GoRoute(
+        path: '/myorders',
+          builder: (context, state) => const MyOrderScreen(),
       ),
       GoRoute(
         path: '/add_product',
@@ -181,6 +186,10 @@ GoRouter router() {
           );
         },
       ),
+      GoRoute(
+          path: '/sellerOrder',
+          name: 'sellerOrder',
+          builder: (context, state) => const SellerOrderList()),
     ],
   );
 }

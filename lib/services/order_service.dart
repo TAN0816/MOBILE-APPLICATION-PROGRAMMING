@@ -141,7 +141,7 @@ class OrderService {
 
         List<OrderItem> orderItems = booksData.map((bookData) {
           return OrderItem(
-            bookId: bookData['bookId'],
+            bookid: bookData['bookId'],
             name: bookData['name'],
             images: (bookData['images'] as List<dynamic>).cast<String>(),
             quantity: bookData['quantity'],
@@ -197,7 +197,7 @@ class OrderService {
 
         List<OrderItem> orderItems = booksData.map((bookData) {
           return OrderItem(
-            bookId: bookData['bookId'],
+            bookid: bookData['bookId'],
             name: bookData['name'],
             images: (bookData['images'] as List<dynamic>).cast<String>(),
             quantity: bookData['quantity'],
@@ -229,15 +229,15 @@ class OrderService {
   }
 
   Future<void> updateOrderStatus(String orderId, String newStatus) async {
-    try {
-      await FirebaseFirestore.instance
-          .collection('orders')
-          .doc(orderId)
-          .update({'status': newStatus});
-      print('Order status updated successfully');
-    } catch (error) {
-      print('Error updating order status: $error');
-      throw error;
-    }
+  try {
+    await FirebaseFirestore.instance
+        .collection('orders')
+        .doc(orderId)
+        .update({'status': newStatus});
+    print('Order status updated successfully');
+  } catch (error) {
+    print('Error updating order status: $error');
+    throw error;
   }
+}
 }

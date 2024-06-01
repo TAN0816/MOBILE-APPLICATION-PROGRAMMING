@@ -35,7 +35,7 @@ class OrderHistoryService {
                     bookSnapshot.data() as Map<String, dynamic>,
                     bookSnapshot.id);
                 OrderItem orderItem = OrderItem(
-                  bookId: bookId,
+                  bookid: bookId,
                   name: book.name,
                   images: book.images,
                   quantity: quantity,

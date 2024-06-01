@@ -4,16 +4,16 @@ import 'package:secondhand_book_selling_platform/services/order_history_service.
 import 'package:secondhand_book_selling_platform/model/order.dart' as Orderitem;
 import 'package:secondhand_book_selling_platform/services/user_service.dart';
 
-class MyOrderScreen extends StatefulWidget {
+class OrderHistoryScreen extends StatefulWidget {
   final String userId;
 
-  const MyOrderScreen({Key? key, required this.userId}) : super(key: key);
+  const OrderHistoryScreen({Key? key, required this.userId}) : super(key: key);
 
   @override
-  _MyOrderScreenState createState() => _MyOrderScreenState();
+  _OrderHistoryState createState() => _OrderHistoryState();
 }
 
-class _MyOrderScreenState extends State<MyOrderScreen> {
+class _OrderHistoryState extends State<OrderHistoryScreen> {
   late Future<List<Orderitem.Order>> _ordersFuture;
   OrderHistoryService orderHistoryService = OrderHistoryService();
 

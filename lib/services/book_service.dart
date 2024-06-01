@@ -197,7 +197,7 @@ class BookService {
       });
     } catch (e) {
       print('Error updating book availability: $e');
-      throw e;
+      rethrow;
     }
   }
 }
