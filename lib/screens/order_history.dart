@@ -34,7 +34,6 @@ class _OrderHistoryState extends State<OrderHistoryScreen> {
   }
 
   Color _getStatusColor(String status) {
-    final lowercaseStatus = status.toLowerCase();
 
     switch (status) {
       case 'completed':
