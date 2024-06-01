@@ -5,6 +5,7 @@ import 'package:secondhand_book_selling_platform/model/order.dart' as Orderitem;
 import 'package:secondhand_book_selling_platform/model/order.dart';
 import 'package:secondhand_book_selling_platform/model/user.dart';
 import 'package:secondhand_book_selling_platform/screens/order/cancelOrder.dart';
+import 'package:secondhand_book_selling_platform/screens/order/updateOrderStatus.dart';
 import 'package:secondhand_book_selling_platform/services/order_service.dart';
 import 'package:secondhand_book_selling_platform/services/user_service.dart';
 import 'package:intl/intl.dart';
@@ -19,31 +20,46 @@ class OrderDetailsScreen extends StatefulWidget {
 }
 
 class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
-  late Future<List<Orderitem.Order>> _ordersFuture;
+  Future<Orderitem.Order>? _orderFuture;
   UserService _userService = UserService();
-  late Future<UserModel> _userDataFuture;
+  UserModel? currentUserData;
+  Future<UserModel>? orderUserData;
   String userId = '';
+  String role = '';
 
   @override
   void initState() {
     super.initState();
     userId = UserService().getUserId;
-    _ordersFuture = _fetchOrders(userId);
-    _userDataFuture = _userService.getUserData(userId);
-    _fetchUserData(userId);
+    _fetchCurrentUserData(userId);
+    _orderFuture = _fetchOrders(widget.orderId);
   }
 
-  Future<void> _fetchUserData(String userId) async {
+  void _fetchCurrentUserData(String userId) async {
     try {
-      _userDataFuture = _userService.getUserData(userId);
+      UserModel user = await UserService().getUserData(userId);
+      setState(() {
+        currentUserData = user;
+        role = user.getRole;
+      });
     } catch (error) {
       print('Error fetching user data: $error');
     }
   }
 
-  Future<List<Orderitem.Order>> _fetchOrders(String userId) async {
+  Future<UserModel> _fetchOrderUserData(String userId) async {
     try {
-      final orders = await OrderService().getOrder(userId);
+      UserModel user = await _userService.getUserData(userId);
+      return user;
+    } catch (error) {
+      print('Error fetching user data: $error');
+      throw error;
+    }
+  }
+
+  Future<Orderitem.Order> _fetchOrders(String orderId) async {
+    try {
+      Orderitem.Order orders = await OrderService().getOrderById(orderId);
       return orders;
     } catch (error) {
       print('Error fetching orders: $error');
@@ -57,33 +73,26 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       appBar: AppBar(
         title: Text('Order Details'),
         leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              context.go('/myorders');
-            }),
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context); // Corrected back navigation
+          },
+        ),
       ),
-      body: FutureBuilder<List<Orderitem.Order>>(
-        future: _ordersFuture,
+      body: FutureBuilder<Orderitem.Order>(
+        future: _orderFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData ||
-              snapshot.data == null ||
-              snapshot.data!.isEmpty) {
+          } else if (!snapshot.hasData || snapshot.data == null) {
             return Center(child: Text('Order not found'));
           } else {
-            var orderList = snapshot.data!;
-            var selectedOrder = orderList
-                .firstWhere((order) => order.orderId == widget.orderId);
-
-            if (selectedOrder == null) {
-              return Center(child: Text('Selected order not found'));
-            }
+            var selectedOrder = snapshot.data!;
 
             return FutureBuilder<UserModel>(
-              future: _userDataFuture,
+              future: _fetchOrderUserData(selectedOrder.userId),
               builder: (context, userSnapshot) {
                 if (userSnapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
@@ -102,17 +111,17 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           Text(
                             'Order Information',
                             style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           SizedBox(height: 8),
                           OrderInformationCard(
-                              orderData: selectedOrder!,
-                              userData:
-                                  userData), // Make sure selectedOrder is non-null
+                            orderData: selectedOrder,
+                            userData: userData,
+                          ),
                           SizedBox(height: 10),
-                          OrderDetailsCard(
-                              orderData:
-                                  selectedOrder), // Make sure selectedOrder is non-null
+                          OrderDetailsCard(orderData: selectedOrder),
                           SizedBox(height: 16),
                           Center(
                             child: Column(
@@ -123,17 +132,30 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                   height: 44,
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      Navigator.pushNamed(
-                                          context, '/contactSeller');
+                                      if (role == "Seller") {
+                                        showModalBottomSheet(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return UpdateOrderStatus(
+                                                orderId: widget.orderId);
+                                          },
+                                        );
+                                      } else {
+                                        context.push('/contactSeller');
+                                      }
                                     },
                                     style: ElevatedButton.styleFrom(
-                                        backgroundColor: Color(0xff4a56c1)),
+                                      backgroundColor: Color(0xff4a56c1),
+                                    ),
                                     child: Text(
-                                      "Contact Seller",
+                                      role == "Buyer"
+                                          ? "Contact Seller"
+                                          : "Update Status",
                                       style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.white),
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -152,13 +174,15 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                       );
                                     },
                                     style: OutlinedButton.styleFrom(
-                                        side: BorderSide(color: Colors.grey)),
+                                      side: BorderSide(color: Colors.grey),
+                                    ),
                                     child: Text(
                                       "Cancel Order",
                                       style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.black),
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.black,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -271,7 +295,7 @@ class OrderDetailsCard extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  'Order No ${orderData.orderId}',
+                  'Order No: ${orderData.orderId}',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Spacer(),

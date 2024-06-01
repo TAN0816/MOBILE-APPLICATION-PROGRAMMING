@@ -65,7 +65,7 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                   return GestureDetector(
                     onTap: () {
                       // Navigate to order details screen
-                      GoRouter.of(context).go('/orderDetails/${order.id}');
+                      GoRouter.of(context).push('/orderDetails/${order.id}');
                     },
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(0, 15.0, 0, 6.0),
@@ -109,7 +109,8 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                                   const SizedBox(width: 15),
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           order.orderItemsList[0].name,
@@ -124,7 +125,8 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                                           style: const TextStyle(
                                             fontSize: 13,
                                             fontWeight: FontWeight.w400,
-                                            color: Color.fromARGB(255, 48, 48, 48),
+                                            color:
+                                                Color.fromARGB(255, 48, 48, 48),
                                           ),
                                         ),
                                         const SizedBox(height: 8),
@@ -133,19 +135,22 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                                           style: const TextStyle(
                                             fontSize: 13,
                                             fontWeight: FontWeight.w400,
-                                            color: Color.fromARGB(255, 48, 48, 48),
+                                            color:
+                                                Color.fromARGB(255, 48, 48, 48),
                                           ),
                                         ),
                                         const SizedBox(height: 8),
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
                                             const Text(
                                               'Total Amount: ',
                                               style: TextStyle(
                                                 fontSize: 13,
                                                 fontWeight: FontWeight.w400,
-                                                color: Color.fromARGB(255, 48, 48, 48),
+                                                color: Color.fromARGB(
+                                                    255, 48, 48, 48),
                                               ),
                                             ),
                                             Text(
@@ -153,7 +158,8 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                                               style: const TextStyle(
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w500,
-                                                color: Color.fromARGB(255, 48, 48, 48),
+                                                color: Color.fromARGB(
+                                                    255, 48, 48, 48),
                                               ),
                                             ),
                                           ],

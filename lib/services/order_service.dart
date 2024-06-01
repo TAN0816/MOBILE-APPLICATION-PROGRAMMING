@@ -5,7 +5,6 @@ import 'package:secondhand_book_selling_platform/model/orderitem.dart';
 
 class OrderService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  
 
   Future<void> placeOrder({
     required List<Book> books,
@@ -80,7 +79,7 @@ class OrderService {
       'paymentMethod': paymentMethod,
       'totalAmount': totalAmount,
       'timestamp': FieldValue.serverTimestamp(),
-      'status': "PENDING",
+      'status': "Pending",
     };
 
     await orderRef.set(orderData);
@@ -119,6 +118,7 @@ class OrderService {
       rethrow;
     }
   }
+
   Future<Book> getBookById(String bookId) async {
     try {
       // Fetch book data from Firestore or any other data source
@@ -148,7 +148,7 @@ class OrderService {
       QuerySnapshot orderSnapshots = await _firestore
           .collection('orders')
           .where('userId', isEqualTo: userId)
-          .where('status', isEqualTo: 'PENDING')
+          .where('status', isEqualTo: 'Pending')
           .get();
 
       if (orderSnapshots.docs.isEmpty) {
@@ -186,7 +186,7 @@ class OrderService {
           deliveryMethod: orderData['deliveryMethod'],
           paymentMethod: orderData['paymentMethod'],
           totalAmount: orderData['totalAmount'],
-          timestamp: orderData['timestamp'], 
+          timestamp: orderData['timestamp'],
           status: orderData['status'],
         );
 
@@ -197,6 +197,54 @@ class OrderService {
       return orders;
     } catch (error) {
       print('Error retrieving orders: $error');
+      throw error;
+    }
+  }
+
+  Future<OrderList.Order> getOrderById(String orderId) async {
+    try {
+      DocumentSnapshot orderSnapshot =
+          await _firestore.collection('orders').doc(orderId).get();
+
+      if (!orderSnapshot.exists) {
+        throw Exception('No order found for order ID: $orderId');
+      }
+
+      Map<String, dynamic> orderData =
+          orderSnapshot.data()! as Map<String, dynamic>;
+
+      List<dynamic> booksData = orderData['books'] as List<dynamic>;
+
+      List<OrderItem> orderItems =
+          await Future.wait(booksData.map<Future<OrderItem>>((bookData) async {
+        // Assuming you have a method to fetch book data based on bookId
+        Book book =
+            await getBookById(bookData['bookId']); // Replace with your method
+
+        return OrderItem(
+          bookid: bookData['bookId'],
+          name: bookData['name'],
+          book: book, // Pass the Book object
+          images: (bookData['images'] as List<dynamic>).cast<String>(),
+          quantity: bookData['quantity'],
+        );
+      }).toList());
+
+      OrderList.Order order = OrderList.Order(
+        id: orderSnapshot.id,
+        userId: orderData['userId'],
+        sellerId: orderData['sellerId'],
+        orderItems: orderItems,
+        deliveryMethod: orderData['deliveryMethod'],
+        paymentMethod: orderData['paymentMethod'],
+        totalAmount: orderData['totalAmount'],
+        timestamp: orderData['timestamp'],
+        status: orderData['status'],
+      );
+
+      return order;
+    } catch (error) {
+      print('Error retrieving order: $error');
       throw error;
     }
   }
@@ -219,82 +267,81 @@ class OrderService {
   }
 
   Future<List<OrderList.Order>> getSellerCurrentOrder(
-  String sellerId, List<String> statuses) async {
-  try {
-    Query orderQuery = _firestore
-        .collection('orders')
-        .where('sellerId', isEqualTo: sellerId);
+      String sellerId, List<String> statuses) async {
+    try {
+      Query orderQuery = _firestore
+          .collection('orders')
+          .where('sellerId', isEqualTo: sellerId);
 
-    if (statuses.length == 1) {
-      orderQuery = orderQuery.where('status', isEqualTo: statuses[0]);
-    } else if (statuses.length > 1) {
-      orderQuery = orderQuery.where('status', whereIn: statuses);
-    }
-
-    QuerySnapshot orderSnapshots = await orderQuery.get();
-
-    List<OrderList.Order> orders = [];
-
-    for (QueryDocumentSnapshot orderSnapshot in orderSnapshots.docs) {
-      Map<String, dynamic> orderData =
-          orderSnapshot.data()! as Map<String, dynamic>;
-
-      List<dynamic> booksData = orderData['books'] as List<dynamic>;
-
-      List<OrderItem> orderItems = [];
-
-      // Iterate over each book data in the order
-      for (var bookData in booksData) {
-        // Retrieve the book details based on the book ID
-        Book book = await getBookById(bookData['bookId']);
-
-        // Create an OrderItem object
-        OrderItem orderItem = OrderItem(
-          bookid: bookData['bookId'],
-          name: bookData['name'],
-          book: book,
-          images: (bookData['images'] as List<dynamic>).cast<String>(),
-          quantity: bookData['quantity'],
-        );
-
-        // Add the OrderItem to the list of orderItems
-        orderItems.add(orderItem);
+      if (statuses.length == 1) {
+        orderQuery = orderQuery.where('status', isEqualTo: statuses[0]);
+      } else if (statuses.length > 1) {
+        orderQuery = orderQuery.where('status', whereIn: statuses);
       }
 
-      OrderList.Order order = OrderList.Order(
-        id: orderSnapshot.id,
-        userId: orderData['userId'],
-        sellerId: orderData['sellerId'],
-        orderItems: orderItems,
-        deliveryMethod: orderData['deliveryMethod'],
-        paymentMethod: orderData['paymentMethod'],
-        totalAmount: orderData['totalAmount'],
-        timestamp: orderData['timestamp'],
-        status: orderData['status'],
-      );
+      QuerySnapshot orderSnapshots = await orderQuery.get();
 
-      orders.add(order);
-      print(orders);
+      List<OrderList.Order> orders = [];
+
+      for (QueryDocumentSnapshot orderSnapshot in orderSnapshots.docs) {
+        Map<String, dynamic> orderData =
+            orderSnapshot.data()! as Map<String, dynamic>;
+
+        List<dynamic> booksData = orderData['books'] as List<dynamic>;
+
+        List<OrderItem> orderItems = [];
+
+        // Iterate over each book data in the order
+        for (var bookData in booksData) {
+          // Retrieve the book details based on the book ID
+          Book book = await getBookById(bookData['bookId']);
+
+          // Create an OrderItem object
+          OrderItem orderItem = OrderItem(
+            bookid: bookData['bookId'],
+            name: bookData['name'],
+            book: book,
+            images: (bookData['images'] as List<dynamic>).cast<String>(),
+            quantity: bookData['quantity'],
+          );
+
+          // Add the OrderItem to the list of orderItems
+          orderItems.add(orderItem);
+        }
+
+        OrderList.Order order = OrderList.Order(
+          id: orderSnapshot.id,
+          userId: orderData['userId'],
+          sellerId: orderData['sellerId'],
+          orderItems: orderItems,
+          deliveryMethod: orderData['deliveryMethod'],
+          paymentMethod: orderData['paymentMethod'],
+          totalAmount: orderData['totalAmount'],
+          timestamp: orderData['timestamp'],
+          status: orderData['status'],
+        );
+
+        orders.add(order);
+        print(orders);
+      }
+
+      return orders;
+    } catch (error) {
+      print('Error retrieving orders: $error');
+      throw error;
     }
-
-    return orders;
-  } catch (error) {
-    print('Error retrieving orders: $error');
-    throw error;
   }
-}
-
 
   Future<void> updateOrderStatus(String orderId, String newStatus) async {
-  try {
-    await FirebaseFirestore.instance
-        .collection('orders')
-        .doc(orderId)
-        .update({'status': newStatus});
-    print('Order status updated successfully');
-  } catch (error) {
-    print('Error updating order status: $error');
-    throw error;
+    try {
+      await FirebaseFirestore.instance
+          .collection('orders')
+          .doc(orderId)
+          .update({'status': newStatus});
+      print('Order status updated successfully');
+    } catch (error) {
+      print('Error updating order status: $error');
+      throw error;
+    }
   }
-}
 }

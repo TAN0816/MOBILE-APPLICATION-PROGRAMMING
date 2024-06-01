@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:secondhand_book_selling_platform/services/order_service.dart';
 import 'package:secondhand_book_selling_platform/model/order.dart' as Orderitem;
 import 'package:secondhand_book_selling_platform/services/user_service.dart';
@@ -27,7 +28,7 @@ class _SellerOrderListState extends State<SellerOrderList>
   Future<List<Orderitem.Order>> fetchCurrentOrders(String sellerId) async {
     try {
       final orders = await OrderService()
-          .getSellerCurrentOrder(sellerId, ['pending', 'ongoing']);
+          .getSellerCurrentOrder(sellerId, ['Pending', 'Preparing']);
       return orders;
     } catch (error) {
       print('Error fetching orders: $error');
@@ -38,7 +39,7 @@ class _SellerOrderListState extends State<SellerOrderList>
   Future<List<Orderitem.Order>> fetchCompletedOrders(String sellerId) async {
     try {
       final orders =
-          await OrderService().getSellerCurrentOrder(sellerId, ['completed']);
+          await OrderService().getSellerCurrentOrder(sellerId, ['Completed']);
       return orders;
     } catch (error) {
       print('Error fetching orders: $error');
@@ -49,7 +50,7 @@ class _SellerOrderListState extends State<SellerOrderList>
   Future<List<Orderitem.Order>> fetchCancelledOrders(String sellerId) async {
     try {
       final orders =
-          await OrderService().getSellerCurrentOrder(sellerId, ['cancelled']);
+          await OrderService().getSellerCurrentOrder(sellerId, ['Cancelled']);
       return orders;
     } catch (error) {
       print('Error fetching orders: $error');
@@ -142,11 +143,9 @@ class _SellerOrderListState extends State<SellerOrderList>
                           children: [
                             Text(
                               order.status, // Display order status
-                              style: TextStyle(
-                                color: order.status == 'cancelled'
-                                    ? const Color.fromARGB(255, 193, 15, 15)
-                                    : const Color.fromARGB(255, 68, 208,
-                                        32), // Adjust color based on status
+                              style: const TextStyle(
+                                color: Color.fromARGB(255, 36, 55,
+                                    197), // Adjust color based on status
                               ),
                             )
                           ],
@@ -183,7 +182,9 @@ class _SellerOrderListState extends State<SellerOrderList>
                             ),
                           ),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              context.push('/orderDetails/${order.id}');
+                            },
                             icon: Icon(Icons.arrow_forward_ios_rounded),
                           ),
                         ],
