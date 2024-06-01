@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:secondhand_book_selling_platform/model/cart_model.dart';
@@ -32,7 +31,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
   String? deliveryMethod;
   String? paymentMethod;
 
-
   @override
   void initState() {
     super.initState();
@@ -56,35 +54,47 @@ class _CheckoutPageState extends State<CheckoutPage> {
     });
   }
 
-
-   void _placeOrder() async {
+  void _placeOrder() async {
     try {
       final orderService = OrderService();
-  
+
       await orderService.placeOrder(
         books: widget.selectedBooks.map((item) => item.book).toList(),
-        quantities: widget.selectedBooks.map((item) => item.getQuantity).toList(),
+        quantities:
+            widget.selectedBooks.map((item) => item.getQuantity).toList(),
         deliveryMethod: deliveryMethod ?? '',
         paymentMethod: paymentMethod ?? '',
         userId: UserService().getUserId,
       );
 
-          ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Order placed successfully!'),
-        duration: Duration(seconds: 2),
-      ),
-    );
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Order placed successfully!'),
+          duration: Duration(seconds: 2),
+        ),
+      );
 
-    // Navigate back to the home page after a delay
-    Future.delayed(const Duration(seconds: 2), () {
-     context.push('/');
-    });
-
+      // Navigate back to the home page after a delay
+      Future.delayed(const Duration(seconds: 2), () {
+        context.push('/');
+      });
     } catch (error) {
       // Handle errors here
       print('Error placing order: $error');
     }
+  }
+
+  bool get canPlaceOrder {
+    return deliveryMethod != null && paymentMethod != null;
+  }
+
+  void showRequiredFieldsMessage() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Delivery method and payment method are required.'),
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 
   @override
@@ -376,7 +386,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         width: 20,
                       ),
                       TextButton(
-                        onPressed: () {_placeOrder();},
+                        onPressed: canPlaceOrder
+                            ? _placeOrder
+                            : () {
+                                showRequiredFieldsMessage();
+                              },
                         style: TextButton.styleFrom(
                             backgroundColor: const Color(0xff4a56c1),
                             padding: const EdgeInsets.all(14),

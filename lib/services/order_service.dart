@@ -108,6 +108,8 @@ class OrderService {
       batch.update(bookRef, {'quantity': FieldValue.increment(-quantities[i])});
     }
 
+    _checkBookQuantitiesAndUpdateStatus(books);
+
     batch.update(cartRef, {'cartList': cartList});
 
     try {
@@ -140,6 +142,22 @@ class OrderService {
     } catch (error) {
       print('Error retrieving book: $error');
       throw error;
+    }
+  }
+
+
+    Future<void> _checkBookQuantitiesAndUpdateStatus(List<Book> books) async {
+    for (var book in books) {
+      DocumentReference bookRef = _firestore.collection('books').doc(book.id);
+      DocumentSnapshot bookSnapshot = await bookRef.get();
+
+      if (bookSnapshot.exists) {
+        int currentQuantity = bookSnapshot.get('quantity');
+        if (currentQuantity <= 0) {
+          await bookRef.update({'status': 'unavailable'});
+          print('Book status updated to UNAVAILABLE for book ID: ${book.id}');
+        }
+      }
     }
   }
 
