@@ -29,7 +29,7 @@ class _MeScreenState extends State<MeScreen> {
   void initState() {
     super.initState();
     userId = UserService().getUserId;
-      fetchUserData();
+    fetchUserData();
   }
 
   void fetchUserData() async {
@@ -469,7 +469,7 @@ class _MeScreenState extends State<MeScreen> {
               ),
             ),
             onPressed: () {
-              context.push('/edit_profile/1');
+              context.push('/orderhistory/$userId');
             },
             child: Container(
               margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),

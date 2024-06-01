@@ -532,7 +532,6 @@ class _SellerList extends State<SellerList> {
         child: const Icon(Icons.add, color: Colors.white),
         backgroundColor: const Color(0xff4a56c1),
         elevation: 4,
-        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
