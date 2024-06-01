@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:secondhand_book_selling_platform/model/book.dart';
 import 'package:secondhand_book_selling_platform/model/order.dart' as OrderList;
 import 'package:secondhand_book_selling_platform/model/orderitem.dart';
+import 'package:secondhand_book_selling_platform/services/book_service.dart';
 
 class OrderService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -86,6 +87,30 @@ class OrderService {
     print('Order placed successfully with ID: ${orderRef.id}');
   }
 
+  Future<Book> getBookById(String bookId) async {
+    try {
+      // Fetch book data from Firestore or any other data source
+      // Example:
+      DocumentSnapshot bookSnapshot =
+          await _firestore.collection('books').doc(bookId).get();
+
+      if (!bookSnapshot.exists) {
+        throw Exception('Book with ID $bookId not found');
+      }
+
+      Map<String, dynamic> bookData =
+          bookSnapshot.data() as Map<String, dynamic>;
+
+      // Create a Book object from the fetched data
+      Book book = Book.fromMap(bookData, bookSnapshot.id);
+
+      return book;
+    } catch (error) {
+      print('Error retrieving book: $error');
+      throw error;
+    }
+  }
+
   Future<void> _updateCartAndBookQuantities(
       List<Book> books, List<int> quantities, String userId) async {
     WriteBatch batch = _firestore.batch();
@@ -139,14 +164,20 @@ class OrderService {
 
         List<dynamic> booksData = orderData['books'] as List<dynamic>;
 
-        List<OrderItem> orderItems = booksData.map((bookData) {
+        List<OrderItem> orderItems = await Future.wait(
+            booksData.map<Future<OrderItem>>((bookData) async {
+          // Assuming you have a method to fetch book data based on bookId
+          Book book =
+              await getBookById(bookData['bookId']); // Replace with your method
+
           return OrderItem(
             bookid: bookData['bookId'],
             name: bookData['name'],
+            book: book, // Pass the Book object
             images: (bookData['images'] as List<dynamic>).cast<String>(),
             quantity: bookData['quantity'],
           );
-        }).toList();
+        }).toList());
 
         OrderList.Order order = OrderList.Order(
           id: orderSnapshot.id,
@@ -166,8 +197,24 @@ class OrderService {
       return orders;
     } catch (error) {
       print('Error retrieving orders: $error');
-
       throw error;
+    }
+  }
+
+  Future<void> updateOrderStatusAndReasons(
+      String orderId, String status, String reasons) async {
+    try {
+      DocumentReference orderRef = _firestore.collection('orders').doc(orderId);
+
+      await orderRef.update({
+        'status': status,
+        'reasons': reasons,
+      });
+
+      print('Order status and reasons updated successfully');
+    } catch (e) {
+      print('Error updating order status and reasons: $e');
+      throw e;
     }
   }
 }

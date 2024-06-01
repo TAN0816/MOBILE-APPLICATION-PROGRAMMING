@@ -14,6 +14,7 @@ import 'package:secondhand_book_selling_platform/screens/message_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/me_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/edit_profile.dart';
 import 'package:secondhand_book_selling_platform/screens/order/myorder.dart';
+import 'package:secondhand_book_selling_platform/screens/order/orderDetails.dart';
 import 'package:secondhand_book_selling_platform/screens/search.dart';
 import 'package:secondhand_book_selling_platform/screens/search_result_page.dart';
 import 'package:secondhand_book_selling_platform/screens/signup_email_password_screen.dart';
@@ -114,6 +115,15 @@ GoRouter router() {
         path: '/search',
         builder: (context, state) => const SearchPage(),
       ),
+      GoRoute(
+            path: '/orderDetails/:orderId',
+            builder: (context, state) {
+              final orderId = state.pathParameters['orderId'];
+              // Retrieve order details based on orderId
+              // For now, returning a placeholder widget
+              return OrderDetailsScreen(orderId: orderId!);
+            },
+          ),
 
       GoRoute(
         path: '/productdetailbuyer/:bookId',

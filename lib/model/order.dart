@@ -11,6 +11,7 @@ class Order {
   String paymentMethod;
   double totalAmount;
   Timestamp timestamp;
+  var status;
 
   Order({
     required this.id,
@@ -59,6 +60,8 @@ class Order {
   double get totalAmountValue => totalAmount;
 
   Timestamp get timestampValue => timestamp;
+
+  set cancellationReason(int cancellationReason) {}
 
 
 }
