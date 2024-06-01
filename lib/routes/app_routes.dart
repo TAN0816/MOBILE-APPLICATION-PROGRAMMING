@@ -13,6 +13,7 @@ import 'package:secondhand_book_selling_platform/screens/notification_screen.dar
 import 'package:secondhand_book_selling_platform/screens/message_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/me_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/edit_profile.dart';
+import 'package:secondhand_book_selling_platform/screens/order/myorder.dart';
 import 'package:secondhand_book_selling_platform/screens/search.dart';
 import 'package:secondhand_book_selling_platform/screens/search_result_page.dart';
 import 'package:secondhand_book_selling_platform/screens/signup_email_password_screen.dart';
@@ -84,6 +85,10 @@ GoRouter router() {
           final String? userId = state.pathParameters['userId'];
           return EditProfile(userId: userId!);
         },
+      ),
+      GoRoute(
+        path: '/myorders',
+          builder: (context, state) => const MyOrderScreen(),
       ),
       GoRoute(
         path: '/add_product',

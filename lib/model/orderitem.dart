@@ -1,15 +1,34 @@
-import 'package:secondhand_book_selling_platform/model/book.dart';
-
 class OrderItem {
-  final Book book;
-  final int quantity;
-  final String id;
+  String bookid;
+  String name;
+  int quantity;
 
-  OrderItem({required this.book, required this.quantity, required this.id});
+  OrderItem({
+    required this.bookid,
+    required this.name,
+    required this.quantity,
+  });
 
-  Book get getBook => book;
+  factory OrderItem.fromJson(Map<String, dynamic> json) {
+    return OrderItem(
+      bookid: json['bookid'],
+      name: json['name'],
+      quantity: json['quantity'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'bookid': bookid,
+      'name': name,
+      'quantity': quantity,
+    };
+  }
+
+  // Getters for each field
+  String get getBookId => bookid;
+
+  String get getName => name;
 
   int get getQuantity => quantity;
-
-  String get getId => id;
 }
