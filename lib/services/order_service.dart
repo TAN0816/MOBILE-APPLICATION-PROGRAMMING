@@ -79,7 +79,7 @@ class OrderService {
       'paymentMethod': paymentMethod,
       'totalAmount': totalAmount,
       'timestamp': FieldValue.serverTimestamp(),
-      'status': "PENDING",
+      'status': "Pending",
     };
 
     await orderRef.set(orderData);
@@ -108,6 +108,8 @@ class OrderService {
       batch.update(bookRef, {'quantity': FieldValue.increment(-quantities[i])});
     }
 
+    _checkBookQuantitiesAndUpdateStatus(books);
+
     batch.update(cartRef, {'cartList': cartList});
 
     try {
@@ -119,12 +121,28 @@ class OrderService {
     }
   }
 
+
+    Future<void> _checkBookQuantitiesAndUpdateStatus(List<Book> books) async {
+    for (var book in books) {
+      DocumentReference bookRef = _firestore.collection('books').doc(book.id);
+      DocumentSnapshot bookSnapshot = await bookRef.get();
+
+      if (bookSnapshot.exists) {
+        int currentQuantity = bookSnapshot.get('quantity');
+        if (currentQuantity <= 0) {
+          await bookRef.update({'status': 'unavailable'});
+          print('Book status updated to UNAVAILABLE for book ID: ${book.id}');
+        }
+      }
+    }
+  }
+
   Future<List<OrderList.Order>> getOrder(String userId) async {
     try {
       QuerySnapshot orderSnapshots = await _firestore
           .collection('orders')
           .where('userId', isEqualTo: userId)
-          .where('status', isEqualTo: 'PENDING')
+          .where('status', isEqualTo: 'Pending')
           .get();
 
       if (orderSnapshots.docs.isEmpty) {
