@@ -186,7 +186,8 @@ class OrderService {
           deliveryMethod: orderData['deliveryMethod'],
           paymentMethod: orderData['paymentMethod'],
           totalAmount: orderData['totalAmount'],
-          timestamp: orderData['timestamp'], status: '',
+          timestamp: orderData['timestamp'], 
+          status: orderData['status'],
         );
 
         orders.add(order);

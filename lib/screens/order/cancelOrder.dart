@@ -212,7 +212,7 @@ class _CancelOrderFormState extends State<CancelOrderForm> {
 
   Future<void> _updateOrderStatusAndReasons(
       String orderId, int selectedReason) async {
-    String status = 'Cancelled'; // Set the status to 'Cancelled'
+    String status = 'CANCELLED'; // Set the status to 'Cancelled'
     String reason = _getReasonText(
         selectedReason); // Get the reason text based on the selected reason
     try {
