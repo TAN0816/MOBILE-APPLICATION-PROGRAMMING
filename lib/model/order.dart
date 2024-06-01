@@ -40,6 +40,6 @@ class Order {
   double get totalAmountValue => totalAmount;
 
   Timestamp get timestampValue => timestamp;
-
+  set cancellationReason(int cancellationReason) {}
   String get getOrderStatus => status;
 }

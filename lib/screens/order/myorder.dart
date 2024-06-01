@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // Import the intl package
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+import 'package:secondhand_book_selling_platform/screens/order/orderDetails.dart';
 import 'package:secondhand_book_selling_platform/services/order_service.dart';
 import 'package:secondhand_book_selling_platform/model/order.dart' as Orderitem;
 import 'package:secondhand_book_selling_platform/services/user_service.dart';
@@ -60,111 +62,112 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                   final order = orders[index];
                   final formattedTimestamp = DateFormat('MM/dd/yyyy')
                       .format(order.timestamp.toDate()); // Format the timestamp
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                                      0, 15.0, 0, 6.0),
-                    child:Card(
-                    color: Colors.white,
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
+                  return GestureDetector(
+                    onTap: () {
+                      // Navigate to order details screen
+                      GoRouter.of(context).go('/orderDetails/${order.id}');
+                    },
                     child: Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
+                      padding: const EdgeInsets.fromLTRB(0, 15.0, 0, 6.0),
+                      child: Card(
+                        color: Colors.white,
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Icon(
-                                Icons.article_rounded,
-                                color: Colors.black,
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                'Order No: ${order.id}',
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 15),
-                          Row(
-                            children: [
-                              Image.network(
-                                order.orderItemsList[0].images[0],
-                                width: 100,
-                                height: 120,
-                                fit: BoxFit.cover,
-                              ),
-                              const SizedBox(width: 15),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      order.orderItemsList[0].name,
-                                      style: const TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500,
-                                      ),
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.article_rounded,
+                                    color: Colors.black,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    'Order No: ${order.id}',
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black,
                                     ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      'Quantity: ${order.orderItemsList[0].quantity}',
-                                      style: const TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w400,
-                                        color: Color.fromARGB(255, 48, 48, 48),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      'Date: $formattedTimestamp',
-                                      style: const TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w400,
-                                        color: Color.fromARGB(255, 48, 48, 48),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 15),
+                              Row(
+                                children: [
+                                  Image.network(
+                                    order.orderItemsList[0].images[0],
+                                    width: 100,
+                                    height: 120,
+                                    fit: BoxFit.cover,
+                                  ),
+                                  const SizedBox(width: 15),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        const Text(
-                                          'Total Amount: ',
-                                          style: TextStyle(
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.w400,
-                                            color:
-                                                Color.fromARGB(255, 48, 48, 48),
+                                        Text(
+                                          order.orderItemsList[0].name,
+                                          style: const TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500,
                                           ),
                                         ),
+                                        const SizedBox(height: 8),
                                         Text(
-                                          'RM${order.totalAmountValue}', // Use actual total amount from order data
+                                          'Quantity: ${order.orderItemsList[0].quantity}',
                                           style: const TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500,
-                                            color:
-                                                Color.fromARGB(255, 48, 48, 48),
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w400,
+                                            color: Color.fromARGB(255, 48, 48, 48),
                                           ),
+                                        ),
+                                        const SizedBox(height: 8),
+                                        Text(
+                                          'Date: $formattedTimestamp',
+                                          style: const TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w400,
+                                            color: Color.fromARGB(255, 48, 48, 48),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 8),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text(
+                                              'Total Amount: ',
+                                              style: TextStyle(
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.w400,
+                                                color: Color.fromARGB(255, 48, 48, 48),
+                                              ),
+                                            ),
+                                            Text(
+                                              'RM${order.totalAmountValue}', // Use actual total amount from order data
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500,
+                                                color: Color.fromARGB(255, 48, 48, 48),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                        ],
+                        ),
                       ),
                     ),
-
-                  ), 
                   );
                 },
               );
