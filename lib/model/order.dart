@@ -1,31 +1,45 @@
-import 'package:secondhand_book_selling_platform/model/orderitem.dart';
-import 'package:secondhand_book_selling_platform/model/book.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'package:secondhand_book_selling_platform/model/orderitem.dart'; // Assuming the OrderItem model is imported
 
 class Order {
-  final String id;
-  final List<OrderItem> order;
-  final String deliveryMethod;
-  final String paymentMethod;
-  final DateTime timestamp;
-  // final String status;
-  final double totalAmountValue;
+  String id;
+  String userId;
+  String sellerId;
+  List<OrderItem> orderItems;
+  String deliveryMethod;
+  String paymentMethod;
+  double totalAmount;
+  Timestamp timestamp;
+  String status;
 
   Order({
     required this.id,
-    required this.order,
+    required this.userId,
+    required this.sellerId,
+    required this.orderItems,
     required this.deliveryMethod,
     required this.paymentMethod,
-    // this.deliveryMethod = 'Unknown',
-    // this.paymentMethod = 'Unknown',
+    required this.totalAmount,
     required this.timestamp,
-    // required this.status,
-    required this.totalAmountValue,
+    required this.status,
   });
 
-  String get getId => id;
-  List<OrderItem> get getOrder => order;
-  String get getDeliveryMethod => deliveryMethod;
-  String get getPaymentMethod => paymentMethod;
-  // String get getStatus => status;
-  double get getTotalAmountValue => totalAmountValue;
+  String get orderId => id;
+
+  String get userIdValue => userId;
+
+  String get sellerIdValue => sellerId;
+
+  List<OrderItem> get orderItemsList => orderItems;
+
+  String get deliveryMethodValue => deliveryMethod;
+
+  String get paymentMethodValue => paymentMethod;
+
+  double get totalAmountValue => totalAmount;
+
+  Timestamp get timestampValue => timestamp;
+
+  String get getOrderStatus => status;
 }

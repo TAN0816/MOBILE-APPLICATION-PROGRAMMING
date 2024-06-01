@@ -79,7 +79,7 @@ GoRouter router() {
         path: '/orderhistory/:userId',
         builder: (context, state) {
           final userId = state.pathParameters['userId']!;
-          return OrderHistory(userId: userId);
+          return MyOrderScreen(userId: userId!);
         },
       ),
       GoRoute(

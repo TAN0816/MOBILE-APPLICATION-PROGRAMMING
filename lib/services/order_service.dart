@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:secondhand_book_selling_platform/model/book.dart';
-import 'package:secondhand_book_selling_platform/services/user_service.dart';
+import 'package:secondhand_book_selling_platform/model/order.dart' as OrderList;
+import 'package:secondhand_book_selling_platform/model/orderitem.dart';
 
 class OrderService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -13,42 +14,82 @@ class OrderService {
     required String userId,
   }) async {
     try {
-      DocumentReference orderRef = _firestore.collection('orders').doc();
+      Map<String, List<Book>> booksBySeller = {};
+      Map<String, List<int>> quantitiesBySeller = {};
 
-      List<Map<String, dynamic>> bookData = [];
       for (int i = 0; i < books.length; i++) {
-        Map<String, dynamic> bookInfo = {
-          'bookId': books[i].id,
-          'name': books[i].name,
-          'quantity': quantities[i],
-        };
-        bookData.add(bookInfo);
+        String sellerId = books[i].sellerId;
+        if (!booksBySeller.containsKey(sellerId)) {
+          booksBySeller[sellerId] = [];
+          quantitiesBySeller[sellerId] = [];
+        }
+        booksBySeller[sellerId]!.add(books[i]);
+        quantitiesBySeller[sellerId]!.add(quantities[i]);
       }
 
-      Map<String, dynamic> orderData = {
-        'userId': userId,
-        'books': bookData,
-        'deliveryMethod': deliveryMethod,
-        'paymentMethod': paymentMethod,
-        'timestamp': FieldValue.serverTimestamp(),
-      };
-
-      await orderRef.set(orderData);
+      for (String sellerId in booksBySeller.keys) {
+        await _createOrderForSeller(
+          books: booksBySeller[sellerId]!,
+          quantities: quantitiesBySeller[sellerId]!,
+          deliveryMethod: deliveryMethod,
+          paymentMethod: paymentMethod,
+          userId: userId,
+          sellerId: sellerId,
+        );
+      }
 
       await _updateCartAndBookQuantities(books, quantities, userId);
 
-      print('Order placed successfully with ID: ${orderRef.id}');
+      print('All orders placed successfully');
     } catch (error) {
       print('Error placing order: $error');
-      throw error;
+      rethrow;
     }
+  }
+
+  Future<void> _createOrderForSeller({
+    required List<Book> books,
+    required List<int> quantities,
+    required String deliveryMethod,
+    required String paymentMethod,
+    required String userId,
+    required String sellerId,
+  }) async {
+    DocumentReference orderRef = _firestore.collection('orders').doc();
+
+    List<Map<String, dynamic>> bookData = [];
+    double totalAmount = 0;
+
+    for (int i = 0; i < books.length; i++) {
+      Map<String, dynamic> bookInfo = {
+        'bookId': books[i].id,
+        'name': books[i].name,
+        'images': books[i].images,
+        'quantity': quantities[i],
+      };
+      bookData.add(bookInfo);
+      totalAmount += (books[i].price * quantities[i]);
+    }
+
+    Map<String, dynamic> orderData = {
+      'userId': userId,
+      'books': bookData,
+      'sellerId': sellerId,
+      'deliveryMethod': deliveryMethod,
+      'paymentMethod': paymentMethod,
+      'totalAmount': totalAmount,
+      'timestamp': FieldValue.serverTimestamp(),
+      'status': "pending",
+    };
+
+    await orderRef.set(orderData);
+    print('Order placed successfully with ID: ${orderRef.id}');
   }
 
   Future<void> _updateCartAndBookQuantities(
       List<Book> books, List<int> quantities, String userId) async {
     WriteBatch batch = _firestore.batch();
 
-    // Fetch the user's cart
     DocumentReference cartRef = _firestore.collection('cart').doc(userId);
     DocumentSnapshot<Object?> cartSnapshot = await cartRef.get();
 
@@ -57,19 +98,16 @@ class OrderService {
       throw Exception('Cart does not exist');
     }
 
-    // Get the current cart list
     List<dynamic> cartList = cartSnapshot.get('cartList');
 
-    // Remove purchased items from the cart list
     for (int i = 0; i < books.length; i++) {
       cartList.removeWhere((item) => item['bookId'] == books[i].id);
-      // Reduce quantity of books in inventory
+
       DocumentReference bookRef =
           _firestore.collection('books').doc(books[i].id);
       batch.update(bookRef, {'quantity': FieldValue.increment(-quantities[i])});
     }
 
-    // Update the cart document with the new cart list
     batch.update(cartRef, {'cartList': cartList});
 
     try {
@@ -77,7 +115,129 @@ class OrderService {
       print('Batch commit successful');
     } catch (e) {
       print('Error committing batch: $e');
-      throw e;
+      rethrow;
+    }
+  }
+
+  Future<List<OrderList.Order>> getOrder(String userId) async {
+    try {
+      QuerySnapshot orderSnapshots = await _firestore
+          .collection('orders')
+          .where('userId', isEqualTo: userId)
+          .where('status', isEqualTo: 'pending')
+          .get();
+
+      if (orderSnapshots.docs.isEmpty) {
+        throw Exception('No orders found for user ID: $userId');
+      }
+
+      List<OrderList.Order> orders = [];
+
+      for (QueryDocumentSnapshot orderSnapshot in orderSnapshots.docs) {
+        Map<String, dynamic> orderData =
+            orderSnapshot.data()! as Map<String, dynamic>;
+
+        List<dynamic> booksData = orderData['books'] as List<dynamic>;
+
+        List<OrderItem> orderItems = booksData.map((bookData) {
+          return OrderItem(
+            bookId: bookData['bookId'],
+            name: bookData['name'],
+            images: (bookData['images'] as List<dynamic>).cast<String>(),
+            quantity: bookData['quantity'],
+          );
+        }).toList();
+
+        OrderList.Order order = OrderList.Order(
+          id: orderSnapshot.id,
+          userId: orderData['userId'],
+          sellerId: orderData['sellerId'],
+          orderItems: orderItems,
+          deliveryMethod: orderData['deliveryMethod'],
+          paymentMethod: orderData['paymentMethod'],
+          totalAmount: orderData['totalAmount'],
+          timestamp: orderData['timestamp'],
+          status: orderData['status'],
+        );
+
+        orders.add(order);
+        print(orders);
+      }
+
+      return orders;
+    } catch (error) {
+      print('Error retrieving orders: $error');
+
+      throw error;
+    }
+  }
+
+  Future<List<OrderList.Order>> getSellerCurrentOrder(
+      String sellerId, List<String> statuses) async {
+    try {
+      Query orderQuery = _firestore
+          .collection('orders')
+          .where('sellerId', isEqualTo: sellerId);
+
+      if (statuses.length == 1) {
+        orderQuery = orderQuery.where('status', isEqualTo: statuses[0]);
+      } else if (statuses.length > 1) {
+        orderQuery = orderQuery.where('status', whereIn: statuses);
+      }
+
+      QuerySnapshot orderSnapshots = await orderQuery.get();
+
+      List<OrderList.Order> orders = [];
+
+      for (QueryDocumentSnapshot orderSnapshot in orderSnapshots.docs) {
+        Map<String, dynamic> orderData =
+            orderSnapshot.data()! as Map<String, dynamic>;
+
+        List<dynamic> booksData = orderData['books'] as List<dynamic>;
+
+        List<OrderItem> orderItems = booksData.map((bookData) {
+          return OrderItem(
+            bookId: bookData['bookId'],
+            name: bookData['name'],
+            images: (bookData['images'] as List<dynamic>).cast<String>(),
+            quantity: bookData['quantity'],
+          );
+        }).toList();
+
+        OrderList.Order order = OrderList.Order(
+          id: orderSnapshot.id,
+          userId: orderData['userId'],
+          sellerId: orderData['sellerId'],
+          orderItems: orderItems,
+          deliveryMethod: orderData['deliveryMethod'],
+          paymentMethod: orderData['paymentMethod'],
+          totalAmount: orderData['totalAmount'],
+          timestamp: orderData['timestamp'],
+          status: orderData['status'],
+        );
+
+        orders.add(order);
+        print(orders);
+      }
+
+      return orders;
+    } catch (error) {
+      print('Error retrieving orders: $error');
+
+      throw error;
+    }
+  }
+
+  Future<void> updateOrderStatus(String orderId, String newStatus) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('orders')
+          .doc(orderId)
+          .update({'status': newStatus});
+      print('Order status updated successfully');
+    } catch (error) {
+      print('Error updating order status: $error');
+      throw error;
     }
   }
 }

@@ -21,7 +21,6 @@ class OrderHistoryService {
         List<OrderItem> orderItems = [];
         double totalAmountValue = 0.0;
 
-        // Check if the 'books' field exists and is not null
         if (doc['books'] != null) {
           for (var item in doc['books']) {
             var bookId = item['bookId']?.toString() ?? '';
@@ -36,9 +35,10 @@ class OrderHistoryService {
                     bookSnapshot.data() as Map<String, dynamic>,
                     bookSnapshot.id);
                 OrderItem orderItem = OrderItem(
-                  book: book,
+                  bookId: bookId,
+                  name: book.name,
+                  images: book.images,
                   quantity: quantity,
-                  id: bookId,
                 );
 
                 orderItems.add(orderItem);
@@ -48,19 +48,21 @@ class OrderHistoryService {
           }
         }
 
-        // Check if 'deliveryMethod' and 'paymentMethod' fields exist and are not null
         var deliveryMethod = doc['deliveryMethod']?.toString() ?? 'Unknown';
         var paymentMethod = doc['paymentMethod']?.toString() ?? 'Unknown';
-        var timestamp = (doc['timestamp'] as firestore.Timestamp).toDate();
-        // var status = doc['status']?.toString() ?? 'Unknown';
+        var timestamp = doc['timestamp'] as firestore.Timestamp;
+        var status = doc['status']?.toString() ?? 'Unknown';
 
         orders.add(Order(
           id: doc.id,
-          order: orderItems,
+          userId: doc['userId'],
+          sellerId: doc['sellerId'],
+          orderItems: orderItems,
           deliveryMethod: deliveryMethod,
           paymentMethod: paymentMethod,
+          totalAmount: totalAmountValue,
           timestamp: timestamp,
-          totalAmountValue: totalAmountValue,
+          status: status,
         ));
       }
 

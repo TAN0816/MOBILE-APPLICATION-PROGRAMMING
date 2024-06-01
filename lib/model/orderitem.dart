@@ -1,15 +1,18 @@
-import 'package:secondhand_book_selling_platform/model/book.dart';
-
 class OrderItem {
-  final Book book;
-  final int quantity;
-  final String id;
+  String bookId;
+  String name;
+  List<String> images;
+  int quantity;
 
-  OrderItem({required this.book, required this.quantity, required this.id});
+  OrderItem({
+    required this.bookId,
+    required this.name,
+    required this.images,
+    required this.quantity,
+  });
 
-  Book get getBook => book;
-
+  String get getBookId => bookId;
+  String get getName => name;
+  List<String> get getImage => images;
   int get getQuantity => quantity;
-
-  String get getId => id;
 }
