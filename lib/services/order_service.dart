@@ -227,4 +227,17 @@ class OrderService {
       throw error;
     }
   }
+
+  Future<void> updateOrderStatus(String orderId, String newStatus) async {
+  try {
+    await FirebaseFirestore.instance
+        .collection('orders')
+        .doc(orderId)
+        .update({'status': newStatus});
+    print('Order status updated successfully');
+  } catch (error) {
+    print('Error updating order status: $error');
+    throw error;
+  }
+}
 }

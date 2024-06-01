@@ -27,7 +27,7 @@ import '../screens/add_product.dart';
 
 GoRouter router() {
   return GoRouter(
-    initialLocation: '/sellerOrder',
+    initialLocation: '/',
     routes: [
       GoRoute(
         path: '/',
