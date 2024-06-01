@@ -34,15 +34,13 @@ class _OrderHistoryState extends State<OrderHistoryScreen> {
   }
 
   Color _getStatusColor(String status) {
+
     switch (status) {
       case 'completed':
         return Colors.green;
       case 'cancelled':
         return Colors.red;
-      case 'preparing':
-        return Colors.yellow;
-      case 'pending':
-        return Colors.orange;
+
       default:
         return Colors.black;
     }
@@ -68,6 +66,13 @@ class _OrderHistoryState extends State<OrderHistoryScreen> {
               return const Center(child: Text('No orders available'));
             } else {
               final orders = snapshot.data!;
+
+              // Filter orders based on status (completed or cancelled)
+              final filteredOrders = orders
+                  .where((order) =>
+                      order.status.toLowerCase() == 'completed' ||
+                      order.status.toLowerCase() == 'cancelled')
+                  .toList();
               return ListView.builder(
                 itemCount: orders.length,
                 itemBuilder: (context, index) {
@@ -77,6 +82,11 @@ class _OrderHistoryState extends State<OrderHistoryScreen> {
 
                   final status = order.status.toLowerCase();
                   final statusColor = _getStatusColor(status);
+
+                  // Filter out orders with status 'pending' or 'preparing'
+                  if (status != 'completed' && status != 'cancelled') {
+                    return Container(); // Return an empty container for excluded orders
+                  }
 
                   return Padding(
                     padding: const EdgeInsets.fromLTRB(0, 15.0, 0, 6.0),

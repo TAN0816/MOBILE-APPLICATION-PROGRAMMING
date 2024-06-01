@@ -38,6 +38,7 @@ class OrderHistoryService {
                   bookid: bookId,
                   name: book.name,
                   images: book.images,
+                  book: book,
                   quantity: quantity,
                 );
 
