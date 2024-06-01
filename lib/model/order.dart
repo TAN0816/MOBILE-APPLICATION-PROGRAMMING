@@ -6,7 +6,7 @@ class Order {
   String id;
   String userId;
   String sellerId;
-  List<OrderItem> orderItems; // Change to list of OrderItem
+  List<OrderItem> orderItems; 
   String deliveryMethod;
   String paymentMethod;
   double totalAmount;
@@ -16,33 +16,33 @@ class Order {
     required this.id,
     required this.userId,
     required this.sellerId,
-    required this.orderItems, // Change parameter name
+    required this.orderItems, 
     required this.deliveryMethod,
     required this.paymentMethod,
     required this.totalAmount,
     required this.timestamp,
   });
 
-  factory Order.fromDocument(DocumentSnapshot doc) {
-    List<OrderItem> orderItemsList = List.from(doc['orderItems']).map((orderItemData) {
-      return OrderItem(
-        bookid: orderItemData['orderId'],
-        name: orderItemData['name'],
-        quantity: orderItemData['quantity'],
-      );
-    }).toList();
+  // factory Order.fromDocument(DocumentSnapshot doc) {
+  //   List<OrderItem> orderItemsList = List.from(doc['orderItems']).map((orderItemData) {
+  //     return OrderItem(
+  //       bookid: orderItemData['orderId'],
+  //       name: orderItemData['name'],
+  //       quantity: orderItemData['quantity'],
+  //     );
+  //   }).toList();
 
-    return Order(
-      id: doc.id,
-      userId: doc['userId'],
-      sellerId: doc['sellerId'],
-      orderItems: orderItemsList,
-      deliveryMethod: doc['deliveryMethod'],
-      paymentMethod: doc['paymentMethod'],
-      totalAmount: doc['totalAmount'],
-      timestamp: doc['timestamp'],
-    );
-  }
+  //   return Order(
+  //     id: doc.id,
+  //     userId: doc['userId'],
+  //     sellerId: doc['sellerId'],
+  //     orderItems: orderItemsList,
+  //     deliveryMethod: doc['deliveryMethod'],
+  //     paymentMethod: doc['paymentMethod'],
+  //     totalAmount: doc['totalAmount'],
+  //     timestamp: doc['timestamp'],
+  //   );
+  // }
 
   String get orderId => id;
 
@@ -50,7 +50,7 @@ class Order {
 
   String get sellerIdValue => sellerId;
 
-  List<OrderItem> get orderItemsList => orderItems; // Adjust getter name
+  List<OrderItem> get orderItemsList => orderItems;
 
   String get deliveryMethodValue => deliveryMethod;
 

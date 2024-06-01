@@ -14,12 +14,11 @@ class OrderService {
     required String userId,
   }) async {
     try {
-      // Group books by sellerId
       Map<String, List<Book>> booksBySeller = {};
       Map<String, List<int>> quantitiesBySeller = {};
 
       for (int i = 0; i < books.length; i++) {
-        String sellerId = books[i].sellerId; // Assuming Book model has a sellerId field
+        String sellerId = books[i].sellerId;
         if (!booksBySeller.containsKey(sellerId)) {
           booksBySeller[sellerId] = [];
           quantitiesBySeller[sellerId] = [];
@@ -28,7 +27,6 @@ class OrderService {
         quantitiesBySeller[sellerId]!.add(quantities[i]);
       }
 
-      // Create separate orders for each seller
       for (String sellerId in booksBySeller.keys) {
         await _createOrderForSeller(
           books: booksBySeller[sellerId]!,
@@ -40,7 +38,6 @@ class OrderService {
         );
       }
 
-      // Update cart and book quantities
       await _updateCartAndBookQuantities(books, quantities, userId);
 
       print('All orders placed successfully');
@@ -67,10 +64,11 @@ class OrderService {
       Map<String, dynamic> bookInfo = {
         'bookId': books[i].id,
         'name': books[i].name,
+        'images': books[i].images,
         'quantity': quantities[i],
       };
       bookData.add(bookInfo);
-      totalAmount += (books[i].price * quantities[i]); // Calculate total amount
+      totalAmount += (books[i].price * quantities[i]);
     }
 
     Map<String, dynamic> orderData = {
@@ -79,8 +77,9 @@ class OrderService {
       'sellerId': sellerId,
       'deliveryMethod': deliveryMethod,
       'paymentMethod': paymentMethod,
-      'totalAmount': totalAmount, // Store total amount in order data
+      'totalAmount': totalAmount,
       'timestamp': FieldValue.serverTimestamp(),
+      'status': "pending",
     };
 
     await orderRef.set(orderData);
@@ -104,8 +103,8 @@ class OrderService {
     for (int i = 0; i < books.length; i++) {
       cartList.removeWhere((item) => item['bookId'] == books[i].id);
 
-      // Reduce quantity of books in inventory
-      DocumentReference bookRef = _firestore.collection('books').doc(books[i].id);
+      DocumentReference bookRef =
+          _firestore.collection('books').doc(books[i].id);
       batch.update(bookRef, {'quantity': FieldValue.increment(-quantities[i])});
     }
 
@@ -119,61 +118,56 @@ class OrderService {
       rethrow;
     }
   }
-Future<List<OrderList.Order>> getOrder(String userId) async {
-  try {
-    QuerySnapshot orderSnapshots = await _firestore
-        .collection('orders')
-        .where('userId', isEqualTo: userId)
-        .get();
 
-    if (orderSnapshots.docs.isEmpty) {
-      throw Exception('No orders found for user ID: $userId');
-    }
-
-    List<OrderList.Order> orders = [];
-
-    for (QueryDocumentSnapshot orderSnapshot in orderSnapshots.docs) {
-      // Retrieve order data as Map<String, dynamic>
-      Map<String, dynamic> orderData = orderSnapshot.data()! as Map<String, dynamic>;
-
-      // Retrieve order items
-      QuerySnapshot orderItemsSnapshot = await _firestore
+  Future<List<OrderList.Order>> getOrder(String userId) async {
+    try {
+      QuerySnapshot orderSnapshots = await _firestore
           .collection('orders')
-          .doc(orderSnapshot.id)
-          .collection('books')
+          .where('userId', isEqualTo: userId)
+          .where('status', isEqualTo: 'pending')
           .get();
 
-      // Convert Firestore documents to OrderItem objects
-      List<OrderItem> orderItems = orderItemsSnapshot.docs.map((doc) {
-        return OrderItem(
-          bookid: doc['orderId'],
-          name: doc['name'],
-          quantity: doc['quantity'],
+      if (orderSnapshots.docs.isEmpty) {
+        throw Exception('No orders found for user ID: $userId');
+      }
+
+      List<OrderList.Order> orders = [];
+
+      for (QueryDocumentSnapshot orderSnapshot in orderSnapshots.docs) {
+        Map<String, dynamic> orderData =
+            orderSnapshot.data()! as Map<String, dynamic>;
+
+        List<dynamic> booksData = orderData['books'] as List<dynamic>;
+
+        List<OrderItem> orderItems = booksData.map((bookData) {
+          return OrderItem(
+            bookid: bookData['bookId'],
+            name: bookData['name'],
+            images: (bookData['images'] as List<dynamic>).cast<String>(),
+            quantity: bookData['quantity'],
+          );
+        }).toList();
+
+        OrderList.Order order = OrderList.Order(
+          id: orderSnapshot.id,
+          userId: orderData['userId'],
+          sellerId: orderData['sellerId'],
+          orderItems: orderItems,
+          deliveryMethod: orderData['deliveryMethod'],
+          paymentMethod: orderData['paymentMethod'],
+          totalAmount: orderData['totalAmount'],
+          timestamp: orderData['timestamp'],
         );
-      }).toList();
 
-      // Construct the Order object
-      OrderList.Order order = OrderList.Order(
-        id: orderSnapshot.id,
-        userId: orderData['userId'],
-        sellerId: orderData['sellerId'],
-        orderItems: orderItems,
-        deliveryMethod: orderData['deliveryMethod'],
-        paymentMethod: orderData['paymentMethod'],
-        totalAmount: orderData['totalAmount'],
-        timestamp: orderData['timestamp'],
-      );
+        orders.add(order);
+        print(orders);
+      }
 
-      orders.add(order);
+      return orders;
+    } catch (error) {
+      print('Error retrieving orders: $error');
+
+      throw error;
     }
-
-    return orders;
-  } catch (error) {
-    print('Error retrieving orders: $error');
-    // Handle error gracefully, e.g., show a message to the user
-    throw error; // Rethrow the error to be handled by the caller
   }
-}
-
-
 }
