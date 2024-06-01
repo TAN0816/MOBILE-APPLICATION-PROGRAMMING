@@ -11,8 +11,7 @@ class Order {
   String paymentMethod;
   double totalAmount;
   Timestamp timestamp;
-  var status;
-
+  String status;
   Order({
     required this.id,
     required this.userId,
@@ -22,6 +21,7 @@ class Order {
     required this.paymentMethod,
     required this.totalAmount,
     required this.timestamp,
+    required this.status,
   });
 
   // factory Order.fromDocument(DocumentSnapshot doc) {
@@ -63,5 +63,6 @@ class Order {
 
   set cancellationReason(int cancellationReason) {}
 
+  String get getOrderStatus => status;
 
 }

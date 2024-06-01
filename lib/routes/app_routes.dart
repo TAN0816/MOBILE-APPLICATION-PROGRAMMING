@@ -17,6 +17,7 @@ import 'package:secondhand_book_selling_platform/screens/order/myorder.dart';
 import 'package:secondhand_book_selling_platform/screens/order/orderDetails.dart';
 import 'package:secondhand_book_selling_platform/screens/search.dart';
 import 'package:secondhand_book_selling_platform/screens/search_result_page.dart';
+import 'package:secondhand_book_selling_platform/screens/sellerOrderList.dart';
 import 'package:secondhand_book_selling_platform/screens/signup_email_password_screen.dart';
 
 import 'package:secondhand_book_selling_platform/screens/reset.dart';
@@ -188,6 +189,10 @@ GoRouter router() {
           );
         },
       ),
+      GoRoute(
+          path: '/sellerOrder',
+          name: 'sellerOrder',
+          builder: (context, state) => const SellerOrderList()),
     ],
   );
 }

@@ -187,7 +187,7 @@ class OrderService {
           deliveryMethod: orderData['deliveryMethod'],
           paymentMethod: orderData['paymentMethod'],
           totalAmount: orderData['totalAmount'],
-          timestamp: orderData['timestamp'],
+          timestamp: orderData['timestamp'], status: '',
         );
 
         orders.add(order);
@@ -217,4 +217,6 @@ class OrderService {
       throw e;
     }
   }
+
+  getSellerCurrentOrder(String sellerId, List<String> list) {}
 }

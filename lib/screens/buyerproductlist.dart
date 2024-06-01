@@ -80,7 +80,8 @@ class _BuyerList extends State<BuyerList> {
                                 borderRadius: BorderRadius.circular(20),
                                 borderSide: BorderSide.none,
                               ),
-                              contentPadding: const EdgeInsets.fromLTRB(16, 10, 0, 8),
+                              contentPadding:
+                                  const EdgeInsets.fromLTRB(16, 10, 0, 8),
                               suffixIcon: IconButton(
                                 icon: const Icon(Icons.search),
                                 onPressed: () {},
@@ -122,7 +123,8 @@ class _BuyerList extends State<BuyerList> {
                 SliverPadding(
                   padding: const EdgeInsets.all(8.0),
                   sliver: SliverGrid(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       childAspectRatio: 0.67,
                       mainAxisSpacing: 8.0,
@@ -131,7 +133,8 @@ class _BuyerList extends State<BuyerList> {
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
                         var book = books[index];
-                        var imageUrl = book.images.isNotEmpty ? book.images[0] : '';
+                        var imageUrl =
+                            book.images.isNotEmpty ? book.images[0] : '';
                         var bookName = book.name;
                         var bookPrice = book.price.toString();
                         var bookId = book.id.toString();
@@ -150,34 +153,53 @@ class _BuyerList extends State<BuyerList> {
                                     aspectRatio: 2,
                                     child: imageUrl.isNotEmpty
                                         ? (imageUrl.startsWith('http')
-                                            ? Image.network(imageUrl, fit: BoxFit.cover)
-                                            : Image.asset(imageUrl, fit: BoxFit.cover))
-                                        : Image.asset('assets/image5.png', fit: BoxFit.cover),
+                                            ? Image.network(imageUrl,
+                                                fit: BoxFit.cover)
+                                            : Image.asset(imageUrl,
+                                                fit: BoxFit.cover))
+                                        : Image.asset('assets/image5.png',
+                                            fit: BoxFit.cover),
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.fromLTRB(22.0, 15.0, 15.0, 6.0),
-                                  child: Text(bookName, style: const TextStyle(fontSize: 16)),
+                                  padding: const EdgeInsets.fromLTRB(
+                                      22.0, 15.0, 15.0, 6.0),
+                                  child: Text(bookName,
+                                      style: const TextStyle(fontSize: 16)),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(left: 22.0, right: 5.0),
+                                  padding: const EdgeInsets.only(
+                                      left: 22.0, right: 5.0),
                                   child: Row(
                                     children: [
                                       Text(
                                         'RM${double.parse(bookPrice).toStringAsFixed(2)}',
-                                        style: const TextStyle(fontSize: 16, color: Color(0xFF4A56C1)),
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            color: Color(0xFF4A56C1)),
                                       ),
                                       const Spacer(),
                                       IconButton(
-                                        icon: const Icon(Icons.add_shopping_cart_outlined, size: 18, color: Color(0xFF4A56C1)),
+                                        icon: const Icon(
+                                            Icons.add_shopping_cart_outlined,
+                                            size: 18,
+                                            color: Color(0xFF4A56C1)),
                                         onPressed: () {
-                                          CartService().addtoCart(bookId).then((_) {
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                              const SnackBar(content: Text('Product added to cart successfully')),
+                                          CartService()
+                                              .addtoCart(bookId)
+                                              .then((_) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                  content: Text(
+                                                      'Product added to cart successfully')),
                                             );
                                           }).catchError((error) {
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                              const SnackBar(content: Text('Failed to add product to cart')),
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                  content: Text(
+                                                      'Failed to add product to cart')),
                                             );
                                           });
                                         },
