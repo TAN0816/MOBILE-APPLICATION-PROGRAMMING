@@ -5,7 +5,7 @@ import 'package:secondhand_book_selling_platform/model/book.dart';
 import 'package:secondhand_book_selling_platform/services/cart_service.dart';
 
 class BuyerList extends StatefulWidget {
-  const BuyerList({Key? key}) : super(key: key);
+  const BuyerList({super.key});
 
   @override
   _BuyerList createState() => _BuyerList();
@@ -46,7 +46,7 @@ class _BuyerList extends State<BuyerList> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
+              SizedBox(
                 height: 60,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -63,7 +63,7 @@ class _BuyerList extends State<BuyerList> {
                       ),
                       Expanded(
                         child: Container(
-                          margin: EdgeInsets.symmetric(horizontal: 8.0),
+                          margin: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: TextField(
                             onTap: () {
                               GoRouter.of(context).go('/search');
@@ -72,7 +72,7 @@ class _BuyerList extends State<BuyerList> {
                               filled: true,
                               fillColor: Colors.grey[200],
                               hintText: 'Search Book Name',
-                              hintStyle: TextStyle(
+                              hintStyle: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w400,
                               ),
@@ -80,9 +80,9 @@ class _BuyerList extends State<BuyerList> {
                                 borderRadius: BorderRadius.circular(20),
                                 borderSide: BorderSide.none,
                               ),
-                              contentPadding: EdgeInsets.fromLTRB(16, 10, 0, 8),
+                              contentPadding: const EdgeInsets.fromLTRB(16, 10, 0, 8),
                               suffixIcon: IconButton(
-                                icon: Icon(Icons.search),
+                                icon: const Icon(Icons.search),
                                 onPressed: () {},
                               ),
                               suffixIconConstraints: const BoxConstraints(
@@ -103,11 +103,11 @@ class _BuyerList extends State<BuyerList> {
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Container(
                 height: 1,
-                margin: EdgeInsets.symmetric(horizontal: 10),
-                decoration: BoxDecoration(
+                margin: const EdgeInsets.symmetric(horizontal: 10),
+                decoration: const BoxDecoration(
                   color: Color.fromARGB(255, 203, 202, 202),
                 ),
               ),
@@ -116,13 +116,13 @@ class _BuyerList extends State<BuyerList> {
         ),
       ),
       body: books.isEmpty
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : CustomScrollView(
               slivers: [
                 SliverPadding(
                   padding: const EdgeInsets.all(8.0),
                   sliver: SliverGrid(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       childAspectRatio: 0.67,
                       mainAxisSpacing: 8.0,
@@ -156,20 +156,20 @@ class _BuyerList extends State<BuyerList> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.fromLTRB(22.0, 15.0, 15.0, 6.0),
-                                  child: Text(bookName, style: TextStyle(fontSize: 16)),
+                                  padding: const EdgeInsets.fromLTRB(22.0, 15.0, 15.0, 6.0),
+                                  child: Text(bookName, style: const TextStyle(fontSize: 16)),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.only(left: 22.0, right: 5.0),
+                                  padding: const EdgeInsets.only(left: 22.0, right: 5.0),
                                   child: Row(
                                     children: [
                                       Text(
                                         'RM${double.parse(bookPrice).toStringAsFixed(2)}',
-                                        style: TextStyle(fontSize: 16, color: Color(0xFF4A56C1)),
+                                        style: const TextStyle(fontSize: 16, color: Color(0xFF4A56C1)),
                                       ),
-                                      Spacer(),
+                                      const Spacer(),
                                       IconButton(
-                                        icon: Icon(Icons.add_shopping_cart_outlined, size: 18, color: Color(0xFF4A56C1)),
+                                        icon: const Icon(Icons.add_shopping_cart_outlined, size: 18, color: Color(0xFF4A56C1)),
                                         onPressed: () {
                                           CartService().addtoCart(bookId).then((_) {
                                             ScaffoldMessenger.of(context).showSnackBar(

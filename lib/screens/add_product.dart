@@ -1,7 +1,6 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:secondhand_book_selling_platform/model/user.dart';
 import 'dart:io';
 
 import 'package:secondhand_book_selling_platform/services/product_service.dart';
@@ -14,9 +13,9 @@ class AddNewBookPage extends StatefulWidget {
   // final Function()? onBookDeleted; // Add this line
 
   const AddNewBookPage({
-    Key? key,
+    super.key,
     this.onBookAdded,
-  }) : super(key: key);
+  });
   @override
   _AddNewBookPageState createState() => _AddNewBookPageState();
 }
@@ -172,7 +171,7 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
                               top: 0,
                               right: 0,
                               child: IconButton(
-                                icon: Icon(Icons.close),
+                                icon: const Icon(Icons.close),
                                 onPressed: () => _removeImage(index),
                               ),
                             ),
@@ -263,8 +262,8 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 16),
-              Text(
+              const SizedBox(height: 16),
+              const Text(
                 'Faculty',
                 style: TextStyle(
                   fontSize: 16,

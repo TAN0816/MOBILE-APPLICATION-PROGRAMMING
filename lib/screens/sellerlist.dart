@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:secondhand_book_selling_platform/screens/add_product.dart';
@@ -252,9 +251,9 @@ class _SellerList extends State<SellerList> {
             fetchBooks();
           }
         },
-        child: Icon(Icons.add, color: Colors.white),
-        backgroundColor: Color(0xff4a56c1),
+        backgroundColor: const Color(0xff4a56c1),
         elevation: 4,
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     
     );

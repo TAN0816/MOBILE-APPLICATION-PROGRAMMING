@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -6,21 +5,19 @@ import 'package:secondhand_book_selling_platform/model/book.dart';
 import 'package:secondhand_book_selling_platform/services/product_service.dart';
 import 'dart:io';
 
-import 'package:secondhand_book_selling_platform/services/user_service.dart';
-import 'package:secondhand_book_selling_platform/services/product_service.dart';
 
 class EditProductPage extends StatefulWidget {
   final String bookId;
   final Function()? onBookUpdate;
 
-  EditProductPage({required this.bookId, this.onBookUpdate});
+  const EditProductPage({super.key, required this.bookId, this.onBookUpdate});
 
   @override
   _EditProductPageState createState() => _EditProductPageState();
 }
 
 class _EditProductPageState extends State<EditProductPage> {
-  List<File> _images = [];
+  final List<File> _images = [];
 
   List<String> _existingImages = [];
   final _picker = ImagePicker();
@@ -54,7 +51,7 @@ class _EditProductPageState extends State<EditProductPage> {
     } catch (e) {
       print('Error fetching book details: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to load book details.')),
+        const SnackBar(content: Text('Failed to load book details.')),
       );
       setState(() {
         _isLoading = false;
@@ -64,24 +61,22 @@ class _EditProductPageState extends State<EditProductPage> {
 
   Future<void> _pickImages() async {
     final pickedFiles = await _picker.pickMultiImage();
-    if (pickedFiles != null) {
-      setState(() {
-        for (var pickedFile in pickedFiles) {
-          File file = File(pickedFile.path);
-          if (!_images.contains(file)) {
-            _images.add(file);
-          }
+    setState(() {
+      for (var pickedFile in pickedFiles) {
+        File file = File(pickedFile.path);
+        if (!_images.contains(file)) {
+          _images.add(file);
         }
-        // _images = pickedFiles.map((file) => File(file.path)).toList();
-      });
+      }
+      // _images = pickedFiles.map((file) => File(file.path)).toList();
+    });
     }
-  }
 
   Future<void> _updateBook() async {
     if (_images.isEmpty && _existingImages.isEmpty) {
       print('No images selected.');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please upload at least one image.')),
+        const SnackBar(content: Text('Please upload at least one image.')),
       );
       return;
     }
@@ -90,7 +85,7 @@ class _EditProductPageState extends State<EditProductPage> {
         _bookPriceController.text.isEmpty ||
         _bookDetailController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please fill in all the fields.')),
+        const SnackBar(content: Text('Please fill in all the fields.')),
       );
       return;
     }
@@ -164,28 +159,28 @@ class _EditProductPageState extends State<EditProductPage> {
         title: const Text('Edit Book'),
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : Padding(
               padding: const EdgeInsets.all(22.0),
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Upload book images',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Center(
                       child: ElevatedButton(
                         onPressed: _pickImages,
-                        child: Text('Upload '),
+                        child: const Text('Upload '),
                       ),
                     ),
-                    SizedBox(height: 12),
+                    const SizedBox(height: 12),
                     Wrap(
                       spacing: 10.0,
                       runSpacing: 10.0,
@@ -194,7 +189,7 @@ class _EditProductPageState extends State<EditProductPage> {
                           int index = _existingImages.indexOf(url);
                           return Stack(
                             children: [
-                              Container(
+                              SizedBox(
                                 width: 100,
                                 height: 100,
                                 child: Image.network(
@@ -206,18 +201,18 @@ class _EditProductPageState extends State<EditProductPage> {
                                 top: 0,
                                 right: 0,
                                 child: IconButton(
-                                  icon: Icon(Icons.close),
+                                  icon: const Icon(Icons.close),
                                   onPressed: () => _removeExistingImage(index),
                                 ),
                               ),
                             ],
                           );
-                        }).toList(),
+                        }),
                         ..._images.map((file) {
                           int index = _images.indexOf(file);
                           return Stack(
                             children: [
-                              Container(
+                              SizedBox(
                                 width: 100,
                                 height: 100,
                                 child: Image.file(
@@ -229,24 +224,24 @@ class _EditProductPageState extends State<EditProductPage> {
                                 top: 0,
                                 right: 0,
                                 child: IconButton(
-                                  icon: Icon(Icons.close),
+                                  icon: const Icon(Icons.close),
                                   onPressed: () => _removeNewImage(index),
                                 ),
                               ),
                             ],
                           );
-                        }).toList(),
+                        }),
                       ],
                     ),
-                    SizedBox(height: 16),
-                    Text(
+                    const SizedBox(height: 16),
+                    const Text(
                       'Book Name',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Container(
                       height: 63,
                       decoration: BoxDecoration(
@@ -257,7 +252,7 @@ class _EditProductPageState extends State<EditProductPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: TextField(
                           controller: _bookNameController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Enter book name',
                             hintStyle: TextStyle(color: Colors.grey),
@@ -265,8 +260,8 @@ class _EditProductPageState extends State<EditProductPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 16),
-                    Text(
+                    const SizedBox(height: 16),
+                    const Text(
                       'Book Price',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -282,7 +277,7 @@ class _EditProductPageState extends State<EditProductPage> {
                         child: TextField(
                           controller: _bookPriceController,
                           keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Enter book price',
                             hintStyle: TextStyle(color: Colors.grey),
@@ -290,15 +285,15 @@ class _EditProductPageState extends State<EditProductPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 16),
-                    Text(
+                    const SizedBox(height: 16),
+                    const Text(
                       'Book Detail',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Container(
                       height: 63,
                       decoration: BoxDecoration(
@@ -309,7 +304,7 @@ class _EditProductPageState extends State<EditProductPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: TextField(
                           controller: _bookDetailController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Enter book detail',
                             hintStyle: TextStyle(color: Colors.grey),
@@ -317,15 +312,15 @@ class _EditProductPageState extends State<EditProductPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 16),
-                    Text(
+                    const SizedBox(height: 16),
+                    const Text(
                       'Course',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Container(
                       height: 63,
                       width: double.infinity,
@@ -360,15 +355,15 @@ class _EditProductPageState extends State<EditProductPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 16),
-                    Text(
+                    const SizedBox(height: 16),
+                    const Text(
                       'Year',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Container(
                       height: 63,
                       width: double.infinity,
@@ -402,17 +397,17 @@ class _EditProductPageState extends State<EditProductPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 18),
+                    const SizedBox(height: 18),
                     Row(
                       children: [
                         Text(
                           'Quantity: $_quantity',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         IconButton(
                           icon: const Icon(Icons.remove),
                           onPressed: () {
@@ -431,19 +426,19 @@ class _EditProductPageState extends State<EditProductPage> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     Center(
-                      child: Container(
+                      child: SizedBox(
                         width: 263,
                         height: 56,
                         child: ElevatedButton(
                           onPressed: _updateBook,
                           style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(vertical: 16),
-                            textStyle: TextStyle(fontSize: 18),
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            textStyle: const TextStyle(fontSize: 18),
                             backgroundColor: const Color(0xff4a56c1),
                           ),
-                          child: Text(
+                          child: const Text(
                             'Update',
                             style: TextStyle(color: Colors.white),
                           ),

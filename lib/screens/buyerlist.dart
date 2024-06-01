@@ -227,7 +227,7 @@ class _BuyerList extends State<BuyerList> {
                           },
                           child: Card(
                             color: Colors.white, // Set card color to white
-                            margin: EdgeInsets.all(
+                            margin: const EdgeInsets.all(
                                 8.0), // Reduce the margin to make space between cards smaller
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -246,14 +246,14 @@ class _BuyerList extends State<BuyerList> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.fromLTRB(
+                                  padding: const EdgeInsets.fromLTRB(
                                       22.0, 15.0, 15.0, 6.0),
                                   child: Text(bookName,
-                                      style: TextStyle(fontSize: 16)),
+                                      style: const TextStyle(fontSize: 16)),
                                 ),
                                 Padding(
                                   padding:
-                                      EdgeInsets.only(left: 22.0, right: 5.0),
+                                      const EdgeInsets.only(left: 22.0, right: 5.0),
                                   child: Row(
                                     children: [
                                       Text(

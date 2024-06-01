@@ -271,7 +271,7 @@ class BookService {
       await _firestore.collection('books').doc(bookId).delete();
     } catch (e) {
       print('Error deleting book: $e');
-      throw e;
+      rethrow;
     }
   }
 }

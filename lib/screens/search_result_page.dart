@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:secondhand_book_selling_platform/model/book.dart';
 import 'package:secondhand_book_selling_platform/services/book_service.dart';
-import 'package:secondhand_book_selling_platform/services/cart_service.dart';
 
 class SearchResultsPage extends StatefulWidget {
   final String query;
@@ -12,13 +11,13 @@ class SearchResultsPage extends StatefulWidget {
   final List<String>? years;
 
   const SearchResultsPage({
-    Key? key,
+    super.key,
     required this.query,
     this.minPrice,
     this.maxPrice,
     this.faculty,
     this.years,
-  }) : super(key: key);
+  });
 
   @override
   _SearchResultsPageState createState() => _SearchResultsPageState();
@@ -147,19 +146,19 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Filter',
+                    const Text('Filter',
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold)),
                     IconButton(
-                      icon: Icon(Icons.close),
+                      icon: const Icon(Icons.close),
                       onPressed: () {
                         Navigator.pop(context);
                       },
                     ),
                   ],
                 ),
-                SizedBox(height: 16),
-                Text('Price Range'),
+                const SizedBox(height: 16),
+                const Text('Price Range'),
                 Row(
                   children: [
                     Expanded(
@@ -173,11 +172,11 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                         keyboardType: TextInputType.number,
                       ),
                     ),
-                    SizedBox(width: 16),
+                    const SizedBox(width: 16),
                     Expanded(
                       child: TextField(
                         controller: _maxPriceController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Max Price',
                           prefixText: 'RM',
                           border: OutlineInputBorder(),
@@ -187,17 +186,17 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                     ),
                   ],
                 ),
-                SizedBox(height: 16),
-                Text('Faculty'),
+                const SizedBox(height: 16),
+                const Text('Faculty'),
                 ListTile(
                   title: Text(selectedFaculty ?? 'Select Faculty'),
-                  trailing: Icon(Icons.arrow_drop_down),
+                  trailing: const Icon(Icons.arrow_drop_down),
                   onTap: () {
                     _showFacultySelection();
                   },
                 ),
-                SizedBox(height: 16),
-                Text('Year'),
+                const SizedBox(height: 16),
+                const Text('Year'),
                 Wrap(
                   spacing: 8.0,
                   runSpacing: 4.0,
@@ -218,7 +217,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                     );
                   }).toList(),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -235,9 +234,9 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.black,
                         backgroundColor: Colors.white,
-                        side: BorderSide(color: Colors.black),
+                        side: const BorderSide(color: Colors.black),
                       ),
-                      child: Text('Reset'),
+                      child: const Text('Reset'),
                     ),
                     ElevatedButton(
                       onPressed: () {
@@ -250,7 +249,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                         _searchAndFilterBooks(widget.query, minPrice, maxPrice,
                             selectedFaculty, selectedYears.toList());
                       },
-                      child: Text('Apply'),
+                      child: const Text('Apply'),
                     ),
                   ],
                 ),
@@ -279,18 +278,18 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Faculty',
+                    const Text('Faculty',
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold)),
                     IconButton(
-                      icon: Icon(Icons.close),
+                      icon: const Icon(Icons.close),
                       onPressed: () {
                         Navigator.pop(context);
                       },
                     ),
                   ],
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Expanded(
                   child: ListView(
                     children: [
@@ -318,12 +317,12 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                     }).toList(),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Center(child: Text('Apply')),
+                  child: const Center(child: Text('Apply')),
                 ),
               ],
             ),
@@ -413,17 +412,17 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                     SliverToBoxAdapter(
                       child: Container(
                         color: Colors.white,
-                        padding: EdgeInsets.symmetric(vertical: 3.0),
+                        padding: const EdgeInsets.symmetric(vertical: 3.0),
                         child: Center(
                           child: TextButton.icon(
                             onPressed: _toggleSortOrder,
-                            icon: Icon(Icons.sort,
+                            icon: const Icon(Icons.sort,
                                 color: Color.fromARGB(255, 87, 86, 86)),
                             label: Text(
                               _isAscending
                                   ? 'Price: lowest to highest'
                                   : 'Price: highest to lowest',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Color.fromARGB(255, 87, 86, 86)),
                             ),
                           ),
@@ -448,7 +447,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                       ),
                     ),
                     SliverPadding(
-                      padding: EdgeInsets.symmetric(vertical: 12.0),
+                      padding: const EdgeInsets.symmetric(vertical: 12.0),
                       sliver: SliverToBoxAdapter(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -456,7 +455,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                             alignment: Alignment.center,
                             child: Text(
                               '${_searchResults.length} Results Found',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 16,
                               ),
                             ),
@@ -483,7 +482,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                             },
                             child: Card(
                               color: Colors.white,
-                              margin: EdgeInsets.all(8.0),
+                              margin: const EdgeInsets.all(8.0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [

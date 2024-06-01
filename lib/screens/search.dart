@@ -103,7 +103,7 @@ class _SearchPageState extends State<SearchPage> {
                         borderSide: BorderSide.none,
                       ),
                       suffixIcon: IconButton(
-                        icon: Icon(Icons.search),
+                        icon: const Icon(Icons.search),
                         onPressed: () => _onSearchButtonPressed(context), // Trigger search on button click
                       ),
                     ),
@@ -111,17 +111,17 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               ],
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                const Text(
                   'Recently Searched',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 TextButton(
                   onPressed: () => _clearSearchHistory(context),
-                  child: Text('Clear History'),
+                  child: const Text('Clear History'),
                 ),
               ],
             ),
@@ -130,7 +130,7 @@ class _SearchPageState extends State<SearchPage> {
               child: ListView(
                 children: userState.searchHistory
                     .map((query) => ListTile(
-                          leading: Icon(Icons.history, color: Colors.grey),
+                          leading: const Icon(Icons.history, color: Colors.grey),
                           title: Text(query),
                           onTap: () => _onHistoryItemPressed(context, query),
                         ))

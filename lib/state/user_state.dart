@@ -9,7 +9,7 @@ class UserState extends ChangeNotifier {
 
   UserModel? userState;
   UserService userService = UserService();
-  List<String> _searchHistory = [];
+  final List<String> _searchHistory = [];
   UserModel? get getUserState => userState;
   List<String> get searchHistory => _searchHistory;
 
