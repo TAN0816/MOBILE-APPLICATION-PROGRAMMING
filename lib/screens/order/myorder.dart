@@ -154,7 +154,7 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                                               ),
                                             ),
                                             Text(
-                                              'RM${order.totalAmountValue}', // Use actual total amount from order data
+                                              'RM${order.totalAmountValue.toStringAsFixed(2)}', // Use actual total amount from order data
                                               style: const TextStyle(
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w500,

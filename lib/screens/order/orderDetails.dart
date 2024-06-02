@@ -347,7 +347,7 @@ class OrderDetailsCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                        'RM${item.getBook.getPrice}'), // Accessing price from Book object
+                        'RM${item.getBook.getPrice.toStringAsFixed(2)}'), // Accessing price from Book object
                   ],
                 ),
               ),
@@ -367,7 +367,7 @@ class OrderDetailsCard extends StatelessWidget {
               children: [
                 Text('Subtotal'),
                 Text(
-                    'RM${orderData.totalAmountValue}'), // Use total amount from order data
+                    'RM${orderData.totalAmountValue.toStringAsFixed(2)}'), // Use total amount from order data
               ],
             ),
             Row(
@@ -386,7 +386,7 @@ class OrderDetailsCard extends StatelessWidget {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  'RM${orderData.totalAmountValue + 3.00}', // Total payment calculation
+                  'RM${(orderData.totalAmountValue + 3.00).toStringAsFixed(2)}', 
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ],

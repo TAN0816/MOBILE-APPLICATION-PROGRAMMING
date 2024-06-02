@@ -180,7 +180,7 @@ class _OrderHistoryState extends State<OrderHistoryScreen> {
                                               ),
                                             ),
                                             Text(
-                                              'RM${order.totalAmountValue}',
+                                              'RM${order.totalAmountValue.toStringAsFixed(2)}',
                                               style: const TextStyle(
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w500,
