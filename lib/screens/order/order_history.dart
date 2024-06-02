@@ -91,7 +91,7 @@ class _OrderHistoryState extends State<OrderHistoryScreen> {
 
                   return InkWell(
                     onTap: () {
-                      GoRouter.of(context).go('/orderDetails/${order.id}');
+                      GoRouter.of(context).push('/orderDetails/${order.id}');
                     },
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(0, 15.0, 0, 6.0),

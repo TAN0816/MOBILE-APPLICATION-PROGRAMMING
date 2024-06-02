@@ -75,7 +75,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context); // Corrected back navigation
+           
+              Navigator.pop(context);  
           },
         ),
       ),
@@ -224,6 +225,18 @@ class OrderInformationCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Name: ',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Expanded(
+                  child: Text(userData.username ?? 'N/A'),
+                ),
+              ],
+            ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
