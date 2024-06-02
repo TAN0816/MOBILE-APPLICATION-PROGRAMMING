@@ -19,7 +19,7 @@ import 'package:secondhand_book_selling_platform/screens/search.dart';
 import 'package:secondhand_book_selling_platform/screens/search_result_page.dart';
 import 'package:secondhand_book_selling_platform/screens/sellerOrderList.dart';
 import 'package:secondhand_book_selling_platform/screens/signup_email_password_screen.dart';
-import 'package:secondhand_book_selling_platform/screens/order_history.dart';
+import 'package:secondhand_book_selling_platform/screens/order/order_history.dart';
 import 'package:secondhand_book_selling_platform/screens/reset.dart';
 import 'package:secondhand_book_selling_platform/screens/product/productdetailbuyer.dart';
 import 'package:secondhand_book_selling_platform/screens/product/productdetailseller.dart';

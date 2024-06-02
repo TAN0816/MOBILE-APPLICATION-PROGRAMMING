@@ -159,33 +159,37 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: 16),
-                                SizedBox(
-                                  width: 284,
-                                  height: 45,
-                                  child: OutlinedButton(
-                                    onPressed: () {
-                                      showModalBottomSheet(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return CancelOrderForm(
-                                              orderId: widget.orderId);
-                                        },
-                                      );
-                                    },
-                                    style: OutlinedButton.styleFrom(
-                                      side: BorderSide(color: Colors.grey),
-                                    ),
-                                    child: Text(
-                                      "Cancel Order",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w700,
-                                        color: Colors.black,
+                                if (selectedOrder.status != "Cancelled" &&
+                                    selectedOrder.status != "Completed")
+                                  SizedBox(height: 16),
+                                if (selectedOrder.status != "Cancelled" &&
+                                    selectedOrder.status != "Completed")
+                                  SizedBox(
+                                    width: 284,
+                                    height: 45,
+                                    child: OutlinedButton(
+                                      onPressed: () {
+                                        showModalBottomSheet(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return CancelOrderForm(
+                                                orderId: widget.orderId);
+                                          },
+                                        );
+                                      },
+                                      style: OutlinedButton.styleFrom(
+                                        side: BorderSide(color: Colors.grey),
+                                      ),
+                                      child: Text(
+                                        "Cancel Order",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.black,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
                               ],
                             ),
                           ),
