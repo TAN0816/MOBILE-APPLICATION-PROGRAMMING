@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:secondhand_book_selling_platform/services/firebase_auth_methods.dart';
+import 'package:secondhand_book_selling_platform/services/notification_service.dart';
 import 'package:secondhand_book_selling_platform/services/user_service.dart';
 import 'package:secondhand_book_selling_platform/model/user.dart';
 // import 'package:secondhand_book_selling_platform/state/user_state.dart';
@@ -149,6 +150,8 @@ class _MeScreenState extends State<MeScreen> {
                                           .signOut(context);
 
                                       if (!context.mounted) return;
+                                      NotificationService()
+                                          .setDeviceTokenToNull(userId);
                                       context.pop(context);
                                       context.go('/');
                                     },
@@ -420,9 +423,9 @@ class _MeScreenState extends State<MeScreen> {
                 borderRadius: BorderRadius.zero,
               ),
             ),
-      onPressed: () {
-  context.push('/myorders');
-},
+            onPressed: () {
+              context.push('/myorders');
+            },
             child: Container(
               margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               padding: const EdgeInsets.fromLTRB(20.0, 20, 20.0, 20.0),

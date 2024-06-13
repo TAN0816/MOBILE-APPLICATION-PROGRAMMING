@@ -97,7 +97,7 @@ GoRouter router() {
       ),
       GoRoute(
         path: '/myorders',
-          builder: (context, state) => const MyOrderScreen(),
+        builder: (context, state) => const MyOrderScreen(),
       ),
       GoRoute(
         path: '/add_product',
@@ -165,14 +165,14 @@ GoRouter router() {
         },
       ),
       GoRoute(
-            path: '/orderDetails/:orderId',
-            builder: (context, state) {
-              final orderId = state.pathParameters['orderId'];
-              // Retrieve order details based on orderId
-              // For now, returning a placeholder widget
-              return OrderDetailsScreen(orderId: orderId!);
-            },
-          ),
+        path: '/orderDetails/:orderId',
+        builder: (context, state) {
+          final orderId = state.pathParameters['orderId'];
+          // Retrieve order details based on orderId
+          // For now, returning a placeholder widget
+          return OrderDetailsScreen(orderId: orderId!);
+        },
+      ),
       GoRoute(
         path: '/checkout',
         name: 'checkout',

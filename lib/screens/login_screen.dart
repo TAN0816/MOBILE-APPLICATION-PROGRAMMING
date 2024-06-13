@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:secondhand_book_selling_platform/services/notification_service.dart';
+import 'package:secondhand_book_selling_platform/services/user_service.dart';
 import 'package:secondhand_book_selling_platform/widgets/custom_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -231,12 +233,15 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
                             // Button to navigate to the home screen
                             ElevatedButton(
                               onPressed: () {
+                                NotificationService()
+                                    .storeDeviceToken(UserService().getUserId);
                                 // Navigate to the home screen
                                 context.go('/home');
                               },
                               style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(
-                                  const Color(0xff4a56c1), // Set background color
+                                  const Color(
+                                      0xff4a56c1), // Set background color
                                 ),
                                 shape: MaterialStateProperty.all<
                                     RoundedRectangleBorder>(

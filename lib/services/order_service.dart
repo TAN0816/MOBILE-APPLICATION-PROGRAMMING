@@ -2,9 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:secondhand_book_selling_platform/model/book.dart';
 import 'package:secondhand_book_selling_platform/model/order.dart' as OrderList;
 import 'package:secondhand_book_selling_platform/model/orderitem.dart';
+import 'package:secondhand_book_selling_platform/services/notification_service.dart';
 
 class OrderService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  NotificationService notificationService = NotificationService();
 
   Future<void> placeOrder({
     required List<Book> books,
@@ -28,7 +30,7 @@ class OrderService {
       }
 
       for (String sellerId in booksBySeller.keys) {
-        await _createOrderForSeller(
+        String orderId = await _createOrderForSeller(
           books: booksBySeller[sellerId]!,
           quantities: quantitiesBySeller[sellerId]!,
           deliveryMethod: deliveryMethod,
@@ -36,8 +38,20 @@ class OrderService {
           userId: userId,
           sellerId: sellerId,
         );
+        notificationService.saveNotification(
+            sellerId, 'New order', 'You have a new order $orderId.');
+        notificationService.sendMessage(
+            notificationService.getUserDeviceToken(sellerId),
+            'New order',
+            'You have a new order $orderId.');
       }
+      notificationService.saveNotification(
+          userId, 'Order Placed', 'Your order has been placed.');
 
+      notificationService.sendMessage(
+          notificationService.getUserDeviceToken(userId),
+          'Order Placed',
+          'Your order has been placed.');
       await _updateCartAndBookQuantities(books, quantities, userId);
 
       print('All orders placed successfully');
@@ -47,7 +61,7 @@ class OrderService {
     }
   }
 
-  Future<void> _createOrderForSeller({
+  Future<String> _createOrderForSeller({
     required List<Book> books,
     required List<int> quantities,
     required String deliveryMethod,
@@ -84,6 +98,7 @@ class OrderService {
 
     await orderRef.set(orderData);
     print('Order placed successfully with ID: ${orderRef.id}');
+    return orderRef.id;
   }
 
   Future<void> _updateCartAndBookQuantities(
@@ -145,8 +160,7 @@ class OrderService {
     }
   }
 
-
-    Future<void> _checkBookQuantitiesAndUpdateStatus(List<Book> books) async {
+  Future<void> _checkBookQuantitiesAndUpdateStatus(List<Book> books) async {
     for (var book in books) {
       DocumentReference bookRef = _firestore.collection('books').doc(book.id);
       DocumentSnapshot bookSnapshot = await bookRef.get();
@@ -352,11 +366,32 @@ class OrderService {
 
   Future<void> updateOrderStatus(String orderId, String newStatus) async {
     try {
+      final orderDoc = await FirebaseFirestore.instance
+          .collection('orders')
+          .doc(orderId)
+          .get();
+      if (!orderDoc.exists) {
+        print('Order not found');
+        return;
+      }
+
+      // Extract userId from order document
+      final userId = orderDoc['userId'] as String?;
+      if (userId == null) {
+        print('UserId not found in order document');
+        return;
+      }
+
       await FirebaseFirestore.instance
           .collection('orders')
           .doc(orderId)
           .update({'status': newStatus});
       print('Order status updated successfully');
+
+      notificationService.sendMessage(
+          notificationService.getUserDeviceToken(userId),
+          'Order Status Update',
+          'Your order status: $orderId has changed to $newStatus.');
     } catch (error) {
       print('Error updating order status: $error');
       throw error;
