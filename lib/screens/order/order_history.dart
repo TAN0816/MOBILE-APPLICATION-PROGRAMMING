@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:secondhand_book_selling_platform/screens/order/orderDetails.dart';
 import 'package:secondhand_book_selling_platform/services/order_history_service.dart';
 import 'package:secondhand_book_selling_platform/model/order.dart' as Orderitem;
-import 'package:secondhand_book_selling_platform/services/user_service.dart';
 // Import your order details screen
 
 class OrderHistoryScreen extends StatefulWidget {
   final String userId;
 
-  const OrderHistoryScreen({Key? key, required this.userId}) : super(key: key);
+  const OrderHistoryScreen({super.key, required this.userId});
 
   @override
   _OrderHistoryState createState() => _OrderHistoryState();
@@ -32,7 +30,7 @@ class _OrderHistoryState extends State<OrderHistoryScreen> {
       return orders;
     } catch (error) {
       print('Error fetching orders: $error');
-      throw error;
+      rethrow;
     }
   }
 
@@ -205,7 +203,7 @@ class _OrderHistoryState extends State<OrderHistoryScreen> {
                                     borderRadius: BorderRadius.circular(
                                         10), // Adjust the radius as needed
                                   ),
-                                  padding: EdgeInsets.symmetric(
+                                  padding: const EdgeInsets.symmetric(
                                       horizontal: 10, vertical: 5),
                                   child: Text(
                                     // 'Status: ${order.status}',

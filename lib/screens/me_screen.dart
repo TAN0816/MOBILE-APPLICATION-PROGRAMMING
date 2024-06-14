@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:secondhand_book_selling_platform/services/firebase_auth_methods.dart';
+import 'package:secondhand_book_selling_platform/services/rating_service.dart';
 import 'package:secondhand_book_selling_platform/services/user_service.dart';
 import 'package:secondhand_book_selling_platform/model/user.dart';
 // import 'package:secondhand_book_selling_platform/state/user_state.dart';
@@ -23,8 +24,11 @@ class _MeScreenState extends State<MeScreen> {
   String imageUrl = '';
   File? _imageFile;
   String role = '';
-  static const sellerRating = 4;
-
+  final RatingService _ratingService = RatingService();
+  int sellerRating = 0;
+  int sellerOrderNumber = 0;
+  int buyerOrderNumber = 0;
+  int buyerOrderHistory = 0;
   @override
   void initState() {
     super.initState();
@@ -41,6 +45,22 @@ class _MeScreenState extends State<MeScreen> {
       imageUrl = user.getImage;
       role = user.getRole;
     });
+    if (role == "Seller") {
+      int rating = await _ratingService.getSellerRating(userId);
+      int orderNo = await userService.getSellerOrderNumber(userId);
+      setState(() {
+        sellerRating = rating;
+        sellerOrderNumber = orderNo;
+      });
+    }
+    else{
+      int orderNo=await userService.getBuyerOrderNumber(userId);
+       int  orderhistory= await userService.getBuyerOrderHistory(userId);
+      setState(() {
+        buyerOrderNumber = orderNo;
+        buyerOrderHistory = orderhistory;
+      });
+    }
   }
 
   @override
@@ -283,13 +303,13 @@ class _MeScreenState extends State<MeScreen> {
                   ),
                 ),
               ),
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'My orders',
                         style: TextStyle(
                           color: Colors.black,
@@ -297,8 +317,8 @@ class _MeScreenState extends State<MeScreen> {
                         ),
                       ),
                       Text(
-                        'Already have 12 orders',
-                        style: TextStyle(
+                        'Already have $sellerOrderNumber orders',
+                        style: const TextStyle(
                           color: Color.fromARGB(100, 0, 0, 0),
                           fontSize: 15,
                           fontWeight: FontWeight.w500,
@@ -306,7 +326,7 @@ class _MeScreenState extends State<MeScreen> {
                       ),
                     ],
                   ),
-                  Icon(Icons.arrow_forward_ios_rounded),
+                  const Icon(Icons.arrow_forward_ios_rounded),
                 ],
               ),
             )),
@@ -420,9 +440,9 @@ class _MeScreenState extends State<MeScreen> {
                 borderRadius: BorderRadius.zero,
               ),
             ),
-      onPressed: () {
-  context.push('/myorders');
-},
+            onPressed: () {
+              context.push('/myorders');
+            },
             child: Container(
               margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               padding: const EdgeInsets.fromLTRB(20.0, 20, 20.0, 20.0),
@@ -434,13 +454,13 @@ class _MeScreenState extends State<MeScreen> {
                   ),
                 ),
               ),
-              child: const Row(
+              child:  Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'My orders',
                         style: TextStyle(
                           color: Colors.black,
@@ -448,8 +468,8 @@ class _MeScreenState extends State<MeScreen> {
                         ),
                       ),
                       Text(
-                        'Already have 12 orders',
-                        style: TextStyle(
+                        'Already have $buyerOrderNumber orders',
+                        style: const TextStyle(
                           color: Color.fromARGB(100, 0, 0, 0),
                           fontSize: 15,
                           fontWeight: FontWeight.w500,
@@ -457,7 +477,7 @@ class _MeScreenState extends State<MeScreen> {
                       ),
                     ],
                   ),
-                  Icon(Icons.arrow_forward_ios_rounded),
+                  const Icon(Icons.arrow_forward_ios_rounded),
                 ],
               ),
             )),
@@ -482,13 +502,13 @@ class _MeScreenState extends State<MeScreen> {
                   ),
                 ),
               ),
-              child: const Row(
+              child:  Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'Order History',
                         style: TextStyle(
                           color: Colors.black,
@@ -496,8 +516,8 @@ class _MeScreenState extends State<MeScreen> {
                         ),
                       ),
                       Text(
-                        '15 orders had made',
-                        style: TextStyle(
+                        '$buyerOrderHistory had made',
+                        style: const TextStyle(
                           color: Color.fromARGB(100, 0, 0, 0),
                           fontSize: 15,
                           fontWeight: FontWeight.w500,
@@ -505,7 +525,7 @@ class _MeScreenState extends State<MeScreen> {
                       ),
                     ],
                   ),
-                  Icon(Icons.arrow_forward_ios_rounded),
+                  const Icon(Icons.arrow_forward_ios_rounded),
                 ],
               ),
             )),

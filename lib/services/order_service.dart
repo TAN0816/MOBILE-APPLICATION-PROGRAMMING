@@ -141,7 +141,7 @@ class OrderService {
       return book;
     } catch (error) {
       print('Error retrieving book: $error');
-      throw error;
+      rethrow;
     }
   }
 
@@ -215,7 +215,7 @@ class OrderService {
       return orders;
     } catch (error) {
       print('Error retrieving orders: $error');
-      throw error;
+      rethrow;
     }
   }
 
@@ -263,7 +263,7 @@ class OrderService {
       return order;
     } catch (error) {
       print('Error retrieving order: $error');
-      throw error;
+      rethrow;
     }
   }
 
@@ -280,7 +280,7 @@ class OrderService {
       print('Order status and reasons updated successfully');
     } catch (e) {
       print('Error updating order status and reasons: $e');
-      throw e;
+      rethrow;
     }
   }
 
@@ -346,7 +346,7 @@ class OrderService {
       return orders;
     } catch (error) {
       print('Error retrieving orders: $error');
-      throw error;
+      rethrow;
     }
   }
 
@@ -359,7 +359,7 @@ class OrderService {
       print('Order status updated successfully');
     } catch (error) {
       print('Error updating order status: $error');
-      throw error;
+      rethrow;
     }
   }
 }

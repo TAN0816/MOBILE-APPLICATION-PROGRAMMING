@@ -48,8 +48,46 @@ class UserService {
       address: userData['address'] ?? "",
       role: userData['role'],
       image: userData['image'] ?? "",
-      
     );
     return user;
+  }
+
+  Future<int> getSellerOrderNumber(String sellerId) async {
+    try {
+      QuerySnapshot orderSnapshot = await FirebaseFirestore.instance
+          .collection('orders')
+          .where('sellerId', isEqualTo: sellerId)
+          .get();
+      return orderSnapshot.size;
+    } catch (e) {
+      print("Error getting seller order number: $e");
+      return 0;
+    }
+  }
+
+  Future<int> getBuyerOrderNumber(String userId) async {
+    try {
+      QuerySnapshot orderSnapshot = await FirebaseFirestore.instance
+          .collection('orders')
+          .where('userId', isEqualTo: userId)
+          .where('status', whereIn: ['Pending', 'Preparing']).get();
+      return orderSnapshot.size;
+    } catch (e) {
+      print("Error getting seller order number: $e");
+      return 0;
+    }
+  }
+
+  Future<int> getBuyerOrderHistory(String userId) async {
+    try {
+      QuerySnapshot orderSnapshot = await FirebaseFirestore.instance
+          .collection('orders')
+          .where('userId', isEqualTo: userId)
+          .where('status', whereIn: ['Cancelled', 'Completed']).get();
+      return orderSnapshot.size;
+    } catch (e) {
+      print("Error getting seller order number: $e");
+      return 0;
+    }
   }
 }

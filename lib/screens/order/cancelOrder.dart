@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:secondhand_book_selling_platform/model/order.dart';
 import 'package:secondhand_book_selling_platform/services/order_service.dart';
 
 class CancelOrderForm extends StatefulWidget {
   final String orderId;
 
-  const CancelOrderForm({required this.orderId});
+  const CancelOrderForm({super.key, required this.orderId});
 
   @override
   _CancelOrderFormState createState() => _CancelOrderFormState();
@@ -15,7 +14,7 @@ class CancelOrderForm extends StatefulWidget {
 class _CancelOrderFormState extends State<CancelOrderForm> {
   int? _selectedReason;
   bool _isReasonSelected = false;
-  OrderService _orderService = OrderService();
+  final OrderService _orderService = OrderService();
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +26,7 @@ class _CancelOrderFormState extends State<CancelOrderForm> {
         children: [
           Row(
             children: [
-              Expanded(
+              const Expanded(
                 child: Center(
                   child: Text(
                     'Select the Cancellation Reason',
@@ -36,16 +35,16 @@ class _CancelOrderFormState extends State<CancelOrderForm> {
                 ),
               ),
               IconButton(
-                icon: Icon(Icons.close),
+                icon: const Icon(Icons.close),
                 onPressed: () {
                   Navigator.pop(context);
                 },
               ),
             ],
           ),
-          Divider(),
+          const Divider(),
           RadioListTile<int>(
-            title: Text('Need to change delivery address'),
+            title: const Text('Need to change delivery address'),
             value: 1,
             groupValue: _selectedReason,
             onChanged: (int? value) {
@@ -56,7 +55,7 @@ class _CancelOrderFormState extends State<CancelOrderForm> {
             },
           ),
           RadioListTile<int>(
-            title: Text('Modify existing order (quantity, etc.)'),
+            title: const Text('Modify existing order (quantity, etc.)'),
             value: 2,
             groupValue: _selectedReason,
             onChanged: (int? value) {
@@ -67,7 +66,7 @@ class _CancelOrderFormState extends State<CancelOrderForm> {
             },
           ),
           RadioListTile<int>(
-            title: Text('Seller is not responsive to my inquiries'),
+            title: const Text('Seller is not responsive to my inquiries'),
             value: 3,
             groupValue: _selectedReason,
             onChanged: (int? value) {
@@ -78,7 +77,7 @@ class _CancelOrderFormState extends State<CancelOrderForm> {
             },
           ),
           RadioListTile<int>(
-            title: Text('Others'),
+            title: const Text('Others'),
             value: 4,
             groupValue: _selectedReason,
             onChanged: (int? value) {
@@ -88,7 +87,7 @@ class _CancelOrderFormState extends State<CancelOrderForm> {
               });
             },
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Center(
             child: GestureDetector(
               onTap: _isReasonSelected
@@ -104,9 +103,9 @@ class _CancelOrderFormState extends State<CancelOrderForm> {
                 height: 44,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(14),
-                  color: Color(0xff4a56c1),
+                  color: const Color(0xff4a56c1),
                 ),
-                child: Center(
+                child: const Center(
                   child: Text(
                     'Confirm',
                     style: TextStyle(

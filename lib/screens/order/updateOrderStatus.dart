@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:secondhand_book_selling_platform/services/order_service.dart';
 
 class UpdateOrderStatus extends StatefulWidget {
   final String orderId;
 
-  const UpdateOrderStatus({Key? key, required this.orderId}) : super(key: key);
+  const UpdateOrderStatus({super.key, required this.orderId});
 
   @override
   _UpdateOrderStatusState createState() => _UpdateOrderStatusState();
@@ -14,7 +13,7 @@ class UpdateOrderStatus extends StatefulWidget {
 class _UpdateOrderStatusState extends State<UpdateOrderStatus> {
   int? _selectedStatus;
   bool _isStatusSelected = false;
-  OrderService _orderService = OrderService();
+  final OrderService _orderService = OrderService();
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +25,7 @@ class _UpdateOrderStatusState extends State<UpdateOrderStatus> {
         children: [
           Row(
             children: [
-              Expanded(
+              const Expanded(
                 child: Center(
                   child: Text(
                     'Update Status',
@@ -35,16 +34,16 @@ class _UpdateOrderStatusState extends State<UpdateOrderStatus> {
                 ),
               ),
               IconButton(
-                icon: Icon(Icons.close),
+                icon: const Icon(Icons.close),
                 onPressed: () {
                   Navigator.pop(context);
                 },
               ),
             ],
           ),
-          Divider(),
+          const Divider(),
           RadioListTile<int>(
-            title: Text('Preparing'),
+            title: const Text('Preparing'),
             value: 1,
             groupValue: _selectedStatus,
             onChanged: (int? value) {
@@ -55,7 +54,7 @@ class _UpdateOrderStatusState extends State<UpdateOrderStatus> {
             },
           ),
           RadioListTile<int>(
-            title: Text('Completed'),
+            title: const Text('Completed'),
             value: 2,
             groupValue: _selectedStatus,
             onChanged: (int? value) {
@@ -65,7 +64,7 @@ class _UpdateOrderStatusState extends State<UpdateOrderStatus> {
               });
             },
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Center(
             child: GestureDetector(
               onTap: _isStatusSelected
@@ -81,9 +80,9 @@ class _UpdateOrderStatusState extends State<UpdateOrderStatus> {
                 height: 44,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(14),
-                  color: Color(0xff4a56c1),
+                  color: const Color(0xff4a56c1),
                 ),
-                child: Center(
+                child: const Center(
                   child: Text(
                     'Confirm',
                     style: TextStyle(
@@ -109,15 +108,15 @@ class _UpdateOrderStatusState extends State<UpdateOrderStatus> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               Container(
                 width: 90,
                 height: 90,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   color: Color(0xFFF5F8FF),
                 ),
-                child: Center(
+                child: const Center(
                   child: Icon(
                     Icons.done,
                     size: 48,
@@ -125,9 +124,9 @@ class _UpdateOrderStatusState extends State<UpdateOrderStatus> {
                   ),
                 ),
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               // Center-aligned text
-              Center(
+              const Center(
                 child: Column(
                   children: [
                     Text(
@@ -140,7 +139,7 @@ class _UpdateOrderStatusState extends State<UpdateOrderStatus> {
                   ],
                 ),
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               // Button to close the dialog
               ElevatedButton(
                 onPressed: () {
@@ -148,13 +147,13 @@ class _UpdateOrderStatusState extends State<UpdateOrderStatus> {
                       context, ModalRoute.withName('sellerOrder'));
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xff4a56c1), // Set background color
+                  backgroundColor: const Color(0xff4a56c1), // Set background color
                   shape: RoundedRectangleBorder(
                     borderRadius:
                         BorderRadius.circular(25.0), // Set border radius
                   ),
                 ),
-                child: SizedBox(
+                child: const SizedBox(
                   width: 150,
                   height: 55,
                   child: Center(

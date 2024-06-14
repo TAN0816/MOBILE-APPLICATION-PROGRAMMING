@@ -32,7 +32,7 @@ class _SellerOrderListState extends State<SellerOrderList>
       return orders;
     } catch (error) {
       print('Error fetching orders: $error');
-      throw error;
+      rethrow;
     }
   }
 
@@ -43,7 +43,7 @@ class _SellerOrderListState extends State<SellerOrderList>
       return orders;
     } catch (error) {
       print('Error fetching orders: $error');
-      throw error;
+      rethrow;
     }
   }
 
@@ -54,7 +54,7 @@ class _SellerOrderListState extends State<SellerOrderList>
       return orders;
     } catch (error) {
       print('Error fetching orders: $error');
-      throw error;
+      rethrow;
     }
   }
 
@@ -62,7 +62,7 @@ class _SellerOrderListState extends State<SellerOrderList>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Sales'),
+        title: const Text('My Sales'),
         bottom: TabBar(
           controller: tabController,
           tabs: const [
@@ -153,7 +153,7 @@ class _SellerOrderListState extends State<SellerOrderList>
                       ],
                     ),
                     Container(
-                      padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                       child: Row(
                         children: [
                           Image.network(
@@ -162,11 +162,11 @@ class _SellerOrderListState extends State<SellerOrderList>
                             height: 80,
                             fit: BoxFit.cover,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Expanded(
-                            child: Container(
+                            child: SizedBox(
                               height: 80,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,7 +185,7 @@ class _SellerOrderListState extends State<SellerOrderList>
                             onPressed: () {
                               context.push('/orderDetails/${order.id}');
                             },
-                            icon: Icon(Icons.arrow_forward_ios_rounded),
+                            icon: const Icon(Icons.arrow_forward_ios_rounded),
                           ),
                         ],
                       ),

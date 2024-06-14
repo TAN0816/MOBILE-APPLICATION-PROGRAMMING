@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:secondhand_book_selling_platform/screens/order/orderDetails.dart';
 import 'package:secondhand_book_selling_platform/services/order_service.dart';
 import 'package:secondhand_book_selling_platform/model/order.dart' as Orderitem;
 import 'package:secondhand_book_selling_platform/services/user_service.dart';
 
 class MyOrderScreen extends StatefulWidget {
-  const MyOrderScreen({Key? key}) : super(key: key);
+  const MyOrderScreen({super.key});
 
   @override
   _MyOrderScreenState createState() => _MyOrderScreenState();
@@ -32,7 +31,7 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
       return orders;
     } catch (error) {
       print('Error fetching orders: $error');
-      throw error;
+      rethrow;
     }
   }
 

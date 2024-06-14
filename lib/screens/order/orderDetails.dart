@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:secondhand_book_selling_platform/model/book.dart';
 import 'package:secondhand_book_selling_platform/model/order.dart' as Orderitem;
 import 'package:secondhand_book_selling_platform/model/order.dart';
 import 'package:secondhand_book_selling_platform/model/user.dart';
 import 'package:secondhand_book_selling_platform/screens/order/cancelOrder.dart';
+import 'package:secondhand_book_selling_platform/screens/order/giveRating.dart';
 import 'package:secondhand_book_selling_platform/screens/order/updateOrderStatus.dart';
 import 'package:secondhand_book_selling_platform/services/order_service.dart';
 import 'package:secondhand_book_selling_platform/services/user_service.dart';
-import 'package:intl/intl.dart';
 
 class OrderDetailsScreen extends StatefulWidget {
   final String orderId;
 
-  const OrderDetailsScreen({Key? key, required this.orderId}) : super(key: key);
+  const OrderDetailsScreen({super.key, required this.orderId});
 
   @override
   _OrderDetailsScreenState createState() => _OrderDetailsScreenState();
@@ -21,7 +20,7 @@ class OrderDetailsScreen extends StatefulWidget {
 
 class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   Future<Orderitem.Order>? _orderFuture;
-  UserService _userService = UserService();
+  final UserService _userService = UserService();
   UserModel? currentUserData;
   Future<UserModel>? orderUserData;
   String userId = '';
@@ -53,7 +52,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       return user;
     } catch (error) {
       print('Error fetching user data: $error');
-      throw error;
+      rethrow;
     }
   }
 
@@ -63,7 +62,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       return orders;
     } catch (error) {
       print('Error fetching orders: $error');
-      throw error;
+      rethrow;
     }
   }
 
@@ -71,12 +70,11 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Order Details'),
+        title: const Text('Order Details'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
-           
-              Navigator.pop(context);  
+            Navigator.pop(context);
           },
         ),
       ),
@@ -84,11 +82,11 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         future: _orderFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data == null) {
-            return Center(child: Text('Order not found'));
+            return const Center(child: Text('Order not found'));
           } else {
             var selectedOrder = snapshot.data!;
 
@@ -96,11 +94,11 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
               future: _fetchOrderUserData(selectedOrder.userId),
               builder: (context, userSnapshot) {
                 if (userSnapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 } else if (userSnapshot.hasError) {
                   return Center(child: Text('Error: ${userSnapshot.error}'));
                 } else if (!userSnapshot.hasData || userSnapshot.data == null) {
-                  return Center(child: Text('User data not found'));
+                  return const Center(child: Text('User data not found'));
                 } else {
                   var userData = userSnapshot.data!;
                   return SingleChildScrollView(
@@ -109,21 +107,21 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             'Order Information',
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           OrderInformationCard(
                             orderData: selectedOrder,
                             userData: userData,
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           OrderDetailsCard(orderData: selectedOrder),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                           Center(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -146,13 +144,13 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                       }
                                     },
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: Color(0xff4a56c1),
+                                      backgroundColor: const Color(0xff4a56c1),
                                     ),
                                     child: Text(
                                       role == "Buyer"
                                           ? "Contact Seller"
                                           : "Update Status",
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w700,
                                         color: Colors.white,
@@ -160,37 +158,51 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                     ),
                                   ),
                                 ),
-                                if (selectedOrder.status != "Cancelled" &&
-                                    selectedOrder.status != "Completed")
-                                  SizedBox(height: 16),
-                                if (selectedOrder.status != "Cancelled" &&
-                                    selectedOrder.status != "Completed")
-                                  SizedBox(
-                                    width: 284,
-                                    height: 45,
-                                    child: OutlinedButton(
-                                      onPressed: () {
-                                        showModalBottomSheet(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return CancelOrderForm(
-                                                orderId: widget.orderId);
-                                          },
-                                        );
-                                      },
-                                      style: OutlinedButton.styleFrom(
-                                        side: BorderSide(color: Colors.grey),
-                                      ),
-                                      child: Text(
-                                        "Cancel Order",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.black,
-                                        ),
+                                // if (selectedOrder.status != "Cancelled" &&
+                                //     selectedOrder.status != "Completed")
+                                const SizedBox(height: 16),
+
+                                SizedBox(
+                                  width: 284,
+                                  height: 45,
+                                  child: OutlinedButton(
+                                    onPressed: () {
+                                      selectedOrder.status != "Cancelled" &&
+                                              selectedOrder.status !=
+                                                  "Completed"
+                                          ? showModalBottomSheet(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return CancelOrderForm(
+                                                    orderId: widget.orderId);
+                                              },
+                                            )
+                                          : showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return GiveRating(
+                                                    orderId: widget.orderId);
+                                              },
+                                            );
+                                    },
+                                    style: OutlinedButton.styleFrom(
+                                      side:
+                                          const BorderSide(color: Colors.grey),
+                                    ),
+                                    child: Text(
+                                      selectedOrder.status != "Cancelled" &&
+                                              selectedOrder.status !=
+                                                  "Completed"
+                                          ? "Cancel Order"
+                                          : "Give Rating",
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.black,
                                       ),
                                     ),
                                   ),
+                                ),
                               ],
                             ),
                           ),
@@ -212,12 +224,13 @@ class OrderInformationCard extends StatelessWidget {
   final Orderitem.Order orderData;
   final UserModel userData;
 
-  OrderInformationCard({required this.orderData, required this.userData});
+  const OrderInformationCard(
+      {super.key, required this.orderData, required this.userData});
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.zero, // Remove border radius
       ),
       child: Padding(
@@ -228,7 +241,7 @@ class OrderInformationCard extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Name: ',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
@@ -240,7 +253,7 @@ class OrderInformationCard extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Shipping Address: ',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
@@ -249,23 +262,23 @@ class OrderInformationCard extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Row(
               children: [
-                Text(
+                const Text(
                   'Payment Method: ',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Expanded(
                   child: Text(orderData.paymentMethod ?? 'N/A'),
                 ),
               ],
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Row(
               children: [
-                Text(
+                const Text(
                   'Shipping Method: ',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
@@ -274,10 +287,10 @@ class OrderInformationCard extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Row(
               children: [
-                Text(
+                const Text(
                   'Phone Number: ',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
@@ -296,12 +309,12 @@ class OrderInformationCard extends StatelessWidget {
 class OrderDetailsCard extends StatelessWidget {
   final Order orderData;
 
-  OrderDetailsCard({required this.orderData});
+  const OrderDetailsCard({super.key, required this.orderData});
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.zero,
       ),
       child: Padding(
@@ -313,27 +326,27 @@ class OrderDetailsCard extends StatelessWidget {
               children: [
                 Text(
                   'Order No: ${orderData.orderId}',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                Spacer(),
+                const Spacer(),
                 Text(
                     orderData.timestampValue.toDate().toString().split(' ')[0]),
               ],
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Row(
               children: [
                 Text('${orderData.orderItemsList.length} items'),
-                Spacer(),
+                const Spacer(),
                 Text(
                   orderData.status ?? 'Pending',
-                  style: TextStyle(color: Colors.green),
+                  style: const TextStyle(color: Colors.green),
                 ),
               ],
             ),
-            SizedBox(height: 8),
-            Divider(),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
+            const Divider(),
+            const SizedBox(height: 8),
             for (var item in orderData.orderItemsList)
               Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
@@ -346,14 +359,14 @@ class OrderDetailsCard extends StatelessWidget {
                       height: 100,
                       fit: BoxFit.cover,
                     ),
-                    SizedBox(width: 16),
+                    const SizedBox(width: 16),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             item.getBook.getName,
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ), // Accessing name from Book object
                           Text('Units: ${item.getQuantity}'),
                         ],
@@ -364,43 +377,43 @@ class OrderDetailsCard extends StatelessWidget {
                   ],
                 ),
               ),
-            SizedBox(height: 15),
-            Divider(),
-            SizedBox(height: 15),
-            Row(
+            const SizedBox(height: 15),
+            const Divider(),
+            const SizedBox(height: 15),
+            const Row(
               children: [
                 Icon(Icons.receipt_long_sharp), // Icon
                 SizedBox(width: 8), // Spacer between icon and text
                 Text('Payment Details:'),
               ],
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Subtotal'),
+                const Text('Subtotal'),
                 Text(
                     'RM${orderData.totalAmountValue.toStringAsFixed(2)}'), // Use total amount from order data
               ],
             ),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('Delivery Fee'),
                 Text('RM3.00'), // Hardcoded delivery fee
               ],
             ),
-            Divider(),
+            const Divider(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                const Text(
                   'Total Payment',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  'RM${(orderData.totalAmountValue + 3.00).toStringAsFixed(2)}', 
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  'RM${(orderData.totalAmountValue + 3.00).toStringAsFixed(2)}',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ],
             ),

@@ -71,7 +71,7 @@ GoRouter router() {
       ),
       GoRoute(
         path: '/messages',
-        builder: (context, state) => const MessageScreen(),
+        builder: (context, state) => const MessageScreen(orderId: "51eYXmaIFJlk1bcwLgRv"),
       ),
       GoRoute(
         path: '/me',
@@ -81,7 +81,7 @@ GoRouter router() {
         path: '/orderhistory/:userId',
         builder: (context, state) {
           final userId = state.pathParameters['userId']!;
-          return OrderHistoryScreen(userId: userId!);
+          return OrderHistoryScreen(userId: userId);
         },
       ),
       GoRoute(

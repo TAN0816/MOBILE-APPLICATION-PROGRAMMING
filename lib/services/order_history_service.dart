@@ -70,7 +70,7 @@ class OrderHistoryService {
       return orders;
     } catch (error) {
       print('Error fetching order history: $error');
-      throw error;
+      rethrow;
     }
   }
 }

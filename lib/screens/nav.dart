@@ -35,7 +35,7 @@ class _BottomNavBarState extends State<Homepage> {
         case 1:
           return const NotificationScreen();
         case 2:
-          return const MessageScreen();
+          return const MessageScreen(orderId: "51eYXmaIFJlk1bcwLgRv",);
         case 3:
           return const MeScreen();
 
