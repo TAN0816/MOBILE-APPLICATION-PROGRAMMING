@@ -29,7 +29,7 @@ class CartService {
       }
 
       if (!itemExists) {
-        cartList.add({
+        cartList.insert(0, {
           'bookId': pid,
           'quantity': 1,
         });
@@ -116,25 +116,39 @@ class CartService {
                 .get();
         if (bookSnapshot.exists) {
           Map<String, dynamic> bookData = bookSnapshot.data()!;
-          Book book = Book(
-            id: bookSnapshot.id,
-            sellerId: bookData['sellerId'] ?? '',
-            name: bookData['name'] ?? 'Unknown Title',
-            price: (bookData['price'] as num?)?.toDouble() ?? 0.0,
-            quantity: bookData['quantity'] ?? 0,
-            images: List<String>.from(bookData['images'] ?? []),
-            year: bookData['year'] ?? 'Unknown Year',
-            faculty: bookData['faculty'] ?? 'Unknown Faculty',
-            detail: bookData['detail'] ?? 'No details available',
-          );
+          if (bookData['quantity'] >= 1) {
+            Book book = Book(
+              id: bookSnapshot.id,
+              sellerId: bookData['sellerId'] ?? '',
+              name: bookData['name'] ?? 'Unknown Title',
+              price: (bookData['price'] as num?)?.toDouble() ?? 0.0,
+              quantity: bookData['quantity'] ?? 0,
+              images: List<String>.from(bookData['images'] ?? []),
+              year: bookData['year'] ?? 'Unknown Year',
+              faculty: bookData['faculty'] ?? 'Unknown Faculty',
+              detail: bookData['detail'] ?? 'No details available',
+            );
 
-          CartItem cartItem = CartItem(
-            book: book,
-            quantity: cartItemData['quantity'],
-          );
-
-          cartItemList.add(cartItem);
-          updatedCartList.add(cartItemData);
+            CartItem cartItem;
+            if (bookData['quantity'] <= cartItemData['quantity']) {
+              cartItem = CartItem(
+                book: book,
+                quantity: bookData['quantity'],
+              );
+            } else {
+              cartItem = CartItem(
+                book: book,
+                quantity: cartItemData['quantity'],
+              );
+            }
+            cartItemList.add(cartItem);
+            updatedCartList.add({
+              'bookId': cartItemData['bookId'],
+              'quantity': cartItem.quantity,
+            });
+          } else {
+            cartUpdated = true;
+          }
         } else {
           cartUpdated = true;
         }

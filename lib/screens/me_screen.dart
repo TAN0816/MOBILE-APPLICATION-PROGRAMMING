@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:secondhand_book_selling_platform/services/firebase_auth_methods.dart';
 import 'package:secondhand_book_selling_platform/services/rating_service.dart';
+import 'package:secondhand_book_selling_platform/services/notification_service.dart';
 import 'package:secondhand_book_selling_platform/services/user_service.dart';
 import 'package:secondhand_book_selling_platform/model/user.dart';
 // import 'package:secondhand_book_selling_platform/state/user_state.dart';
@@ -169,6 +170,8 @@ class _MeScreenState extends State<MeScreen> {
                                           .signOut(context);
 
                                       if (!context.mounted) return;
+                                      NotificationService()
+                                          .setDeviceTokenToNull(userId);
                                       context.pop(context);
                                       context.go('/');
                                     },
