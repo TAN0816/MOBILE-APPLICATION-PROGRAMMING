@@ -23,6 +23,7 @@ import 'package:secondhand_book_selling_platform/screens/order/order_history.dar
 import 'package:secondhand_book_selling_platform/screens/reset.dart';
 import 'package:secondhand_book_selling_platform/screens/product/productdetailbuyer.dart';
 import 'package:secondhand_book_selling_platform/screens/product/productdetailseller.dart';
+import 'package:secondhand_book_selling_platform/screens/sales_report_screen.dart';
 
 import '../screens/add_product.dart';
 
@@ -71,7 +72,8 @@ GoRouter router() {
       ),
       GoRoute(
         path: '/messages',
-        builder: (context, state) => const MessageScreen(orderId: "51eYXmaIFJlk1bcwLgRv"),
+        builder: (context, state) =>
+            const MessageScreen(orderId: "51eYXmaIFJlk1bcwLgRv"),
       ),
       GoRoute(
         path: '/me',
@@ -200,6 +202,21 @@ GoRouter router() {
           path: '/sellerOrder',
           name: 'sellerOrder',
           builder: (context, state) => const SellerOrderList()),
+      // GoRoute(
+      //   path: '/sales_report/:userId',
+      //   builder: (context, state) {
+      //     final String? userId = state.pathParameters['userId'];
+      //     return SalesReportPage(userId: userId!);
+      //   },
+      // ),
+
+      GoRoute(
+        path: '/sales_report/:sellerId',
+        builder: (context, state) {
+          final String? sellerId = state.pathParameters['sellerId'];
+          return SalesReportPage(sellerId: sellerId!);
+        },
+      ),
     ],
   );
 }

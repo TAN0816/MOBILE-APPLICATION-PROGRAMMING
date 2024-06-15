@@ -53,10 +53,9 @@ class _MeScreenState extends State<MeScreen> {
         sellerRating = rating;
         sellerOrderNumber = orderNo;
       });
-    }
-    else{
-      int orderNo=await userService.getBuyerOrderNumber(userId);
-       int  orderhistory= await userService.getBuyerOrderHistory(userId);
+    } else {
+      int orderNo = await userService.getBuyerOrderNumber(userId);
+      int orderhistory = await userService.getBuyerOrderHistory(userId);
       setState(() {
         buyerOrderNumber = orderNo;
         buyerOrderHistory = orderhistory;
@@ -341,7 +340,7 @@ class _MeScreenState extends State<MeScreen> {
               ),
             ),
             onPressed: () {
-              context.push('/edit_profile/1');
+              context.push('/sales_report/$userId');
             },
             child: Container(
               margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -457,7 +456,7 @@ class _MeScreenState extends State<MeScreen> {
                   ),
                 ),
               ),
-              child:  Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
@@ -505,7 +504,7 @@ class _MeScreenState extends State<MeScreen> {
                   ),
                 ),
               ),
-              child:  Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
