@@ -304,7 +304,8 @@ class OrderService {
     try {
       Query orderQuery = _firestore
           .collection('orders')
-          .where('sellerId', isEqualTo: sellerId);
+          .where('sellerId', isEqualTo: sellerId)
+          .orderBy('timestamp', descending: true);
 
       if (statuses.length == 1) {
         orderQuery = orderQuery.where('status', isEqualTo: statuses[0]);
@@ -389,6 +390,9 @@ class OrderService {
           .update({'status': newStatus});
       print('Order status updated successfully');
 
+      notificationService.saveNotification(userId, 'Order Status Update',
+          'Your order status: $orderId has changed to $newStatus.');
+
       notificationService.sendMessage(
           notificationService.getUserDeviceToken(userId),
           'Order Status Update',
@@ -401,4 +405,3 @@ class OrderService {
 
   getUserData(String userId) {}
 }
-
