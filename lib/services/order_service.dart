@@ -388,6 +388,9 @@ class OrderService {
           .update({'status': newStatus});
       print('Order status updated successfully');
 
+      notificationService.saveNotification(userId, 'Order Status Update',
+          'Your order status: $orderId has changed to $newStatus.');
+
       notificationService.sendMessage(
           notificationService.getUserDeviceToken(userId),
           'Order Status Update',
@@ -400,4 +403,3 @@ class OrderService {
 
   getUserData(String userId) {}
 }
-
