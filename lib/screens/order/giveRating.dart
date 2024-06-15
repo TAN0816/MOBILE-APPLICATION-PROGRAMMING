@@ -5,15 +5,38 @@ import 'package:secondhand_book_selling_platform/services/rating_service.dart';
 class GiveRating extends StatefulWidget {
   final String orderId;
 
-  const GiveRating({super.key, required this.orderId});
+  const GiveRating({Key? key, required this.orderId}) : super(key: key);
 
   @override
-  _GiveRating createState() => _GiveRating();
+  _GiveRatingState createState() => _GiveRatingState();
 }
 
-class _GiveRating extends State<GiveRating> {
+class _GiveRatingState extends State<GiveRating> {
   double _rating = 0;
+  bool rated = false;
   final RatingService _ratingService = RatingService();
+
+  @override
+  void initState() {
+    super.initState();
+    _checkAndSetRating();
+  }
+
+  void _checkAndSetRating() async {
+    bool rated = await _ratingService.getRatingStatus(widget.orderId);
+    if (rated) {
+      double rating = await _ratingService.getRating(widget.orderId);
+      setState(() {
+        this.rated = rated;
+        _rating = rating;
+      });
+    } else {
+      setState(() {
+        this.rated = rated;
+      });
+    }
+       print("ratingstatus $rated and $_rating");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,99 +53,203 @@ class _GiveRating extends State<GiveRating> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20.0),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Center(
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(22.0, 21.0, 30.0, 21.0),
-                      child: Text(
-                        'Your opinion matters to us!',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    color: const Color(0xFFE8E8F5),
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(22.0, 23.0, 15.0, 23.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Row(
-                            children: [
-                              Expanded(
-                                child: Center(
-                                  child: Text(
-                                    'How was the order',
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
-                                  ),
+              child: !rated
+                  ? Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                                22.0, 21.0, 5.0, 21.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  'Your opinion matters!',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.center,
                                 ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 20),
-                          Center(
-                            child: RatingBar.builder(
-                              initialRating: _rating,
-                              minRating: 1,
-                              direction: Axis.horizontal,
-                              allowHalfRating: false,
-                              itemCount: 5,
-                              itemSize: 40,
-                              itemPadding:
-                                  const EdgeInsets.symmetric(horizontal: 5.0),
-                              itemBuilder: (context, _) => const Icon(
-                                Icons.star,
-                                color: Colors.amber,
-                              ),
-                              onRatingUpdate: (rating) {
-                                setState(() {
-                                  _rating = rating;
-                                });
-                              },
+                                IconButton(
+                                  icon: const Icon(Icons.close),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: _rating > 0
-                          ? () async {
-                              await updateRating(widget.orderId, _rating);
-                            }
-                          : null,
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Colors.white),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
+                        ),
+                        Container(
+                          color: const Color(0xFFE8E8F5),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                                22.0, 23.0, 15.0, 23.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Row(
+                                  children: [
+                                    Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          'How was the order',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 20),
+                                Center(
+                                  child: RatingBar.builder(
+                                    initialRating: 0,
+                                    minRating: 1,
+                                    direction: Axis.horizontal,
+                                    allowHalfRating: false,
+                                    itemCount: 5,
+                                    itemSize: 40,
+                                    itemPadding: const EdgeInsets.symmetric(
+                                        horizontal: 5.0),
+                                    itemBuilder: (context, _) => const Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                    ),
+                                    onRatingUpdate: (rating) {
+                                      setState(() {
+                                        _rating = rating;
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        padding: MaterialStateProperty.all(
-                          const EdgeInsets.fromLTRB(22.0, 20.0, 15.0, 20.0),
+                        Center(
+                          child: ElevatedButton(
+                            onPressed: _rating > 0
+                                ? () async {
+                                    await updateRating(widget.orderId, _rating);
+                                  }
+                                : null,
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.white),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                              ),
+                              padding: MaterialStateProperty.all(
+                                const EdgeInsets.fromLTRB(
+                                    10.0, 5.0, 10.0, 5.0),
+                              ),
+                            ),
+                            child: const Text(
+                              'Send Rating',
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 0, 47, 237),
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                      child: const Text(
-                        'Send Rating',
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 0, 47, 237),
+                      ],
+                    )
+                  : Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Center(
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(22.0, 21.0, 5.0, 21.0),
+                            child: Text(
+                              'Thanks for your Rating!',
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
                         ),
-                      ),
+                        Container(
+                          color: const Color(0xFFE8E8F5),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                                22.0, 23.0, 15.0, 23.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Row(
+                                  children: [
+                                    Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          'Here is your rating',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 20),
+                                Center(
+                                  child: RatingBarIndicator(
+                                    rating: _rating,
+                                    direction: Axis.horizontal,
+                                    itemCount: 5,
+                                    itemSize: 40,
+                                    itemPadding: const EdgeInsets.symmetric(
+                                        horizontal: 5.0),
+                                    itemBuilder: (context, _) => const Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Center(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.white),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                              ),
+                              padding: MaterialStateProperty.all(
+                                const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+                              ),
+                            ),
+                            child: const Text(
+                              'Close',
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 0, 47, 237),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
             ),
           ),
         ),

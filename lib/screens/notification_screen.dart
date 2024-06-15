@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:secondhand_book_selling_platform/services/notification_service.dart';
 import 'package:secondhand_book_selling_platform/services/user_service.dart';
 
 class NotificationScreen extends StatefulWidget {
@@ -105,15 +104,15 @@ class _NotificationScreenState extends State<NotificationScreen> {
               return Container(
                 margin: const EdgeInsets.fromLTRB(20, 5, 20, 5),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
                   color: Colors.grey[200],
                 ),
                 child: ListTile(
-                  leading: Icon(Icons.notifications_active_rounded,
-                      color: const Color.fromARGB(255, 0, 0, 0)),
+                  leading: const Icon(Icons.notifications_active_rounded,
+                      color: Color.fromARGB(255, 0, 0, 0)),
                   title: Text(
                     notification['title'],
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontWeight: FontWeight.bold, color: Colors.black),
                   ),
                   subtitle: Column(

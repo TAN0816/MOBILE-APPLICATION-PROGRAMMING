@@ -46,8 +46,39 @@ class RatingService {
     if (numRating == 0) {
       return 0;
     }
-  int rating = (currentRating / numRating).round();
-print("Rating: $rating");
+    int rating = (currentRating / numRating).round();
+    print("Rating: $rating");
     return rating;
   }
+
+  Future<bool> getRatingStatus(String orderId) async {
+    DocumentSnapshot orderDoc =
+        await _firestore.collection('orders').doc(orderId).get();
+
+    if (orderDoc.exists) {
+      Map<String, dynamic>? orderData =
+          orderDoc.data() as Map<String, dynamic>?;
+      if (orderData != null && orderData.containsKey('rating')) {
+        return true;
+     
+      }
+    }
+    return false;
+  }
+
+Future<double> getRating(String orderId) async {
+  try {
+    DocumentSnapshot orderDoc = await _firestore.collection('orders').doc(orderId).get();
+
+    if (orderDoc.exists) {
+      Map<String, dynamic>? orderData = orderDoc.data() as Map<String, dynamic>?;
+      if (orderData != null && orderData.containsKey('rating')) {
+        return (orderData['rating'] as num).toDouble();
+      }
+    }
+  } catch (e) {
+    print("Error getting rating: $e");
+  }
+  return 0.0;
+}
 }
