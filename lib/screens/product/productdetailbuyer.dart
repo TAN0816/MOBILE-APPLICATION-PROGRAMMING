@@ -6,6 +6,7 @@ import 'package:secondhand_book_selling_platform/model/user.dart';
 import 'package:secondhand_book_selling_platform/services/book_service.dart';
 import 'package:secondhand_book_selling_platform/services/cart_service.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:secondhand_book_selling_platform/services/rating_service.dart';
 
 class ProductDetailBuyer extends StatefulWidget {
   final String bookId;
@@ -20,10 +21,12 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
   int _currentPage = 0;
   final BookService _bookService = BookService();
   final CartService _cartService = CartService();
+    final RatingService _ratingService = RatingService();
 
   Book? _book;
   UserModel? _seller;
   bool _isLoading = true;
+  int rating= 5;
 
   @override
   void initState() {
@@ -51,6 +54,8 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
     } else {
       print('error');
     }
+
+    rating=await _ratingService.getSellerRating(_book!.sellerId);
   }
 
   @override
@@ -214,7 +219,7 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
                             //   ),
                             // ),
                             Text(
-                              _book!.detail ?? 'No description available.',
+                              _book!.detail,
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 14,
@@ -264,9 +269,9 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
                                         fontWeight: FontWeight.w400,
                                       ),
                                     ),
-                                    const Text(
-                                      '4.5/5',
-                                      style: TextStyle(
+                                     Text(
+                                      '$rating/5',
+                                      style: const TextStyle(
                                         color: Color.fromARGB(255, 83, 83, 83),
                                         fontSize: 15,
                                         fontWeight: FontWeight.w500,

@@ -44,7 +44,7 @@ class RatingService {
       }
     }
     if (numRating == 0) {
-      return 0;
+      return 5;
     }
     int rating = (currentRating / numRating).round();
     print("Rating: $rating");

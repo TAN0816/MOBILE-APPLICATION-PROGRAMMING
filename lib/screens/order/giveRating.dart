@@ -5,7 +5,7 @@ import 'package:secondhand_book_selling_platform/services/rating_service.dart';
 class GiveRating extends StatefulWidget {
   final String orderId;
 
-  const GiveRating({Key? key, required this.orderId}) : super(key: key);
+  const GiveRating({super.key, required this.orderId});
 
   @override
   _GiveRatingState createState() => _GiveRatingState();
