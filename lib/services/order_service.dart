@@ -180,7 +180,8 @@ class OrderService {
       QuerySnapshot orderSnapshots = await _firestore
           .collection('orders')
           .where('userId', isEqualTo: userId)
-          .where('status', isEqualTo: 'Pending')
+          // .where('status', whereIn: ['Pending', 'Preparing'])
+          .orderBy('timestamp', descending: true)
           .get();
 
       if (orderSnapshots.docs.isEmpty) {
