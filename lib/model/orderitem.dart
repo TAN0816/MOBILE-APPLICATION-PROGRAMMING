@@ -21,4 +21,6 @@ class OrderItem {
   List<String> get getImage => images;
 
   int get getQuantity => quantity;
+
+  static fromJson(Object? data) {}
 }
