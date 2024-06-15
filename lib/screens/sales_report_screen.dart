@@ -8,7 +8,7 @@ import 'package:secondhand_book_selling_platform/widgets/appbar_with_back.dart';
 class SalesReportPage extends StatefulWidget {
   final String sellerId;
 
-  SalesReportPage({required this.sellerId});
+  const SalesReportPage({super.key, required this.sellerId});
 
   @override
   _SalesReportPageState createState() => _SalesReportPageState();
@@ -36,7 +36,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
       };
     } catch (error) {
       print('Error loading data: $error');
-      throw error;
+      rethrow;
     }
   }
 
@@ -50,11 +50,11 @@ class _SalesReportPageState extends State<SalesReportPage> {
         future: _salesData,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData) {
-            return Center(child: Text('No sales data available.'));
+            return const Center(child: Text('No sales data available.'));
           } else {
             UserModel seller = snapshot.data!['seller'];
             Map<String, int> monthlySales = snapshot.data!['monthlySales'];
@@ -81,7 +81,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Personal Information',
                     style: TextStyle(
                       fontSize: 18,
@@ -89,7 +89,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
                       color: Colors.blueAccent,
                     ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   _buildPersonalInfoRow('Name:', seller.username),
                   _buildPersonalInfoRow('Email:', seller.email),
                   _buildPersonalInfoRow('Phone:', seller.phone),
@@ -97,17 +97,17 @@ class _SalesReportPageState extends State<SalesReportPage> {
               ),
             ),
           ),
-          SizedBox(height: 24),
-          Text(
+          const SizedBox(height: 24),
+          const Text(
             'Monthly Sales Analysis',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Expanded(
             child: charts.BarChart(
               _createSalesSeries(monthlySales),
               animate: true,
-              domainAxis: charts.OrdinalAxisSpec(
+              domainAxis: const charts.OrdinalAxisSpec(
                 renderSpec: charts.SmallTickRendererSpec(
                   labelStyle: charts.TextStyleSpec(
                     fontSize: 14,
@@ -117,7 +117,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
                   minimumPaddingBetweenLabelsPx: 20,
                 ),
               ),
-              primaryMeasureAxis: charts.NumericAxisSpec(
+              primaryMeasureAxis: const charts.NumericAxisSpec(
                 renderSpec: charts.GridlineRendererSpec(
                   labelStyle: charts.TextStyleSpec(
                     fontSize: 14,
@@ -154,7 +154,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
         children: [
           Text(
             '$label ',
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           Expanded(
             child: Text(value),

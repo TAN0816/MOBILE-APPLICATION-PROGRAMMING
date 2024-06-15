@@ -73,7 +73,7 @@ GoRouter router() {
       GoRoute(
         path: '/messages',
         builder: (context, state) =>
-            const MessageScreen(orderId: "51eYXmaIFJlk1bcwLgRv"),
+            const MessageScreen(),
       ),
       GoRoute(
         path: '/me',

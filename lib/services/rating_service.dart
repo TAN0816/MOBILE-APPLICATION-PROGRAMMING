@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class RatingService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<void> placeRating(String orderId, double rating) async {
+  Future<void> placeRating(String orderId, int rating) async {
     try {
       DocumentReference orderRef = _firestore.collection('orders').doc(orderId);
 
@@ -30,23 +30,23 @@ class RatingService {
         .where('sellerId', isEqualTo: sellerId)
         .get();
 
-    double currentRating = 0;
+    int currentRating = 0;
     int numRating = 0;
 
     for (QueryDocumentSnapshot orderDoc in orderSnapshot.docs) {
       if (orderDoc.exists) {
         dynamic orderData = orderDoc.data();
         if (orderData != null && orderData.containsKey('rating')) {
-          double orderRating = (orderData['rating'] as int).toDouble();
+          int orderRating = orderData['rating'].toInt();
           currentRating += orderRating;
           numRating++;
         }
       }
     }
     if (numRating == 0) {
-      return 0;
+      return 5;
     }
-    int rating = (currentRating / numRating).round();
+    int rating = currentRating ~/ numRating;
     print("Rating: $rating");
     return rating;
   }
@@ -60,25 +60,26 @@ class RatingService {
           orderDoc.data() as Map<String, dynamic>?;
       if (orderData != null && orderData.containsKey('rating')) {
         return true;
-     
       }
     }
     return false;
   }
 
-Future<double> getRating(String orderId) async {
-  try {
-    DocumentSnapshot orderDoc = await _firestore.collection('orders').doc(orderId).get();
+  Future<int> getRating(String orderId) async {
+    try {
+      DocumentSnapshot orderDoc =
+          await _firestore.collection('orders').doc(orderId).get();
 
-    if (orderDoc.exists) {
-      Map<String, dynamic>? orderData = orderDoc.data() as Map<String, dynamic>?;
-      if (orderData != null && orderData.containsKey('rating')) {
-        return (orderData['rating'] as num).toDouble();
+      if (orderDoc.exists) {
+        Map<String, dynamic>? orderData =
+            orderDoc.data() as Map<String, dynamic>?;
+        if (orderData != null && orderData.containsKey('rating')) {
+          return (orderData['rating'].toInt());
+        }
       }
+    } catch (e) {
+      print("Error getting rating: $e");
     }
-  } catch (e) {
-    print("Error getting rating: $e");
+    return 1;
   }
-  return 0.0;
-}
 }
