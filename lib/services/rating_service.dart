@@ -74,12 +74,12 @@ class RatingService {
         Map<String, dynamic>? orderData =
             orderDoc.data() as Map<String, dynamic>?;
         if (orderData != null && orderData.containsKey('rating')) {
-          return (orderData['rating'] as int);
+          return (orderData['rating'].toInt());
         }
       }
     } catch (e) {
       print("Error getting rating: $e");
     }
-    return 0;
+    return 1;
   }
 }
