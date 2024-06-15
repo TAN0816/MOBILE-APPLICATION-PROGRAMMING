@@ -37,7 +37,7 @@ class RatingService {
       if (orderDoc.exists) {
         dynamic orderData = orderDoc.data();
         if (orderData != null && orderData.containsKey('rating')) {
-          int orderRating = (orderData['rating'] as int);
+          int orderRating = orderData['rating'].toInt();
           currentRating += orderRating;
           numRating++;
         }
@@ -60,25 +60,26 @@ class RatingService {
           orderDoc.data() as Map<String, dynamic>?;
       if (orderData != null && orderData.containsKey('rating')) {
         return true;
-     
       }
     }
     return false;
   }
 
-Future<int> getRating(String orderId) async {
-  try {
-    DocumentSnapshot orderDoc = await _firestore.collection('orders').doc(orderId).get();
+  Future<int> getRating(String orderId) async {
+    try {
+      DocumentSnapshot orderDoc =
+          await _firestore.collection('orders').doc(orderId).get();
 
-    if (orderDoc.exists) {
-      Map<String, dynamic>? orderData = orderDoc.data() as Map<String, dynamic>?;
-      if (orderData != null && orderData.containsKey('rating')) {
-        return (orderData['rating'] as int);
+      if (orderDoc.exists) {
+        Map<String, dynamic>? orderData =
+            orderDoc.data() as Map<String, dynamic>?;
+        if (orderData != null && orderData.containsKey('rating')) {
+          return (orderData['rating'] as int);
+        }
       }
+    } catch (e) {
+      print("Error getting rating: $e");
     }
-  } catch (e) {
-    print("Error getting rating: $e");
+    return 0;
   }
-  return 0;
-}
 }
