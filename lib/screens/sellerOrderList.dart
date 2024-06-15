@@ -62,6 +62,20 @@ class _SellerOrderListState extends State<SellerOrderList>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 16.0),
+          child: CircleAvatar(
+            radius: 30,
+            backgroundColor: const Color.fromARGB(244, 255, 255, 255),
+            child: IconButton(
+              icon: const Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: Colors.black,
+              ),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
+        ),
         title: const Text('My Sales'),
         bottom: TabBar(
           controller: tabController,
