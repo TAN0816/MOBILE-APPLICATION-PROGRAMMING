@@ -21,12 +21,12 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
   int _currentPage = 0;
   final BookService _bookService = BookService();
   final CartService _cartService = CartService();
-    final RatingService _ratingService = RatingService();
+  final RatingService _ratingService = RatingService();
 
   Book? _book;
   UserModel? _seller;
   bool _isLoading = true;
-  int rating= 5;
+  int rating = 5;
 
   @override
   void initState() {
@@ -55,10 +55,11 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
       print('error');
     }
 
-    int ratingg=await _ratingService.getSellerRating(_book!.sellerId);
-          setState(() {
-        rating = ratingg;
-      });
+    int ratingg = await _ratingService.getSellerRating(_book!.sellerId);
+    setState(() {
+      rating = ratingg;
+      print("buyerrating $rating");
+    });
   }
 
   @override
@@ -272,7 +273,7 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
                                         fontWeight: FontWeight.w400,
                                       ),
                                     ),
-                                     Text(
+                                    Text(
                                       '$rating/5',
                                       style: const TextStyle(
                                         color: Color.fromARGB(255, 83, 83, 83),

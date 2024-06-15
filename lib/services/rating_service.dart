@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class RatingService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<void> placeRating(String orderId, double rating) async {
+  Future<void> placeRating(String orderId, int rating) async {
     try {
       DocumentReference orderRef = _firestore.collection('orders').doc(orderId);
 
@@ -30,14 +30,14 @@ class RatingService {
         .where('sellerId', isEqualTo: sellerId)
         .get();
 
-    double currentRating = 0;
+    int currentRating = 0;
     int numRating = 0;
 
     for (QueryDocumentSnapshot orderDoc in orderSnapshot.docs) {
       if (orderDoc.exists) {
         dynamic orderData = orderDoc.data();
         if (orderData != null && orderData.containsKey('rating')) {
-          double orderRating = (orderData['rating'] as int).toDouble();
+          int orderRating = (orderData['rating'] as int);
           currentRating += orderRating;
           numRating++;
         }
@@ -46,7 +46,7 @@ class RatingService {
     if (numRating == 0) {
       return 5;
     }
-    int rating = (currentRating / numRating).round();
+    int rating = currentRating ~/ numRating;
     print("Rating: $rating");
     return rating;
   }
@@ -66,19 +66,19 @@ class RatingService {
     return false;
   }
 
-Future<double> getRating(String orderId) async {
+Future<int> getRating(String orderId) async {
   try {
     DocumentSnapshot orderDoc = await _firestore.collection('orders').doc(orderId).get();
 
     if (orderDoc.exists) {
       Map<String, dynamic>? orderData = orderDoc.data() as Map<String, dynamic>?;
       if (orderData != null && orderData.containsKey('rating')) {
-        return (orderData['rating'] as num).toDouble();
+        return (orderData['rating'] as int);
       }
     }
   } catch (e) {
     print("Error getting rating: $e");
   }
-  return 0.0;
+  return 0;
 }
 }

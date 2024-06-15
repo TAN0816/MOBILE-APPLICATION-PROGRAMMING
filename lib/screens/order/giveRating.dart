@@ -12,7 +12,7 @@ class GiveRating extends StatefulWidget {
 }
 
 class _GiveRatingState extends State<GiveRating> {
-  double _rating = 0;
+  int _rating = 0;
   bool rated = false;
   final RatingService _ratingService = RatingService();
 
@@ -25,7 +25,7 @@ class _GiveRatingState extends State<GiveRating> {
   void _checkAndSetRating() async {
     bool rated = await _ratingService.getRatingStatus(widget.orderId);
     if (rated) {
-      double rating = await _ratingService.getRating(widget.orderId);
+      int rating = await _ratingService.getRating(widget.orderId);
       setState(() {
         this.rated = rated;
         _rating = rating;
@@ -123,7 +123,7 @@ class _GiveRatingState extends State<GiveRating> {
                                     ),
                                     onRatingUpdate: (rating) {
                                       setState(() {
-                                        _rating = rating;
+                                        _rating = rating.toInt();
                                       });
                                     },
                                   ),
@@ -205,7 +205,7 @@ class _GiveRatingState extends State<GiveRating> {
                                 const SizedBox(height: 20),
                                 Center(
                                   child: RatingBarIndicator(
-                                    rating: _rating,
+                                    rating: _rating.toDouble(),
                                     direction: Axis.horizontal,
                                     itemCount: 5,
                                     itemSize: 40,
@@ -257,7 +257,7 @@ class _GiveRatingState extends State<GiveRating> {
     );
   }
 
-  Future<void> updateRating(String orderId, double rating) async {
+  Future<void> updateRating(String orderId, int rating) async {
     try {
       await _ratingService.placeRating(orderId, rating);
       ScaffoldMessenger.of(context).showSnackBar(
