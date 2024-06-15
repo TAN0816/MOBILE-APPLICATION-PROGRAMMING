@@ -55,7 +55,10 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
       print('error');
     }
 
-    rating=await _ratingService.getSellerRating(_book!.sellerId);
+    int ratingg=await _ratingService.getSellerRating(_book!.sellerId);
+          setState(() {
+        rating = ratingg;
+      });
   }
 
   @override
