@@ -1,3 +1,4 @@
+import 'package:secondhand_book_selling_platform/screens/chat/chatlist_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/home_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/notification_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/message_screen.dart';
@@ -35,7 +36,7 @@ class _BottomNavBarState extends State<Homepage> {
         case 1:
           return const NotificationScreen();
         case 2:
-          return const MessageScreen();
+          return const ChatListScreen();
         case 3:
           return const MeScreen();
 

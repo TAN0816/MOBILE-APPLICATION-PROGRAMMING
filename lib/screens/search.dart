@@ -65,7 +65,7 @@ class _SearchPageState extends State<SearchPage> {
               child: IconButton(
                 icon: const Icon(Icons.arrow_back_ios_new_rounded),
                 onPressed: () {
-                  GoRouter.of(context).go('/');
+                  Navigator.of(context).pop();
                 },
               ),
             ),

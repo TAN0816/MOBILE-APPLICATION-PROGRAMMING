@@ -67,7 +67,7 @@ class _BuyerList extends State<BuyerList> {
                           margin: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: TextField(
                             onTap: () {
-                              GoRouter.of(context).go('/search');
+                              GoRouter.of(context).push('/search');
                             },
                             decoration: InputDecoration(
                               filled: true,

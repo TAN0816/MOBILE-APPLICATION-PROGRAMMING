@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:secondhand_book_selling_platform/model/cart_model.dart';
 import 'package:secondhand_book_selling_platform/screens/cart/cart_screen.dart';
+import 'package:secondhand_book_selling_platform/screens/chat/chat_screen';
 import 'package:secondhand_book_selling_platform/screens/checkout.dart';
 import 'package:secondhand_book_selling_platform/screens/forgot_password.dart';
 import 'package:secondhand_book_selling_platform/screens/nav.dart';
@@ -72,8 +73,7 @@ GoRouter router() {
       ),
       GoRoute(
         path: '/messages',
-        builder: (context, state) =>
-            const MessageScreen(),
+        builder: (context, state) => const MessageScreen(),
       ),
       GoRoute(
         path: '/me',
@@ -196,6 +196,19 @@ GoRouter router() {
             selectedBookIds: parameters['selectedBookIds'] as List<String>,
             selectedBooks: parameters['selectedBooks'] as List<CartItem>,
           );
+        },
+      ),
+      GoRoute(
+        path: '/chat/:chatRoomId',
+        builder: (context, state) {
+          // Extract chatRoomId from path parameters
+          final chatRoomId = state.pathParameters['chatRoomId']!;
+
+          // Extract receiverId from query parameters
+          final receiverId =
+              state.uri.queryParameters['receiverId'] ?? 'defaultReceiverId';
+
+          return ChatScreen(chatRoomId: chatRoomId, receiverId: receiverId);
         },
       ),
       GoRoute(

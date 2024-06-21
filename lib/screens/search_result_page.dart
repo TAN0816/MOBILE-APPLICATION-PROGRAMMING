@@ -111,188 +111,84 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
         query, widget.minPrice, widget.maxPrice, widget.faculty, widget.years);
   }
 
-// void _showFilterOptions() {
-//     Navigator.push(
-//       context,
-//       MaterialPageRoute(
-//         builder: (context) => FilterForm(
-//           initialMinPrice: widget.minPrice,
-//           initialMaxPrice: widget.maxPrice,
-//           initialFaculty: widget.faculty,
-//           initialYears: widget.years?.toSet() ?? {},
-//           onApply: (minPrice, maxPrice, faculty, years) {
-//             setState(() {
-//               _searchAndFilterBooks(widget.query, minPrice, maxPrice, faculty, years.toList());
-//             });
-//           },
-//         ),
-//       ),
-//     );
-//   }
-  void _showFilterOptions() {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) {
-        return FractionallySizedBox(
-          heightFactor: 0.85,
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('Filter',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold)),
-                    IconButton(
-                      icon: const Icon(Icons.close),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                const Text('Price Range'),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _minPriceController,
-                        decoration: const InputDecoration(
-                          labelText: 'Min Price',
-                          prefixText: 'RM',
-                          border: OutlineInputBorder(),
-                        ),
-                        keyboardType: TextInputType.number,
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: TextField(
-                        controller: _maxPriceController,
-                        decoration: const InputDecoration(
-                          labelText: 'Max Price',
-                          prefixText: 'RM',
-                          border: OutlineInputBorder(),
-                        ),
-                        keyboardType: TextInputType.number,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                const Text('Faculty'),
-                ListTile(
-                  title: Text(selectedFaculty ?? 'Select Faculty'),
-                  trailing: const Icon(Icons.arrow_drop_down),
-                  onTap: () {
-                    _showFacultySelection();
-                  },
-                ),
-                const SizedBox(height: 16),
-                const Text('Year'),
-                Wrap(
-                  spacing: 8.0,
-                  runSpacing: 4.0,
-                  children:
-                      ['Year 1', 'Year 2', 'Year 3', 'Year 4'].map((year) {
-                    return FilterChip(
-                      label: Text(year),
-                      selected: selectedYears.contains(year),
-                      onSelected: (bool selected) {
-                        setState(() {
-                          if (selected) {
-                            selectedYears.add(year);
-                          } else {
-                            selectedYears.remove(year);
-                          }
-                        });
-                      },
-                    );
-                  }).toList(),
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          _minPriceController.clear();
-                          _maxPriceController.clear();
-                          selectedFaculty = null;
-                          selectedYears.clear();
-                        });
-                        Navigator.pop(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.black,
-                        backgroundColor: Colors.white,
-                        side: const BorderSide(color: Colors.black),
-                      ),
-                      child: const Text('Reset'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        double? minPrice =
-                            double.tryParse(_minPriceController.text);
-                        double? maxPrice =
-                            double.tryParse(_maxPriceController.text);
 
-                        Navigator.pop(context);
-                        _searchAndFilterBooks(widget.query, minPrice, maxPrice,
-                            selectedFaculty, selectedYears.toList());
-                      },
-                      child: const Text('Apply'),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
+void _showFilterOptions() {
+  // Define controllers for min and max price
+  TextEditingController minPriceController = TextEditingController();
+  TextEditingController maxPriceController = TextEditingController();
 
-  void _showFacultySelection() {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) {
-        return FractionallySizedBox(
-          heightFactor: 0.85,
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('Faculty',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold)),
-                    IconButton(
-                      icon: const Icon(Icons.close),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                Expanded(
-                  child: ListView(
+  // Local variables for selected filters
+  String? localSelectedFaculty = selectedFaculty;
+  Set<String> localSelectedYears = Set.from(selectedYears);
+
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    builder: (context) {
+      return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+          return FractionallySizedBox(
+            heightFactor: 0.85,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      const Text(
+                        'Filter',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  const Text('Price Range'),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: minPriceController,
+                          decoration: const InputDecoration(
+                            labelText: 'Min Price',
+                            prefixText: 'RM',
+                            border: OutlineInputBorder(),
+                          ),
+                          keyboardType: TextInputType.number,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: TextField(
+                          controller: maxPriceController,
+                          decoration: const InputDecoration(
+                            labelText: 'Max Price',
+                            prefixText: 'RM',
+                            border: OutlineInputBorder(),
+                          ),
+                          keyboardType: TextInputType.number,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  const Text('Faculty'),
+                  DropdownButtonFormField<String>(
+                    value: localSelectedFaculty,
+                    onChanged: (value) {
+                      setState(() {
+                        localSelectedFaculty = value;
+                      });
+                    },
+                    items: [
                       'Civil Engineering',
                       'Mechanical Engineering',
                       'Electrical Engineering',
@@ -303,34 +199,84 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                       'Social Sciences & Humanities',
                       'Management',
                     ].map((faculty) {
-                      return RadioListTile<String>(
-                        title: Text(faculty),
+                      return DropdownMenuItem<String>(
                         value: faculty,
-                        groupValue: selectedFaculty,
-                        onChanged: (value) {
+                        child: Text(faculty),
+                      );
+                    }).toList(),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text('Year'),
+                  Wrap(
+                    spacing: 8.0,
+                    runSpacing: 4.0,
+                    children: ['Year 1', 'Year 2', 'Year 3', 'Year 4'].map((year) {
+                      return FilterChip(
+                        label: Text(year),
+                        selected: localSelectedYears.contains(year),
+                        onSelected: (bool selected) {
                           setState(() {
-                            selectedFaculty = value;
+                            if (selected) {
+                              localSelectedYears.add(year);
+                            } else {
+                              localSelectedYears.remove(year);
+                            }
                           });
-                          Navigator.pop(context);
                         },
                       );
                     }).toList(),
                   ),
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Center(child: Text('Apply')),
-                ),
-              ],
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          // Reset filters locally
+                          setState(() {
+                            minPriceController.clear();
+                            maxPriceController.clear();
+                            localSelectedFaculty = null;
+                            localSelectedYears.clear();
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.black,
+                          backgroundColor: Colors.white,
+                          side: const BorderSide(color: Colors.black),
+                        ),
+                        child: const Text('Reset'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          // Apply filters and close modal
+                          double? minPrice = double.tryParse(minPriceController.text);
+                          double? maxPrice = double.tryParse(maxPriceController.text);
+
+                          Navigator.pop(context); // Close modal on apply
+                          _searchAndFilterBooks(widget.query, minPrice, maxPrice, localSelectedFaculty, localSelectedYears.toList());
+                        },
+                        child: const Text('Apply'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        );
-      },
-    );
-  }
+          );
+        },
+      );
+    },
+  );
+}
+
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -361,7 +307,9 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
           children: [
             Expanded(
               child: TextField(
-                onSubmitted: _onSearchSubmitted,
+                onTap: () {
+                  GoRouter.of(context).go('/search');
+                },
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.grey[200],
@@ -376,7 +324,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.search),
                     onPressed: () {
-                      _onSearchSubmitted(widget.query);
+                      GoRouter.of(context).push('/search');
                     },
                   ),
                   suffixIconConstraints: const BoxConstraints(
@@ -464,7 +412,8 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                       ),
                     ),
                     SliverGrid(
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         childAspectRatio: 0.67,
                       ),
@@ -537,222 +486,3 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
     );
   }
 }
-
-
-// class FilterForm extends StatefulWidget {
-//   final double? initialMinPrice;
-//   final double? initialMaxPrice;
-//   final String? initialFaculty;
-//   final Set<String> initialYears;
-//   final void Function(double?, double?, String?, Set<String>) onApply;
-
-//   const FilterForm({
-//     Key? key,
-//     this.initialMinPrice,
-//     this.initialMaxPrice,
-//     this.initialFaculty,
-//     required this.initialYears,
-//     required this.onApply,
-//   }) : super(key: key);
-
-//   @override
-//   _FilterFormState createState() => _FilterFormState();
-// }
-
-// class _FilterFormState extends State<FilterForm> {
-//   final TextEditingController _minPriceController = TextEditingController();
-//   final TextEditingController _maxPriceController = TextEditingController();
-//   String? selectedFaculty;
-//   Set<String> selectedYears = {};
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _minPriceController.text = widget.initialMinPrice?.toString() ?? '';
-//     _maxPriceController.text = widget.initialMaxPrice?.toString() ?? '';
-//     selectedFaculty = widget.initialFaculty;
-//     selectedYears = widget.initialYears;
-//   }
-
-//   void _applyFilters() {
-//     double? minPrice = double.tryParse(_minPriceController.text);
-//     double? maxPrice = double.tryParse(_maxPriceController.text);
-//     widget.onApply(minPrice, maxPrice, selectedFaculty, selectedYears);
-//     Navigator.pop(context);
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Filter Options'),
-//         actions: [
-//           IconButton(
-//             icon: Icon(Icons.close),
-//             onPressed: () {
-//               Navigator.pop(context);
-//             },
-//           ),
-//         ],
-//       ),
-//       body: Padding(
-//         padding: const EdgeInsets.all(16.0),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             Text('Price Range'),
-//             Row(
-//               children: [
-//                 Expanded(
-//                   child: TextField(
-//                     controller: _minPriceController,
-//                     decoration: const InputDecoration(
-//                       labelText: 'Min Price',
-//                       prefixText: 'RM',
-//                       border: OutlineInputBorder(),
-//                     ),
-//                     keyboardType: TextInputType.number,
-//                   ),
-//                 ),
-//                 SizedBox(width: 16),
-//                 Expanded(
-//                   child: TextField(
-//                     controller: _maxPriceController,
-//                     decoration: InputDecoration(
-//                       labelText: 'Max Price',
-//                       prefixText: 'RM',
-//                       border: OutlineInputBorder(),
-//                     ),
-//                     keyboardType: TextInputType.number,
-//                   ),
-//                 ),
-//               ],
-//             ),
-//             SizedBox(height: 16),
-//             Text('Faculty'),
-//             ListTile(
-//               title: Text(selectedFaculty ?? 'Select Faculty'),
-//               trailing: Icon(Icons.arrow_drop_down),
-//               onTap: _showFacultySelection,
-//             ),
-//             SizedBox(height: 16),
-//             Text('Year'),
-//             Wrap(
-//               spacing: 8.0,
-//               runSpacing: 4.0,
-//               children: ['Year 1', 'Year 2', 'Year 3', 'Year 4'].map((year) {
-//                 return FilterChip(
-//                   label: Text(year),
-//                   selected: selectedYears.contains(year),
-//                   onSelected: (bool selected) {
-//                     setState(() {
-//                       if (selected) {
-//                         selectedYears.add(year);
-//                       } else {
-//                         selectedYears.remove(year);
-//                       }
-//                     });
-//                   },
-//                 );
-//               }).toList(),
-//             ),
-//             SizedBox(height: 16),
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//               children: [
-//                 ElevatedButton(
-//                   onPressed: () {
-//                     setState(() {
-//                       _minPriceController.clear();
-//                       _maxPriceController.clear();
-//                       selectedFaculty = null;
-//                       selectedYears.clear();
-//                     });
-//                   },
-//                   style: ElevatedButton.styleFrom(
-//                     foregroundColor: Colors.black,
-//                     backgroundColor: Colors.white,
-//                     side: BorderSide(color: Colors.black),
-//                   ),
-//                   child: Text('Reset'),
-//                 ),
-//                 ElevatedButton(
-//                   onPressed: _applyFilters,
-//                   child: Text('Apply'),
-//                 ),
-//               ],
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-
-//   void _showFacultySelection() {
-//     showModalBottomSheet(
-//       context: context,
-//       isScrollControlled: true,
-//       builder: (context) {
-//         return FractionallySizedBox(
-//           heightFactor: 0.85,
-//           child: Padding(
-//             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-//             child: Column(
-//               mainAxisSize: MainAxisSize.min,
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 Row(
-//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                   children: [
-//                     Text('Faculty', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-//                     IconButton(
-//                       icon: Icon(Icons.close),
-//                       onPressed: () {
-//                         Navigator.pop(context);
-//                       },
-//                     ),
-//                   ],
-//                 ),
-//                 SizedBox(height: 16),
-//                 Expanded(
-//                   child: ListView(
-//                     children: [
-//                       'Civil Engineering',
-//                       'Mechanical Engineering',
-//                       'Electrical Engineering',
-//                       'Chemical & Energy Engineering',
-//                       'Computing',
-//                       'Science',
-//                       'Built Environment & Surveying',
-//                       'Social Sciences & Humanities',
-//                       'Management',
-//                     ].map((faculty) {
-//                       return RadioListTile<String>(
-//                         title: Text(faculty),
-//                         value: faculty,
-//                         groupValue: selectedFaculty,
-//                         onChanged: (value) {
-//                           setState(() {
-//                             selectedFaculty = value;
-//                           });
-//                           Navigator.pop(context);
-//                         },
-//                       );
-//                     }).toList(),
-//                   ),
-//                 ),
-//                 SizedBox(height: 16),
-//                 ElevatedButton(
-//                   onPressed: () {
-//                     Navigator.pop(context);
-//                   },
-//                   child: Center(child: Text('Apply')),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }

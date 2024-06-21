@@ -90,4 +90,37 @@ class UserService {
       return 0;
     }
   }
+
+   Future<UserModel?> getUser(String userId) async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> docSnapshot =
+          await FirebaseFirestore.instance.collection('users').doc(userId).get();
+
+      if (docSnapshot.exists) {
+        Map<String, dynamic> userData = docSnapshot.data()!; // Ensure data is not null
+        return UserModel(
+          username: userData['username'],
+          email: userData['email'],
+          phone: userData['phone'],
+          address: userData['address'] ?? "",
+          role: userData['role'],
+          image: userData['image'] ?? "",
+        );
+      } else {
+        print('Document does not exist for user ID: $userId');
+        return null;
+      }
+    } catch (e) {
+      print('Error fetching user data: $e');
+      return null; // Return null if any error occurs during data fetching
+    }
+  }
+  String getCurrentUserId() {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      return user.uid;
+    } else {
+      throw Exception('User not authenticated or not found');
+    }
+  }
 }

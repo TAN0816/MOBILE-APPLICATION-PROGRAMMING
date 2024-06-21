@@ -297,8 +297,7 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
                                     width: 1),
                               ),
                               onPressed: () {
-                                Navigator.pushNamed(
-                                    context, '/productdetailbuyer');
+                                GoRouter.of(context).push('/chat/${_book!.sellerId}?receiverId=${_book!.sellerId}');
                               },
                               child: const Text('Chat'),
                             ),

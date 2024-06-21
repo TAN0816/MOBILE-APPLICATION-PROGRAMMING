@@ -56,88 +56,95 @@ class BookService {
   }
 
   Future<List<Book>> searchBooksByName(String name) async {
-    QuerySnapshot<Map<String, dynamic>> querySnapshot = await bookCollection
-        .where('name', isGreaterThanOrEqualTo: name)
-        .where('name', isLessThanOrEqualTo: '$name\uf8ff')
-        .get();
+  // Convert search name to lowercase
+  String searchNameLower = name.toLowerCase();
 
-    return querySnapshot.docs.map((doc) {
-      var data = doc.data();
-      return Book(
-        id: doc.id,
-        sellerId: data['sellerId'] ?? 'Unknown Seller',
-        name: data['name'] ?? 'Unknown Title',
-        price: (data['price'] ?? 0.0).toDouble(),
-        quantity: data['quantity'] ?? 0,
-        detail: data['detail'] ?? 'No detail available.',
-        images: List<String>.from(data['images'] ?? []),
-        faculty: (data['faculty'] as String?) ?? 'Unknown Faculty',
-        year: (data['year'] as String?) ?? 'Unknown Year',
-        status: data['status'] ?? 'Unknown Status',
-      );
-    }).toList();
-  }
+  QuerySnapshot<Map<String, dynamic>> querySnapshot = await bookCollection
+      .where('name', isGreaterThanOrEqualTo: searchNameLower)
+      .where('name', isLessThanOrEqualTo: '$searchNameLower\uf8ff')
+      .get();
 
-  Future<List<Book>> searchAndFilterBooks({
+  return querySnapshot.docs.map((doc) {
+    var data = doc.data();
+    return Book(
+      id: doc.id,
+      sellerId: data['sellerId'] ?? 'Unknown Seller',
+      name: data['name'] ?? 'Unknown Title',
+      price: (data['price'] ?? 0.0).toDouble(),
+      quantity: data['quantity'] ?? 0,
+      detail: data['detail'] ?? 'No detail available.',
+      images: List<String>.from(data['images'] ?? []),
+      faculty: (data['faculty'] as String?) ?? 'Unknown Faculty',
+      year: (data['year'] as String?) ?? 'Unknown Year',
+      status: data['status'] ?? 'Unknown Status',
+    );
+  }).toList();
+}
+
+
+
+    Future<List<Book>> searchAndFilterBooks({
     required String query,
     double? minPrice,
     double? maxPrice,
     String? faculty,
     List<String>? years,
   }) async {
-    Query<Map<String, dynamic>> queryRef = bookCollection;
+    try {
+      // Convert query to lowercase to ensure case-insensitive search
+      String queryLowerCase = query.toLowerCase();
 
-    // Perform search based on the query
-    if (query.isNotEmpty) {
-      queryRef = queryRef
-          .where('name', isGreaterThanOrEqualTo: query)
-          .where('name', isLessThanOrEqualTo: '$query\uf8ff');
+      // Construct Firestore query for books collection
+      Query<Map<String, dynamic>> queryRef = _firestore.collection('books');
+
+      // Execute the query
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await queryRef.get();
+
+      // Convert QuerySnapshot to a list of Book objects
+      List<Book> books = querySnapshot.docs
+          .where((doc) => doc.data()['name'].toLowerCase().contains(queryLowerCase))
+          .map((doc) {
+            var data = doc.data();
+            return Book(
+              id: doc.id,
+              sellerId: data['sellerId'] ?? 'Unknown Seller',
+              name: data['name'] ?? 'Unknown Title',
+              price: (data['price'] ?? 0.0).toDouble(),
+              quantity: data['quantity'] ?? 0,
+              detail: data['detail'] ?? 'No detail available.',
+              images: List<String>.from(data['images'] ?? []),
+              year: data['year'] ?? 'Unknown Year',
+              faculty: data['faculty'] ?? 'Unknown Faculty',
+              status: data['status'] ?? 'Unknown Status',
+            );
+          })
+          .toList();
+
+      // Apply additional filters for price, faculty, and years
+      if (minPrice != null) {
+        books = books.where((book) => book.price >= minPrice).toList();
+      }
+
+      if (maxPrice != null) {
+        books = books.where((book) => book.price <= maxPrice).toList();
+      }
+
+      if (faculty != null && faculty.isNotEmpty && faculty != 'All') {
+        books = books.where((book) => book.faculty == faculty).toList();
+      }
+
+      if (years != null && years.isNotEmpty) {
+        books = books.where((book) => years.contains(book.year)).toList();
+      }
+
+      // Filter to show only available books
+      books = books.where((book) => book.status == 'available').toList();
+
+      return books;
+    } catch (e) {
+      print('Error searching and filtering books: $e');
+      return []; // Return an empty list or handle error as needed
     }
-
-    QuerySnapshot<Map<String, dynamic>> querySnapshot = await queryRef.get();
-
-    // Filter results to ensure case-insensitive search
-    List<Book> books = querySnapshot.docs.map((doc) {
-      var data = doc.data();
-      return Book(
-        id: doc.id,
-        sellerId: data['sellerId'] ?? 'Unknown Seller',
-        name: data['name'] ?? 'Unknown Title',
-        price: (data['price'] ?? 0.0).toDouble(),
-        quantity: data['quantity'] ?? 0,
-        detail: data['detail'] ?? 'No detail available.',
-        images: List<String>.from(data['images'] ?? []),
-        year: data['year'] ?? 'Unknown Year',
-        faculty: data['faculty'] ?? 'Unknown Faculty',
-        status: data['status'] ?? 'Unknown Status',
-      );
-    }).toList();
-
-    // Further filter the results based on the query
-    if (query.isNotEmpty) {
-      books = books.where((book) {
-        return book.name.toLowerCase().contains(query.toLowerCase());
-      }).toList();
-    }
-
-    // Apply additional filters for price, faculty, and years
-    if (minPrice != null) {
-      books = books.where((book) => book.price >= minPrice).toList();
-    }
-
-    if (maxPrice != null) {
-      books = books.where((book) => book.price <= maxPrice).toList();
-    }
-
-    if (faculty != null && faculty.isNotEmpty && faculty != 'All') {
-      books = books.where((book) => book.faculty == faculty).toList();
-    }
-
-    if (years != null && years.isNotEmpty) {
-      books = books.where((book) => years.contains(book.year)).toList();
-    }
-
-    return books;
   }
 
   Future<Book?> getBookById(String id) async {
