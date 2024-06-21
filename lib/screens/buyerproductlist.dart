@@ -24,8 +24,9 @@ class _BuyerList extends State<BuyerList> {
   void fetchBooks() async {
     try {
       List<Book> fetchedBooks = await bookService.getAllBooks();
+      List<Book> availableBooks = fetchedBooks.where((book) => book.status == 'available').toList();
       setState(() {
-        books = fetchedBooks;
+        books = availableBooks;
       });
     } catch (error) {
       print('Error fetching books: $error');

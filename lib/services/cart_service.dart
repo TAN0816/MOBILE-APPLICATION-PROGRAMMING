@@ -127,6 +127,7 @@ class CartService {
               year: bookData['year'] ?? 'Unknown Year',
               faculty: bookData['faculty'] ?? 'Unknown Faculty',
               detail: bookData['detail'] ?? 'No details available',
+              status: bookData['status'] ?? 'Unknown Status',
             );
 
             CartItem cartItem;

@@ -26,10 +26,13 @@ class UserState extends ChangeNotifier {
     userState = await userService.getUserData(userId);
     notifyListeners();
   }
-  void addSearchQuery(String query) {
+ void addSearchQuery(String query) {
   // Check if the query already exists in the search history
   if (!_searchHistory.contains(query)) {
     _searchHistory.insert(0, query);
+    if (_searchHistory.length >= 5) {
+    _searchHistory.removeLast(); // Remove the oldest entry
+  }
     notifyListeners();
   }
 }

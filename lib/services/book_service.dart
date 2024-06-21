@@ -23,6 +23,7 @@ class BookService {
         images: List<String>.from(data['images'] ?? []),
         year: data['year'] ?? 'Unknown Year',
         faculty: data['faculty'] ?? 'Unknown Faculty',
+        status: data['status'] ?? 'Unknown Status',
       );
     }).toList();
   }
@@ -45,6 +46,7 @@ class BookService {
         images: List<String>.from(data['images'] ?? []),
         year: data['year'] ?? 'Unknown Year',
         faculty: data['faculty'] ?? 'Unknown Faculty',
+        status: data['status'] ?? 'Unknown Status',
       );
     }).toList();
   }
@@ -71,6 +73,7 @@ class BookService {
         images: List<String>.from(data['images'] ?? []),
         faculty: (data['faculty'] as String?) ?? 'Unknown Faculty',
         year: (data['year'] as String?) ?? 'Unknown Year',
+        status: data['status'] ?? 'Unknown Status',
       );
     }).toList();
   }
@@ -106,6 +109,7 @@ class BookService {
         images: List<String>.from(data['images'] ?? []),
         year: data['year'] ?? 'Unknown Year',
         faculty: data['faculty'] ?? 'Unknown Faculty',
+        status: data['status'] ?? 'Unknown Status',
       );
     }).toList();
 
@@ -152,6 +156,7 @@ class BookService {
         images: List<String>.from(data['images'] ?? []),
         year: data['year'] ?? 'Unknown Year',
         faculty: data['faculty'] ?? 'Unknown Faculty',
+        status: data['status'] ?? 'Unknown Status',
       );
     } else {
       return null; // Book not found
