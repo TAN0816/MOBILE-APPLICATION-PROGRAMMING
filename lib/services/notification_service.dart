@@ -19,15 +19,15 @@ class NotificationService {
     final fCMToken = await _firebaseMessaging.getToken();
     print('Token: $fCMToken.');
 
-    try {
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(UserService().getUserId)
-          .update({'deviceToken': fCMToken});
-    } catch (e) {
-      print('Error updating token: $e');
-      rethrow;
-    }
+    // try {
+    //   await FirebaseFirestore.instance
+    //       .collection('users')
+    //       .doc(UserService().getUserId)
+    //       .update({'deviceToken': fCMToken});
+    // } catch (e) {
+    //   print('Error updating token: $e');
+    //   rethrow;
+    // }
 
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -145,8 +145,7 @@ class NotificationService {
 
   Future<String> getAccessToken() async {
     // Your client ID and client secret obtained from Google Cloud Console
-    final serviceAccountJson = {
-    };
+    final serviceAccountJson = {};
 
     List<String> scopes = [
       "https://www.googleapis.com/auth/userinfo.email",
