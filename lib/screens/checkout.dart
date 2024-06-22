@@ -442,60 +442,66 @@ class _CheckoutPageState extends State<CheckoutPage> {
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
-            return PopScope(
-              canPop: false,
-              onPopInvoked: (didPop) async {
-                Navigator.pop(context, deliveryMethod);
-              },
-              child: SizedBox(
-                height: 200,
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
                     children: [
-                      const Text(
-                        'Select Delivery Method',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                      const Expanded(
+                        child: Center(
+                          child: Text(
+                            'Select Delivery Method',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ),
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      RadioListTile<String>(
-                        title: const Text('Delivery'),
-                        value: 'Delivery',
-                        groupValue: deliveryMethod,
-                        onChanged: (value) {
-                          setState(() {
-                            deliveryMethod = value;
-                            Navigator.pop(context, deliveryMethod);
-                          });
-                        },
-                      ),
-                      RadioListTile<String>(
-                        title: const Text('Meet'),
-                        value: 'Meet',
-                        groupValue: deliveryMethod,
-                        onChanged: (value) {
-                          setState(() {
-                            deliveryMethod = value;
-                            Navigator.pop(context, deliveryMethod);
-                          });
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () {
+                          Navigator.pop(context);
                         },
                       ),
                     ],
                   ),
-                ),
+                  const Divider(),
+                  RadioListTile<String>(
+                    title: const Text('Delivery'),
+                    value: 'Delivery',
+                    groupValue: deliveryMethod,
+                    onChanged: (value) {
+                      setState(() {
+                        deliveryMethod = value;
+                      });
+                      Navigator.pop(context, value);
+                    },
+                  ),
+                  RadioListTile<String>(
+                    title: const Text('Meet'),
+                    value: 'Meet',
+                    groupValue: deliveryMethod,
+                    onChanged: (value) {
+                      setState(() {
+                        deliveryMethod = value;
+                      });
+                      Navigator.pop(context, value);
+                    },
+                  ),
+                ],
               ),
             );
           },
         );
       },
     ).then((value) {
-      setState(() {
-        deliveryMethod = value;
-      });
+      if (value != null) {
+        setState(() {
+          deliveryMethod = value;
+        });
+      }
     });
   }
 
@@ -506,60 +512,66 @@ class _CheckoutPageState extends State<CheckoutPage> {
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
-            return PopScope(
-              canPop: false,
-              onPopInvoked: (didPop) async {
-                Navigator.pop(context, paymentMethod);
-              },
-              child: SizedBox(
-                height: 200,
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
                     children: [
-                      const Text(
-                        'Select Payment Method',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                      const Expanded(
+                        child: Center(
+                          child: Text(
+                            'Select Payment Method',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ),
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      RadioListTile<String>(
-                        title: const Text('Card'),
-                        value: 'Card',
-                        groupValue: paymentMethod,
-                        onChanged: (value) {
-                          setState(() {
-                            paymentMethod = value;
-                            Navigator.pop(context, paymentMethod);
-                          });
-                        },
-                      ),
-                      RadioListTile<String>(
-                        title: const Text('Online Banking'),
-                        value: 'Online Banking',
-                        groupValue: paymentMethod,
-                        onChanged: (value) {
-                          setState(() {
-                            paymentMethod = value;
-                            Navigator.pop(context, paymentMethod);
-                          });
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () {
+                          Navigator.pop(context);
                         },
                       ),
                     ],
                   ),
-                ),
+                  const Divider(),
+                  RadioListTile<String>(
+                    title: const Text('Card'),
+                    value: 'Card',
+                    groupValue: paymentMethod,
+                    onChanged: (value) {
+                      setState(() {
+                        paymentMethod = value;
+                      });
+                      Navigator.pop(context, value);
+                    },
+                  ),
+                  RadioListTile<String>(
+                    title: const Text('Online Banking'),
+                    value: 'Online Banking',
+                    groupValue: paymentMethod,
+                    onChanged: (value) {
+                      setState(() {
+                        paymentMethod = value;
+                      });
+                      Navigator.pop(context, value);
+                    },
+                  ),
+                ],
               ),
             );
           },
         );
       },
     ).then((value) {
-      setState(() {
-        paymentMethod = value;
-      });
+      if (value != null) {
+        setState(() {
+          paymentMethod = value;
+        });
+      }
     });
   }
 }
