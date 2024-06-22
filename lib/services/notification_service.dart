@@ -213,9 +213,12 @@ class NotificationService {
     }
   }
 
-  Future <void> deleteNotification (notificationId) async {
+  Future<void> deleteNotification(notificationId) async {
     try {
-      await FirebaseFirestore.instance.collection('notifications').doc(notificationId).delete();
+      await FirebaseFirestore.instance
+          .collection('notifications')
+          .doc(notificationId)
+          .delete();
       print('Notification deleted');
     } catch (e) {
       print('Error deleting notification: $e');
