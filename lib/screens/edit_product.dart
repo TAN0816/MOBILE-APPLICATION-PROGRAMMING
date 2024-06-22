@@ -5,7 +5,6 @@ import 'package:secondhand_book_selling_platform/model/book.dart';
 import 'package:secondhand_book_selling_platform/services/product_service.dart';
 import 'dart:io';
 
-
 class EditProductPage extends StatefulWidget {
   final String bookId;
   final Function()? onBookUpdate;
@@ -70,7 +69,7 @@ class _EditProductPageState extends State<EditProductPage> {
       }
       // _images = pickedFiles.map((file) => File(file.path)).toList();
     });
-    }
+  }
 
   Future<void> _updateBook() async {
     if (_images.isEmpty && _existingImages.isEmpty) {
@@ -124,7 +123,7 @@ class _EditProductPageState extends State<EditProductPage> {
       _bookDetailController.clear();
       setState(() {
         _images.clear();
-        _selectedCourse = 'Software Engineering';
+        _selectedCourse = 'Computing';
         _selectedYear = 'Year 1';
         _quantity = 1;
       });
@@ -340,11 +339,15 @@ class _EditProductPageState extends State<EditProductPage> {
                             },
                             isExpanded: true,
                             items: <String>[
-                              'Software Engineering',
-                              'Data Engineering',
-                              'Network and Security',
-                              'Bioinformatics',
-                              'Graphics and Multimedia Design'
+                              'Civil Engineering',
+                              'Mechanical Engineering',
+                              'Electrical Engineering',
+                              'Chemical & Energy Engineering',
+                              'Computing',
+                              'Science',
+                              'Built Environment & Surveying',
+                              'Social Sciences & Humanities',
+                              'Management'
                             ].map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
