@@ -114,7 +114,7 @@ class _EditProfileState extends State<EditProfile> {
                         ? FileImage(_imageFile!)
                         : imageUrl != ""
                             ? NetworkImage(imageUrl) as ImageProvider
-                            : const AssetImage('assets/images/profile.jpg'),
+                            : const AssetImage('assets/images/profileicon.jpg'),
                   ),
                   const Positioned(
                     bottom: 0,
