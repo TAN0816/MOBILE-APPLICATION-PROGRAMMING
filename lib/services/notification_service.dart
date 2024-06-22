@@ -212,4 +212,13 @@ class NotificationService {
       print('Failed to send FCM message: ${response.statusCode}');
     }
   }
+
+  Future <void> deleteNotification (notificationId) async {
+    try {
+      await FirebaseFirestore.instance.collection('notifications').doc(notificationId).delete();
+      print('Notification deleted');
+    } catch (e) {
+      print('Error deleting notification: $e');
+    }
+  }
 }
