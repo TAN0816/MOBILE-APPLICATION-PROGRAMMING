@@ -26,7 +26,7 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
   final TextEditingController _bookNameController = TextEditingController();
   final TextEditingController _bookPriceController = TextEditingController();
   final TextEditingController _bookDetailController = TextEditingController();
-  String _selectedCourse = "Software Engineering";
+  String _selectedCourse = "Computing";
   String _selectedYear = "Year 1";
   int _quantity = 1;
   // UserService userService = UserService();
@@ -290,11 +290,15 @@ class _AddNewBookPageState extends State<AddNewBookPage> {
                       },
                       isExpanded: true,
                       items: <String>[
-                        'Software Engineering',
-                        'Data Engineering',
-                        'Network and Security',
-                        'Bioinformatics',
-                        'Graphics and Multimedia Design'
+                        'Civil Engineering',
+                        'Mechanical Engineering',
+                        'Electrical Engineering',
+                        'Chemical & Energy Engineering',
+                        'Computing',
+                        'Science',
+                        'Built Environment & Surveying',
+                        'Social Sciences & Humanities',
+                        'Management',
                       ].map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
