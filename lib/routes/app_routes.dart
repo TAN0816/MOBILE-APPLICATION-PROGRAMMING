@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:secondhand_book_selling_platform/model/cart_model.dart';
 import 'package:secondhand_book_selling_platform/screens/cart/cart_screen.dart';
-import 'package:secondhand_book_selling_platform/screens/chat/chat_screen';
+import 'package:secondhand_book_selling_platform/screens/chat/chat_screen.dart';
 import 'package:secondhand_book_selling_platform/screens/checkout.dart';
 import 'package:secondhand_book_selling_platform/screens/forgot_password.dart';
 import 'package:secondhand_book_selling_platform/screens/nav.dart';
