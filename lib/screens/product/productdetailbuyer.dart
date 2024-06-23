@@ -1,16 +1,19 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
 import 'package:secondhand_book_selling_platform/model/book.dart';
 import 'package:secondhand_book_selling_platform/model/user.dart';
 import 'package:secondhand_book_selling_platform/services/book_service.dart';
 import 'package:secondhand_book_selling_platform/services/cart_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:secondhand_book_selling_platform/services/rating_service.dart';
+import 'package:secondhand_book_selling_platform/services/chat_service.dart'; // Import the chat service
+import 'package:uuid/uuid.dart'; // Import the uuid package
 
 class ProductDetailBuyer extends StatefulWidget {
   final String bookId;
-  const ProductDetailBuyer({super.key, required this.bookId});
+
+  const ProductDetailBuyer({Key? key, required this.bookId}) : super(key: key);
 
   @override
   _ProductDetailBuyerState createState() => _ProductDetailBuyerState();
@@ -22,11 +25,12 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
   final BookService _bookService = BookService();
   final CartService _cartService = CartService();
   final RatingService _ratingService = RatingService();
+  final ChatService _chatService = ChatService(); // Instantiate the chat service
 
   Book? _book;
   UserModel? _seller;
   bool _isLoading = true;
-  int rating = 5;
+  int _sellerRating = 5; // Default rating
 
   @override
   void initState() {
@@ -40,26 +44,50 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
   }
 
   Future<void> _fetchBookDetails() async {
-    Book? book = await _bookService.getBookById(widget.bookId);
-    setState(() {
-      _book = book;
-      _isLoading = false;
-    });
-
-    if (_book != null) {
-      UserModel? seller = await _bookService.getSellerData(_book!.sellerId);
+    try {
+      Book? book = await _bookService.getBookById(widget.bookId);
+      if (book != null) {
+        UserModel? seller = await _bookService.getSellerData(book.sellerId);
+        int sellerRating = await _ratingService.getSellerRating(book.sellerId);
+        setState(() {
+          _book = book;
+          _seller = seller;
+          _sellerRating = sellerRating;
+          _isLoading = false;
+        });
+      } else {
+        setState(() {
+          _isLoading = false;
+        });
+        print('Book not found');
+      }
+    } catch (error) {
       setState(() {
-        _seller = seller;
+        _isLoading = false;
       });
-    } else {
-      print('error');
+      print('Error fetching book details: $error');
     }
+  }
 
-    int ratingg = await _ratingService.getSellerRating(_book!.sellerId);
-    setState(() {
-      rating = ratingg;
-      print("buyerrating $rating");
-    });
+  Future<void> createChatRoomAndNavigate(BuildContext context) async {
+    try {
+      final currentUser = FirebaseAuth.instance.currentUser; // Get current user from FirebaseAuth
+
+      if (_book != null && currentUser != null) {
+        final chatRoomId = Uuid().v4(); // Generate a unique ID for the chat room
+        final newChatRoom = await _chatService.createChatRoom(
+          _book!.sellerId, // Seller ID
+          currentUser.uid, // Current user's ID
+          chatRoomId, // Chat room ID
+        );
+
+        GoRouter.of(context).push('/chat/${newChatRoom.id}?receiverId=${_book!.sellerId}');
+      } else {
+        print('Book details not available or current user not authenticated');
+      }
+    } catch (error) {
+      print('Error creating chat room: $error');
+    }
   }
 
   @override
@@ -84,7 +112,7 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
           'Product Detail',
           style: TextStyle(
             fontSize: 20,
-            fontWeight: FontWeight.w500, // Set the font weight to medium
+            fontWeight: FontWeight.w500,
           ),
         ),
         actions: [
@@ -94,7 +122,7 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
               context.push('/cart');
             },
           ),
-          const SizedBox(width: 16), // Adding padding to the right
+          const SizedBox(width: 16),
         ],
         bottom: const PreferredSize(
           preferredSize: Size.fromHeight(1.0),
@@ -145,9 +173,7 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
                               ),
                               child: Column(
                                 children: [
-                                  const SizedBox(
-                                      height:
-                                          10), // Adjust the height as needed
+                                  const SizedBox(height: 10),
                                   _buildPageIndicator(),
                                 ],
                               ),
@@ -163,14 +189,16 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(_book!.name,
-                                  style: GoogleFonts.roboto(
-                                    textStyle: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 26,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  )),
+                              Text(
+                                _book!.name,
+                                style: GoogleFonts.roboto(
+                                  textStyle: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 26,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
                               Text(
                                 'RM${_book!.price.toStringAsFixed(2)}',
                                 style: GoogleFonts.alegreya(
@@ -185,43 +213,11 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
                           ),
                         ),
                       ),
-                      // const Padding(
-                      //   padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
-                      //   child: Column(
-                      //     crossAxisAlignment: CrossAxisAlignment.start,
-                      //     children: [
-                      //       Text(
-                      //         'Delivery Method',
-                      //         style: TextStyle(
-                      //           color: Colors.black,
-                      //           fontSize: 18,
-                      //           fontWeight: FontWeight.bold,
-                      //         ),
-                      //       ),
-                      //       Text(
-                      //         'Delivery',
-                      //         style: TextStyle(
-                      //           color: Colors.black,
-                      //           fontSize: 14,
-                      //           fontWeight: FontWeight.w300,
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(30, 5, 30, 10),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // const Text(
-                            //   'Description of Product',
-                            //   style: TextStyle(
-                            //     color: Colors.black,
-                            //     fontSize: 18,
-                            //     fontWeight: FontWeight.bold,
-                            //   ),
-                            // ),
                             Text(
                               _book!.detail,
                               style: const TextStyle(
@@ -256,12 +252,10 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
                                           _seller?.image != ""
                                       ? NetworkImage(_seller!.image)
                                       : const AssetImage(
-                                              'assets/images/profileicon.jpg')
+                                          'assets/images/profileicon.jpg')
                                           as ImageProvider,
                                 ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
+                                const SizedBox(width: 10),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -274,7 +268,7 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
                                       ),
                                     ),
                                     Text(
-                                      '$rating/5',
+                                      '$_sellerRating/5',
                                       style: const TextStyle(
                                         color: Color.fromARGB(255, 83, 83, 83),
                                         fontSize: 15,
@@ -293,12 +287,11 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
                                       BorderRadius.all(Radius.circular(5)),
                                 ),
                                 side: const BorderSide(
-                                    color: Color.fromARGB(255, 72, 72, 72),
-                                    width: 1),
+                                  color: Color.fromARGB(255, 72, 72, 72),
+                                  width: 1,
+                                ),
                               ),
-                              onPressed: () {
-                                GoRouter.of(context).push('/chat/${_book!.sellerId}?receiverId=${_book!.sellerId}');
-                              },
+                              onPressed: () => createChatRoomAndNavigate(context),
                               child: const Text('Chat'),
                             ),
                           ],
@@ -324,17 +317,19 @@ class _ProductDetailBuyerState extends State<ProductDetailBuyer> {
           onPressed: () {
             _cartService.addtoCart(_book!.id).then((_) {
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text('Product added to cart successfully')));
+                content: Text('Product added to cart successfully'),
+              ));
             }).catchError((error) {
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text('Failed to add product to cart')));
+                content: Text('Failed to add product to cart'),
+              ));
             });
           },
           child: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.shopping_cart, color: Colors.white),
-              SizedBox(width: 8), // Add spacing between icon and text
+              SizedBox(width: 8),
               Text(
                 'Add to Cart',
                 style: TextStyle(

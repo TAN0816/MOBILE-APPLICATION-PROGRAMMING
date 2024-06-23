@@ -82,7 +82,35 @@ Future<String> getSenderIdFromChatRoom(String chatRoomId) async {
     }
     throw Exception('Sender ID not found in chat room');
   }
+  
+Future<ChatRoom> createChatRoom(String sellerId, String currentUserId, String chatRoomId) async {
+    try {
+      // Example: Creating a chat room document in Firestore
+      DocumentReference<Map<String, dynamic>> chatRoomRef = _firestore.collection('chatRooms').doc(chatRoomId);
 
+      // Example data for chat room
+      Map<String, dynamic> chatRoomData = {
+        'id': chatRoomId,
+        'users': [sellerId, currentUserId], // Include both sellerId and currentUserId
+        'lastMessageTimestamp': Timestamp.now(), // Example: Timestamp for last message
+        // Add other relevant data as needed
+      };
+
+      // Set the chat room data in Firestore
+      await chatRoomRef.set(chatRoomData);
+
+      // Return the created ChatRoom object
+      return ChatRoom(
+        id: chatRoomId,
+        users: [sellerId, currentUserId],
+        lastMessageTimestamp: Timestamp.now(),
+        // Add other relevant data as needed
+      );
+    } catch (error) {
+      print('Error creating chat room: $error');
+      rethrow; // Re-throw the error to be handled further up the call stack
+    }
+  }
   // Fetch messages for a specific chat room
   Stream<List<ChatMessage>> getMessages(String chatRoomId) {
     return _firestore
