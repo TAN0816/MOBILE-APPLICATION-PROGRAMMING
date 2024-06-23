@@ -116,7 +116,7 @@ class CartService {
                 .get();
         if (bookSnapshot.exists) {
           Map<String, dynamic> bookData = bookSnapshot.data()!;
-          if (bookData['quantity'] >= 1) {
+          if (bookData['quantity'] >= 1 && bookData['status'] == 'available') {
             Book book = Book(
               id: bookSnapshot.id,
               sellerId: bookData['sellerId'] ?? '',

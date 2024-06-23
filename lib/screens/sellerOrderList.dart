@@ -171,7 +171,7 @@ class _SellerOrderListState extends State<SellerOrderList>
                       child: Row(
                         children: [
                           Image.network(
-                            order.orderItemsList[0].images[0],
+                            order.orderItemsList[0].book.images[0],
                             width: 60,
                             height: 80,
                             fit: BoxFit.cover,
@@ -188,7 +188,7 @@ class _SellerOrderListState extends State<SellerOrderList>
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                      "Title: ${order.orderItemsList[0].name}"),
+                                      "Title: ${order.orderItemsList[0].book.name}"),
                                   Text(
                                       "Qty: ${order.orderItemsList[0].quantity}")
                                 ],

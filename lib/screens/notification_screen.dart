@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:secondhand_book_selling_platform/services/notification_service.dart';
 import 'package:secondhand_book_selling_platform/services/user_service.dart';
 
 class NotificationScreen extends StatefulWidget {
@@ -101,42 +102,75 @@ class _NotificationScreenState extends State<NotificationScreen> {
             itemCount: notifications.length,
             itemBuilder: (context, index) {
               final notification = notifications[index];
-              return Container(
-                margin: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  color: Colors.grey[200],
-                ),
-                child: ListTile(
-                  leading: const Icon(Icons.notifications_active_rounded,
-                      color: Color.fromARGB(255, 0, 0, 0)),
-                  title: Text(
-                    notification['title'],
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.black),
+              return InkWell(
+                onLongPress: () {
+                  showDeleteConfirmationBox(context, notification.id);
+                },
+                child: Container(
+                  margin: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    color: Colors.grey[200],
                   ),
-                  subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          notification['body'],
-                          style: TextStyle(color: Colors.grey[600]),
-                        ),
-                        Text(
-                          notification['timestamp'] != null
-                              ? formatTimestamp(
-                                  notification['timestamp'] as Timestamp)
-                              : 'Pending',
-                          style:
-                              TextStyle(color: Colors.grey[500], fontSize: 12),
-                        ),
-                      ]),
+                  child: ListTile(
+                    leading: const Icon(Icons.notifications_active_rounded,
+                        color: Color.fromARGB(255, 0, 0, 0)),
+                    title: Text(
+                      notification['title'],
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black),
+                    ),
+                    subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            notification['body'],
+                            style: TextStyle(color: Colors.grey[600]),
+                          ),
+                          Text(
+                            notification['timestamp'] != null
+                                ? formatTimestamp(
+                                    notification['timestamp'] as Timestamp)
+                                : 'Pending',
+                            style: TextStyle(
+                                color: Colors.grey[500], fontSize: 12),
+                          ),
+                        ]),
+                  ),
                 ),
               );
             },
           );
         },
       ),
+    );
+  }
+
+  void showDeleteConfirmationBox(BuildContext context, String id) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Delete Notification'),
+          content:
+              const Text('Are you sure you want to delete this notification?'),
+          actions: [
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Delete'),
+              onPressed: () {
+                NotificationService().deleteNotification(id);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
